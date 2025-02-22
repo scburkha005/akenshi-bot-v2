@@ -36,7 +36,7 @@ async function sendMessage (user, bot, message) {
 
 
 // Request user auth
-let params = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls+channel%3Abot+user%3Awrite%3Achat`, `&state=${STATE_STRING}`]
+let params = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls+channel%3Abot+user%3Awrite%3Achat+user%3Aread%3Achat`, `&state=${STATE_STRING}`]
 let botParams = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=channel%3Abot`, `&state=${STATE_STRING}`]
 params = params.join('')
 
