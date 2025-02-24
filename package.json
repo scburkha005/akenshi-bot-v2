@@ -6,7 +6,8 @@
     "mongodb": "^6.13.1"
   },
   "scripts": {
-    "start": "npx nodemon ./botmain/index.js"
+    "start": "npx nodemon ./bot-main/app.js",
+    "start:db": "npx nodemon ./db/index.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
