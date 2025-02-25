@@ -1,16 +1,11 @@
 const axios = require('axios');
 const express = require('express');
+const crypto = require('crypto')
 require('dotenv').config();
 const { createUser, findUser, updateUser } = require('../db/adapters/users');
 const { getToken, validateToken } = require('./api/token')
-const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING } = process.env;
-
+const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
 const app = express();
-
-// TEMP STORAGE => MOVE TO DB LATER
-let access_token = ''
-let refresh_token = ''
-let user_object = {}
 
 // POST Send Chat Message
 async function sendMessage (user, bot, message) {
@@ -80,6 +75,17 @@ app.get('/', async function (req, res) {
 		console.log("Ah shit somebody hacking");
 	}
 	res.send(`<html><a href="https://id.twitch.tv/oauth2/authorize?${params}">Click here to auth the bot</a><a href="https://id.twitch.tv/oauth2/authorize?${botParams}">Click here as BOT ACCOUNT ONLY</a></html>`)
+});
+
+// POST localhost:3000/eventsub
+app.post('/eventsub', (req, res) => {
+  // Steps for security / auth CRYPTOJS? jscrypto
+  // 1. Get Secret from env file (this is used for encryption/decryption)
+  // 2. Create a string that combines data in the req (TWITCH_MESSAGE_ID + TWITCH_MESSAGE_TIMESTAMP + "message?")
+  // 3. Hash our secret + message using a library, (potentially prepend sha256= to this result)
+  // 4. verify the message using the library to check our hashed secret against the TWITCH_MESSAGE_SIGNATURE
+  console.log(req.headers)
+  res.sendStatus(204);
 });
 
 
