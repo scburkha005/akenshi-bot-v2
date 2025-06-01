@@ -95,7 +95,10 @@ app.post('/eventsub', (req, res) => {
   if(verifySignatures(HMAC_SIG, req.headers['twitch-eventsub-message-signature'])) {
     let notification = JSON.parse(req.body);
     // Handle notification
-    res.sendStatus(204);
+    if (req.headers["twitch-eventsub-message-type"] === 'notification') {
+      console.log(notification)
+      res.sendStatus(204);
+    }
   } else {
     console.log('There was an issue matching signatures: Signature verification returned false');
     res.sendStatus(403);
@@ -127,10 +130,6 @@ const createSubscription = async () => {
   } catch (err) {
     console.log(err);
   }
-}
-
-const verifyHMAC = (HMAC_SIG, secret) => {
-  return jws.verify(HMAC_SIG, "HS256", secret)
 }
 
 // Host port
