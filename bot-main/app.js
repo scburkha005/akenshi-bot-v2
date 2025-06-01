@@ -1,6 +1,6 @@
 const axios = require('axios');
 const express = require('express');
-const crypto = require('crypto')
+const jws = require('jws');
 require('dotenv').config();
 const { createUser, findUser, updateUser } = require('../db/adapters/users');
 const { getToken, validateToken } = require('./api/token')
@@ -10,7 +10,7 @@ const app = express();
 // POST Send Chat Message
 async function sendMessage (user, bot, message) {
 	try {
-    const akenshiBot = await findUser("1265515088")
+    const akenshiBot = await findUser("1265515088");
     console.log(user)
 		const { data } = await axios.post("https://api.twitch.tv/helix/chat/messages", {
         "broadcaster_id": "187093318",
@@ -53,7 +53,7 @@ app.get('/', async function (req, res) {
 		const data = await getToken(req.query.code);
 		const userData = await validateToken(data.access_token);
     const user = await findUser(userData.user_id);
-    console.log('database', user)
+    console.log('database', user);
     if (user) {
       console.log('updating user');
       await updateUser(userData.user_id, data.access_token, data.refresh_token, userData.scopes);
@@ -79,15 +79,51 @@ app.get('/', async function (req, res) {
 
 // POST localhost:3000/eventsub
 app.post('/eventsub', (req, res) => {
+  // Challenge Events
+  // if (req.headers["twitch-eventsub-message-type"] === "webhook_callback_verification") {
+  //   console.log(req)
+  //   // res.set('Content-Type', 'text/plain').status(200).send(req.body.notification.challenge);
+  // }
+
+  // Notification Events
   // Steps for security / auth CRYPTOJS? jscrypto
   // 1. Get Secret from env file (this is used for encryption/decryption)
+  HMAC_SECRET
+  console.log(req)
   // 2. Create a string that combines data in the req (TWITCH_MESSAGE_ID + TWITCH_MESSAGE_TIMESTAMP + "message?")
+  // let str = `${req.headers["twitch-eventsub-message-id"]}${}`
   // 3. Hash our secret + message using a library, (potentially prepend sha256= to this result)
   // 4. verify the message using the library to check our hashed secret against the TWITCH_MESSAGE_SIGNATURE
   console.log(req.headers)
   res.sendStatus(204);
 });
 
+// Make subscription
+const createSubscription = async () => {
+  try {
+    const { data } = await axios.post("https://api.twitch.tv/helix/eventsub/subscriptions", {
+      type: "channel.chat.message",
+      version: "1",
+      condition: {
+        broadcaster_user_id: "187093318", // broadcaster userId
+        user_id: "1265515088", // bot userId
+      },
+      transport: {
+        method: "webhook",
+        callback: "http://localhost:3000",
+        secret: "s3cre7"
+      }
+    }, {
+      headers: {
+        'Authorization': `Bearer ${akenshiBot.accessToken}`,
+        'Client-Id': TWITCH_CLIENT_ID,
+        'Content-Type': 'application/json'
+      }
+    })
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 // Host port
 app.listen(3000, function () {
