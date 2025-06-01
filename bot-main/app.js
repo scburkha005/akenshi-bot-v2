@@ -4,9 +4,9 @@ const jws = require('jws');
 require('dotenv').config();
 const { createUser, findUser, updateUser } = require('../db/adapters/users');
 const { getToken, validateToken } = require('./api/token')
+const { createHmac, verifySignatures } = require('./modules/hmac');
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
 const app = express();
-
 // POST Send Chat Message
 async function sendMessage (user, bot, message) {
 	try {
@@ -44,6 +44,11 @@ let params = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect
 let botParams = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=channel%3Abot`, `&state=${STATE_STRING}`]
 params = params.join('')
 
+// Need raw message body for proper signature verification, make sure to JSON.parse() the body later so it's in a readable format
+app.use(express.raw({
+  type: 'application/json'
+}));
+
 app.get('/', async function (req, res) {
 	// Store code upon validation
 	if (req.query.code && req.query.state === STATE_STRING) {
@@ -69,8 +74,6 @@ app.get('/', async function (req, res) {
       }
       await createUser(user);
     }
-		// if find user do nothing
-		// if no find user, createuser	
 	} else {
 		console.log("Ah shit somebody hacking");
 	}
@@ -86,16 +89,17 @@ app.post('/eventsub', (req, res) => {
   // }
 
   // Notification Events
-  // Steps for security / auth CRYPTOJS? jscrypto
-  // 1. Get Secret from env file (this is used for encryption/decryption)
-  HMAC_SECRET
-  console.log(req)
-  // 2. Create a string that combines data in the req (TWITCH_MESSAGE_ID + TWITCH_MESSAGE_TIMESTAMP + "message?")
-  // let str = `${req.headers["twitch-eventsub-message-id"]}${}`
-  // 3. Hash our secret + message using a library, (potentially prepend sha256= to this result)
-  // 4. verify the message using the library to check our hashed secret against the TWITCH_MESSAGE_SIGNATURE
-  console.log(req.headers)
-  res.sendStatus(204);
+  // Create our own HMAC sig to compare our signature to the one provided by twitch
+  const HMAC_MSG = `${req.headers["twitch-eventsub-message-id"]}${req.headers["twitch-eventsub-message-timestamp"]}${req.body}`
+  let HMAC_SIG = 'sha256=' + createHmac(HMAC_SECRET, HMAC_MSG);
+  if(verifySignatures(HMAC_SIG, req.headers['twitch-eventsub-message-signature'])) {
+    let notification = JSON.parse(req.body);
+    // Handle notification
+    res.sendStatus(204);
+  } else {
+    console.log('There was an issue matching signatures: Signature verification returned false');
+    res.sendStatus(403);
+  }
 });
 
 // Make subscription
@@ -110,7 +114,7 @@ const createSubscription = async () => {
       },
       transport: {
         method: "webhook",
-        callback: "http://localhost:3000",
+        callback: "http://localhost:3000/eventsub",
         secret: "s3cre7"
       }
     }, {
@@ -123,6 +127,10 @@ const createSubscription = async () => {
   } catch (err) {
     console.log(err);
   }
+}
+
+const verifyHMAC = (HMAC_SIG, secret) => {
+  return jws.verify(HMAC_SIG, "HS256", secret)
 }
 
 // Host port
