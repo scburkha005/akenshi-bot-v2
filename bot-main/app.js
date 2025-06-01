@@ -40,9 +40,10 @@ async function handleChannelMessages () {
 }
 
 // Request user auth
-let params = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls+channel%3Abot+user%3Awrite%3Achat+user%3Aread%3Achat`, `&state=${STATE_STRING}`]
-let botParams = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=channel%3Abot`, `&state=${STATE_STRING}`]
-params = params.join('')
+let params = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls+channel%3Abot`, `&state=${STATE_STRING}`]
+let botParams = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=user%3Abot+user%3Aread%3Achat`, `&state=${STATE_STRING}`]
+params = params.join('');
+botParams = botParams.join('');
 
 // Need raw message body for proper signature verification, make sure to JSON.parse() the body later so it's in a readable format
 app.use(express.raw({
@@ -108,6 +109,7 @@ app.post('/eventsub', (req, res) => {
 // Make subscription
 const createSubscription = async () => {
   try {
+    const akenshiBot = await findUser("1265515088");
     const { data } = await axios.post("https://api.twitch.tv/helix/eventsub/subscriptions", {
       type: "channel.chat.message",
       version: "1",
@@ -118,7 +120,7 @@ const createSubscription = async () => {
       transport: {
         method: "webhook",
         callback: "http://localhost:3000/eventsub",
-        secret: "s3cre7"
+        secret: HMAC_SECRET
       }
     }, {
       headers: {
@@ -127,10 +129,12 @@ const createSubscription = async () => {
         'Content-Type': 'application/json'
       }
     })
+    console.log(data)
   } catch (err) {
     console.log(err);
   }
 }
+// createSubscription();
 
 // Host port
 app.listen(3000, function () {
