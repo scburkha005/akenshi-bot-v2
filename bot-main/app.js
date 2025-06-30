@@ -3,7 +3,7 @@ const express = require('express');
 const jws = require('jws');
 require('dotenv').config();
 const { createUser, findUser, updateUser } = require('../db/adapters/users');
-const { getToken, validateToken } = require('./api/token')
+const { getUserToken, validateToken } = require('./api/token')
 const { createHmac, verifySignatures } = require('./modules/hmac');
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
 const app = express();
@@ -41,7 +41,7 @@ async function handleChannelMessages () {
 
 // Request user auth
 let params = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls+channel%3Abot`, `&state=${STATE_STRING}`]
-let botParams = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=user%3Abot+user%3Aread%3Achat`, `&state=${STATE_STRING}`]
+let botParams = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=user%3Abot+user%3Aread%3Achat+user%3Awrite%3Achat`, `&state=${STATE_STRING}`]
 params = params.join('');
 botParams = botParams.join('');
 
@@ -56,7 +56,7 @@ app.get('/', async function (req, res) {
 		console.log(req.query)
     // We don't want to get a token if we have a token
     // Does getting a new token invalidate the old token?
-		const data = await getToken(req.query.code);
+		const data = await getUserToken(req.query.code);
 		const userData = await validateToken(data.access_token);
     const user = await findUser(userData.user_id);
     console.log('database', user);
@@ -78,6 +78,7 @@ app.get('/', async function (req, res) {
 	} else {
 		console.log("Ah shit somebody hacking");
 	}
+
 	res.send(`<html><a href="https://id.twitch.tv/oauth2/authorize?${params}">Click here to auth the bot</a><a href="https://id.twitch.tv/oauth2/authorize?${botParams}">Click here as BOT ACCOUNT ONLY</a></html>`)
 });
 
@@ -106,8 +107,8 @@ app.post('/eventsub', (req, res) => {
   }
 });
 
-// Make subscription
-const createSubscription = async () => {
+// This subscription will send a notification when any user sends a message to a channel's chat room
+const createChatSubscription = async () => {
   try {
     const akenshiBot = await findUser("1265515088");
     const { data } = await axios.post("https://api.twitch.tv/helix/eventsub/subscriptions", {
@@ -119,12 +120,12 @@ const createSubscription = async () => {
       },
       transport: {
         method: "webhook",
-        callback: "http://localhost:3000/eventsub",
+        callback: "https://localhost/eventsub",
         secret: HMAC_SECRET
       }
     }, {
       headers: {
-        'Authorization': `Bearer ${akenshiBot.accessToken}`,
+        'Authorization': `Bearer ${TWITCH_SECRET}`,
         'Client-Id': TWITCH_CLIENT_ID,
         'Content-Type': 'application/json'
       }
@@ -134,7 +135,7 @@ const createSubscription = async () => {
     console.log(err);
   }
 }
-// createSubscription();
+createChatSubscription();
 
 // Host port
 app.listen(3000, function () {
