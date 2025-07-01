@@ -62,14 +62,19 @@ app.get('/', async function (req, res) {
     console.log('database', user);
     if (user) {
       console.log('updating user');
-      await updateUser(userData.user_id, data.access_token, data.refresh_token, userData.scopes);
+      await updateUser(userData.user_id, { 
+        accessToken: data.access_token, 
+        refreshToken: data.refresh_token, 
+        scopes: userData.scopes 
+      });
     } else {
       console.log('didnt find user');
       let user = {
         clientId: userData.client_id,
         userId: userData.user_id,
         displayName: userData.login,
-        accessToken: data.access_token,
+        userAccessToken: data.access_token,
+        appAccessToken: "",
         refreshToken: data.refresh_token,
         scopes: userData.scopes
       }
