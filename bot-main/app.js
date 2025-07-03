@@ -5,6 +5,7 @@ require('dotenv').config();
 const { createUser, findUser, updateUser } = require('../db/adapters/users');
 const { getUserToken, validateToken } = require('./api/token')
 const { createHmac, verifySignatures } = require('./modules/hmac');
+const { createChatSubscription } = require('./modules/subscriptions');
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
 const app = express();
 // POST Send Chat Message
@@ -103,8 +104,19 @@ app.post('/eventsub', (req, res) => {
     let notification = JSON.parse(req.body);
     // Handle notification
     if (req.headers["twitch-eventsub-message-type"] === 'notification') {
+      console.log('notification running')
       console.log(notification)
       res.sendStatus(204);
+    } else if (req.headers["twitch-eventsub-message-type"] = 'webhook_callback_verification') {
+      console.log('webhook callback verification running')
+      // Respond to the challenge request to enable our subscription
+      res.set('Content-Type', 'text/plain').status(200).send(notification.challenge);
+    } else if (req.headers["twitch-eventsub-message-type"] = 'revocation') {
+      res.sendStatus(204);
+      
+      console.log(`${notification.subscription.type} notifications revoked`);
+      console.log(`reason: ${notification.subscription.status}`);
+      console.log(`condition: ${JSON.stringify(notification.subscription.condition, null, 4)}`);
     }
   } else {
     console.log('There was an issue matching signatures: Signature verification returned false');
@@ -112,34 +124,7 @@ app.post('/eventsub', (req, res) => {
   }
 });
 
-// This subscription will send a notification when any user sends a message to a channel's chat room
-const createChatSubscription = async () => {
-  try {
-    const akenshiBot = await findUser("1265515088");
-    const { data } = await axios.post("https://api.twitch.tv/helix/eventsub/subscriptions", {
-      type: "channel.chat.message",
-      version: "1",
-      condition: {
-        broadcaster_user_id: "187093318", // broadcaster userId
-        user_id: "1265515088", // bot userId
-      },
-      transport: {
-        method: "webhook",
-        callback: "https://localhost/eventsub",
-        secret: HMAC_SECRET
-      }
-    }, {
-      headers: {
-        'Authorization': `Bearer ${TWITCH_SECRET}`,
-        'Client-Id': TWITCH_CLIENT_ID,
-        'Content-Type': 'application/json'
-      }
-    })
-    console.log(data)
-  } catch (err) {
-    console.log(err);
-  }
-}
+// temp running subscriptions here
 createChatSubscription();
 
 // Host port
