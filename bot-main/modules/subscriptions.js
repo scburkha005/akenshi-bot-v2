@@ -11,6 +11,14 @@ const getEventSubscriptions = async () => {
       }
     });
     console.log(data)
+    const failedSubscriptions = data.data.filter(subscription => {
+      return subscription.status === 'webhook_callback_verification_failed'
+    });
+    
+    if (failedSubscriptions.length > 0) {
+      console.log('Failed subscriptions found: deleting failed subscriptions');
+      await deleteFailedSubscriptions(failedSubscriptions);
+    }
   } catch (err) {
     console.log(err);
   }
@@ -46,7 +54,29 @@ const createChatSubscription = async () => {
   }
 }
 
+const deleteFailedSubscriptions = async (failedSubscriptions) => {
+  try {
+    const akenshiBot = await findUser("1265515088");
+
+    failedSubscriptions.forEach(async subscription => {
+      let id = subscription.id
+      console.log(`deleting subscription: ${id}`);
+      await axios.delete(`https://api.twitch.tv/helix/eventsub/subscriptions?id=${id}`, {
+        headers: {
+          'Authorization': `Bearer ${akenshiBot.appAccessToken}`,
+          'Client-Id': TWITCH_CLIENT_ID,
+        }
+      });
+    });
+
+    console.log('finished deleting failed subscriptions');
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 module.exports = {
     createChatSubscription,
-    getEventSubscriptions
+    getEventSubscriptions,
+    deleteFailedSubscriptions
 }
