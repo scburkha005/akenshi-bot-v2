@@ -5,7 +5,7 @@ require('dotenv').config();
 const { createUser, findUser, updateUser } = require('../db/adapters/users');
 const { getUserToken, validateToken } = require('./api/token')
 const { createHmac, verifySignatures } = require('./modules/hmac');
-const { createChatSubscription } = require('./modules/subscriptions');
+const { createChatSubscription, getEventSubscriptions } = require('./modules/subscriptions');
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
 const app = express();
 // POST Send Chat Message
@@ -125,7 +125,8 @@ app.post('/eventsub', (req, res) => {
 });
 
 // temp running subscriptions here
-createChatSubscription();
+// createChatSubscription();
+// getEventSubscriptions();
 
 // Host port
 app.listen(3000, function () {
