@@ -7,8 +7,10 @@ user {
   clientId
   userId
   displayName
-  accessToken
+  userAccessToken
+  appAccessToken
   refreshToken
+  scopes
 }
 */
 // Create User
@@ -33,23 +35,20 @@ async function findUser(userId) {
   }
 }
 // Find User
-async function updateUser(userId, accessToken, refreshToken, scopes) {
+async function updateUser(userId, userUpdateObj) {
   try {
     const user = usersCollection.updateOne({ userId }, {
-      $set: {
-        accessToken,
-        refreshToken,
-        scopes
-      }
-    })
+      $set: userUpdateObj
+    });
 
     return user;
   } catch (err) {
     console.log(err);
   }
 }
+
 module.exports = {
   createUser,
   findUser,
-  updateUser
+  updateUser,
 }

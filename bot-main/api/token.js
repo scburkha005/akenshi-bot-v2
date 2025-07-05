@@ -1,8 +1,21 @@
 const axios = require('axios');
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING } = process.env;
 // TWITCH API REQUESTS
-// POST oauth2 token
-async function getToken (code) {
+async function getAppToken (clientId, clientSecret) {
+	try {
+		const { data } = await axios.post('https://id.twitch.tv/oauth2/token', {
+			client_id: clientId,
+			client_secret: clientSecret,
+			grant_type: 'client_credentials'
+		})
+		console.log(data);
+		return data;
+	} catch (err) {
+		console.log(err);
+	}
+}
+// POST oauth2 token => uses code from authorize endpoint to generate user access token
+async function getUserToken (code) {
 	try {
 		const { data } = await axios.post('https://id.twitch.tv/oauth2/token', {
 			client_id: TWITCH_CLIENT_ID,
@@ -45,7 +58,8 @@ async function getUser() {
 }
 
 module.exports = {
-    getToken,
+    getUserToken,
     validateToken,
-    getUser
+    getUser,
+	getAppToken
 }
