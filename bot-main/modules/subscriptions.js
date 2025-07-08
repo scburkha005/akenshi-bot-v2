@@ -38,7 +38,7 @@ const createChatSubscription = async () => {
       },
       transport: {
         method: "webhook",
-        callback: "https://localhost/eventsub",
+        callback: "https://akenshi-bot.ashagni.live/eventsub",
         secret: HMAC_SECRET
       }
     }, {

@@ -41,8 +41,8 @@ async function handleChannelMessages () {
 }
 
 // Request user auth
-let params = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls+channel%3Abot`, `&state=${STATE_STRING}`]
-let botParams = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=http://localhost:3000`, `&scope=user%3Abot+user%3Aread%3Achat+user%3Awrite%3Achat`, `&state=${STATE_STRING}`]
+let params = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=https://akenshi-bot.ashagni.live`, `&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls+channel%3Abot`, `&state=${STATE_STRING}`]
+let botParams = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=https://akenshi-bot.ashagni.live`, `&scope=user%3Abot+user%3Aread%3Achat+user%3Awrite%3Achat`, `&state=${STATE_STRING}`]
 params = params.join('');
 botParams = botParams.join('');
 
@@ -81,10 +81,7 @@ app.get('/', async function (req, res) {
       }
       await createUser(user);
     }
-	} else {
-		console.log("Ah shit somebody hacking");
 	}
-
 	res.send(`<html><a href="https://id.twitch.tv/oauth2/authorize?${params}">Click here to auth the bot</a><a href="https://id.twitch.tv/oauth2/authorize?${botParams}">Click here as BOT ACCOUNT ONLY</a></html>`)
 });
 
@@ -125,8 +122,8 @@ app.post('/eventsub', (req, res) => {
 });
 
 // temp running subscriptions here
-// createChatSubscription();
-// getEventSubscriptions();
+createChatSubscription();
+getEventSubscriptions();
 
 // Host port
 app.listen(3000, function () {

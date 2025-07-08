@@ -8,8 +8,8 @@
     "mongodb": "^6.13.1"
   },
   "scripts": {
-    "start": "npx nodemon ./bot-main/app.js",
-    "start:db": "npx nodemon ./db/index.js"
+    "start": "node ./bot-main/app.js",
+    "start:db": "node ./db/index.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
