@@ -12,14 +12,13 @@ const app = express();
 async function sendMessage (user, bot, message) {
 	try {
     const akenshiBot = await findUser("1265515088");
-    console.log(user)
 		const { data } = await axios.post("https://api.twitch.tv/helix/chat/messages", {
         "broadcaster_id": "187093318",
         "sender_id": akenshiBot.userId,
-        "message": 'Hello world'
+        "message": message
 			}, {
         headers: {
-          'Authorization': `Bearer ${akenshiBot.accessToken}`,
+          'Authorization': `Bearer ${akenshiBot.userAccessToken}`,
           'Client-Id': TWITCH_CLIENT_ID,
           'Content-Type': 'application/json'
         }
@@ -87,12 +86,6 @@ app.get('/', async function (req, res) {
 
 // POST localhost:3000/eventsub
 app.post('/eventsub', (req, res) => {
-  // Challenge Events
-  // if (req.headers["twitch-eventsub-message-type"] === "webhook_callback_verification") {
-  //   console.log(req)
-  //   // res.set('Content-Type', 'text/plain').status(200).send(req.body.notification.challenge);
-  // }
-
   // Notification Events
   // Create our own HMAC sig to compare our signature to the one provided by twitch
   const HMAC_MSG = `${req.headers["twitch-eventsub-message-id"]}${req.headers["twitch-eventsub-message-timestamp"]}${req.body}`
@@ -103,6 +96,10 @@ app.post('/eventsub', (req, res) => {
     if (req.headers["twitch-eventsub-message-type"] === 'notification') {
       console.log('notification running')
       console.log(notification)
+      // Captures message events
+      if (notification.subscription.type === 'channel.chat.message') {
+        sendMessage( 'placeholder', 'placeholder', `${notification.event.broadcaster_user_name} said ${notification.event.message.text}`);
+      }
       res.sendStatus(204);
     } else if (req.headers["twitch-eventsub-message-type"] = 'webhook_callback_verification') {
       console.log('webhook callback verification running')
@@ -122,7 +119,7 @@ app.post('/eventsub', (req, res) => {
 });
 
 // temp running subscriptions here
-createChatSubscription();
+// createChatSubscription();
 getEventSubscriptions();
 
 // Host port
