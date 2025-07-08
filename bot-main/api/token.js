@@ -22,7 +22,7 @@ async function getUserToken (code) {
 			client_secret: TWITCH_SECRET,
 			code,
 			grant_type: 'authorization_code',
-			redirect_uri: 'http://localhost:3000'
+			redirect_uri: 'https://akenshi-bot.ashagni.live'
 		});
 		console.log(data);
 		return data;
