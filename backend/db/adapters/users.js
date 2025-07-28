@@ -1,4 +1,5 @@
-const { client } = require('../index')
+// const { client } = require('../index')
+import client from '../index.js';
 const akenshiBotDB = client.db('akenshiBotDB');
 const usersCollection = akenshiBotDB.collection('users');
 // Schema
@@ -14,7 +15,7 @@ user {
 }
 */
 // Create User
-async function createUser(user) {
+export async function createUser(user) {
   try {
     if (user) {
       const data = await usersCollection.insertOne(user)
@@ -25,7 +26,7 @@ async function createUser(user) {
   }
 }
 // Find User
-async function findUser(userId) {
+export async function findUser(userId) {
   try {
     const user = usersCollection.findOne({ userId })
 
@@ -35,7 +36,7 @@ async function findUser(userId) {
   }
 }
 // Find User
-async function updateUser(userId, userUpdateObj) {
+export async function updateUser(userId, userUpdateObj) {
   try {
     const user = usersCollection.updateOne({ userId }, {
       $set: userUpdateObj
@@ -45,10 +46,4 @@ async function updateUser(userId, userUpdateObj) {
   } catch (err) {
     console.log(err);
   }
-}
-
-module.exports = {
-  createUser,
-  findUser,
-  updateUser,
 }

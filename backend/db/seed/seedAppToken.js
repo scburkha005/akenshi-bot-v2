@@ -1,5 +1,5 @@
 const { client } = require('../index.js');
-const { getAppToken } = require('../../bot-main/api/token.js');
+const { getAppToken } = require('../../api/token.js');
 const { updateUser } = require('../adapters/users.js');
 require('dotenv').config({ path: '../../../../../etc/akenshi-bot.env' });
 const { TWITCH_CLIENT_ID, TWITCH_SECRET } = process.env;

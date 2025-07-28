@@ -1,7 +1,12 @@
-const axios = require('axios');
-const { findUser } = require('../../db/adapters/users');
+// const axios = require('axios');
+import axios from 'axios';
+// const { findUser } = require('../db/adapters/users');
+import { findUser } from '../db/adapters/users.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
-const getEventSubscriptions = async () => {
+console.log('file running')
+console.log(TWITCH_CLIENT_ID)
+export const getEventSubscriptions = async (TWITCH_CLIENT_ID) => {
+  console.log(TWITCH_CLIENT_ID)
   try {
     const akenshiBot = await findUser("1265515088");
     const { data } = await axios.get('https://api.twitch.tv/helix/eventsub/subscriptions', {
@@ -25,7 +30,7 @@ const getEventSubscriptions = async () => {
 }
 
 // This subscription will send a notification when any user sends a message to a channel's chat room
-const createChatSubscription = async () => {
+export const createChatSubscription = async () => {
   try {
     const akenshiBot = await findUser("1265515088");
     console.log(akenshiBot)
@@ -54,7 +59,7 @@ const createChatSubscription = async () => {
   }
 }
 
-const deleteFailedSubscriptions = async (failedSubscriptions) => {
+export const deleteFailedSubscriptions = async (failedSubscriptions) => {
   try {
     const akenshiBot = await findUser("1265515088");
 
@@ -75,8 +80,8 @@ const deleteFailedSubscriptions = async (failedSubscriptions) => {
   }
 }
 
-module.exports = {
-    createChatSubscription,
-    getEventSubscriptions,
-    deleteFailedSubscriptions
-}
+// module.exports = {
+//     createChatSubscription,
+//     getEventSubscriptions,
+//     deleteFailedSubscriptions
+// }
