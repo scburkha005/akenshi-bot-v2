@@ -1,10 +1,10 @@
-const { client } = require('../index.js');
+import { client } from '../index.js';
 
 let exampleUser = {
   id: 1231245
 }
 
-async function seedDB() {
+export async function seedDB() {
   try {
     const akenshiBotDB = client.db('akenshiBotDB');
 
@@ -17,7 +17,3 @@ async function seedDB() {
 }
 
 seedDB();
-
-module.exports = {
-  seedDB
-}

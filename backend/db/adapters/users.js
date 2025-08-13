@@ -1,4 +1,3 @@
-// const { client } = require('../index')
 import client from '../index.js';
 const akenshiBotDB = client.db('akenshiBotDB');
 const usersCollection = akenshiBotDB.collection('users');

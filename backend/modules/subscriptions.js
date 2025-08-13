@@ -1,10 +1,7 @@
-// const axios = require('axios');
 import axios from 'axios';
-// const { findUser } = require('../db/adapters/users');
 import { findUser } from '../db/adapters/users.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
 console.log('file running')
-console.log(TWITCH_CLIENT_ID)
 export const getEventSubscriptions = async (TWITCH_CLIENT_ID) => {
   console.log(TWITCH_CLIENT_ID)
   try {
@@ -43,7 +40,7 @@ export const createChatSubscription = async () => {
       },
       transport: {
         method: "webhook",
-        callback: "https://akenshi-bot.ashagni.live/eventsub",
+        callback: "https://akenshi-bot.ashagni.live/api/eventsub",
         secret: HMAC_SECRET
       }
     }, {

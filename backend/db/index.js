@@ -1,4 +1,3 @@
-// const { MongoClient, ServerApiVersion } = require('mongodb');
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
 const uri = 'mongodb://localhost:27017';

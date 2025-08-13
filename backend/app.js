@@ -1,23 +1,14 @@
-// const axios = require('axios');
 import axios from 'axios';
-// const apiRouter = require('express').Router();
 import express from 'express';
 const apiRouter = express.Router();
-// const jws = require('jws');
 import jws from 'jws';
-// require('dotenv').config();
 import dotenv from 'dotenv'
 dotenv.config();
-// const { createUser, findUser, updateUser } = require('./db/adapters/users');
 import { createUser, findUser, updateUser } from './db/adapters/users.js';
-// const { getUserToken, validateToken } = require('./api/token')
 import { getUserToken, validateToken } from './api/token.js';
-// const { createHmac, verifySignatures } = require('./modules/hmac');
 import { createHmac, verifySignatures } from './modules/hmac.js';
-// const { createChatSubscription, getEventSubscriptions } = require('./modules/subscriptions');
 import { createChatSubscription, getEventSubscriptions } from './modules/subscriptions.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
-// console.log(TWITCH_CLIENT_ID)
 // POST Send Chat Message
 async function sendMessage (user, bot, message) {
 	try {
