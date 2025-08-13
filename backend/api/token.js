@@ -1,4 +1,3 @@
-// const axios = require('axios');
 import axios from 'axios';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING } = process.env;
 // TWITCH API REQUESTS
