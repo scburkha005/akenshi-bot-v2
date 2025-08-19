@@ -1,7 +1,8 @@
-const { client } = require('../index.js');
-const { getAppToken } = require('../../bot-main/api/token.js');
-const { updateUser } = require('../adapters/users.js');
-require('dotenv').config({ path: '../../../../../etc/akenshi-bot.env' });
+import { client } from '../index.js';
+import { getAppToken } from '../../api/token.js';
+import { updateUser } from '../adapters/users.js';
+import dotenv from 'dotenv'
+dotenv.config({ path: '../../../../../etc/akenshi-bot.env' });
 const { TWITCH_CLIENT_ID, TWITCH_SECRET } = process.env;
 
 async function seedAppAccessToken () {

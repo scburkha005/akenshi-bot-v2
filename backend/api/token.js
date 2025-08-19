@@ -1,7 +1,7 @@
-const axios = require('axios');
+import axios from 'axios';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING } = process.env;
 // TWITCH API REQUESTS
-async function getAppToken (clientId, clientSecret) {
+export async function getAppToken (clientId, clientSecret) {
 	try {
 		const { data } = await axios.post('https://id.twitch.tv/oauth2/token', {
 			client_id: clientId,
@@ -15,7 +15,7 @@ async function getAppToken (clientId, clientSecret) {
 	}
 }
 // POST oauth2 token => uses code from authorize endpoint to generate user access token
-async function getUserToken (code) {
+export async function getUserToken (code) {
 	try {
 		const { data } = await axios.post('https://id.twitch.tv/oauth2/token', {
 			client_id: TWITCH_CLIENT_ID,
@@ -32,7 +32,7 @@ async function getUserToken (code) {
 }
 
 // GET Validate Token
-async function validateToken (access_token) {
+export async function validateToken (access_token) {
 	try {
 		console.log('ACCESS TOKEN', access_token)
 		const { data } = await axios.get('https://id.twitch.tv/oauth2/validate', {
@@ -47,7 +47,7 @@ async function validateToken (access_token) {
 	}
 }
 // GET User
-async function getUser() {
+export async function getUser() {
 	try {
 		const { data } = await axios.get('https://api.twitch.tv/helix/users?login=twitchdev', {
 			
@@ -55,11 +55,4 @@ async function getUser() {
 	} catch (err) {
 		console.log(err);
 	}
-}
-
-module.exports = {
-    getUserToken,
-    validateToken,
-    getUser,
-	getAppToken
 }

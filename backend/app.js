@@ -1,13 +1,14 @@
-const axios = require('axios');
-const express = require('express');
-const jws = require('jws');
-require('dotenv').config();
-const { createUser, findUser, updateUser } = require('../db/adapters/users');
-const { getUserToken, validateToken } = require('./api/token')
-const { createHmac, verifySignatures } = require('./modules/hmac');
-const { createChatSubscription, getEventSubscriptions } = require('./modules/subscriptions');
+import axios from 'axios';
+import express from 'express';
+const apiRouter = express.Router();
+import jws from 'jws';
+import dotenv from 'dotenv'
+dotenv.config();
+import { createUser, findUser, updateUser } from './db/adapters/users.js';
+import { getUserToken, validateToken } from './api/token.js';
+import { createHmac, verifySignatures } from './modules/hmac.js';
+import { createChatSubscription, getEventSubscriptions } from './modules/subscriptions.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
-const app = express();
 // POST Send Chat Message
 async function sendMessage (user, bot, message) {
 	try {
@@ -46,11 +47,11 @@ params = params.join('');
 botParams = botParams.join('');
 
 // Need raw message body for proper signature verification, make sure to JSON.parse() the body later so it's in a readable format
-app.use(express.raw({
+apiRouter.use(express.raw({
   type: 'application/json'
 }));
 
-app.get('/', async function (req, res) {
+apiRouter.get('/', async function (req, res) {
 	// Store code upon validation
 	if (req.query.code && req.query.state === STATE_STRING) {
 		console.log(req.query)
@@ -85,7 +86,7 @@ app.get('/', async function (req, res) {
 });
 
 // POST localhost:3000/eventsub
-app.post('/eventsub', (req, res) => {
+apiRouter.post('/eventsub', (req, res) => {
   // Notification Events
   // Create our own HMAC sig to compare our signature to the one provided by twitch
   const HMAC_MSG = `${req.headers["twitch-eventsub-message-id"]}${req.headers["twitch-eventsub-message-timestamp"]}${req.body}`
@@ -120,9 +121,10 @@ app.post('/eventsub', (req, res) => {
 
 // temp running subscriptions here
 // createChatSubscription();
-getEventSubscriptions();
+getEventSubscriptions(TWITCH_CLIENT_ID);
 
 // Host port
-app.listen(3000, function () {
-	console.log('Twitch auth server listening on http://localhost:3000');
-});
+// app.listen(3000, function () {
+// 	console.log('Twitch auth server listening on http://localhost:3000');
+// });
+export default apiRouter;

@@ -1,17 +1,33 @@
 {
+  "name": "akenshi-bot",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build --outDir dist/client",
+    "build:server": "vite build --ssr src/entry-server.jsx --outDir dist/server",
+    "preview": "cross-env NODE_ENV=production node server"
+  },
   "dependencies": {
     "axios": "^1.7.9",
+    "compression": "^1.8.0",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
+    "express": "^5.1.0",
     "jws": "^4.0.0",
-    "mongodb": "^6.13.1"
-  },
-  "scripts": {
-    "start": "node ./bot-main/app.js",
-    "start:db": "node ./db/index.js"
+    "mongodb": "^6.13.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.8.0",
+    "sirv": "^3.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "cross-env": "^7.0.3",
+    "vite": "^7.0.0"
   }
 }
