@@ -24,7 +24,7 @@ export async function createUser(user) {
     console.log(err);
   }
 }
-// Find User
+// Find User By Id
 export async function findUser(userId) {
   try {
     const user = usersCollection.findOne({ userId })
@@ -34,7 +34,17 @@ export async function findUser(userId) {
     console.log(err);
   }
 }
-// Find User
+// Find User by Username
+export async function findUserByUsername (username) {
+  try {
+    const user = usersCollection.findOne({ username });
+
+    return user;
+  } catch (err) {
+    console.log(err);
+  }
+}
+// Update User
 export async function updateUser(userId, userUpdateObj) {
   try {
     const user = usersCollection.updateOne({ userId }, {
