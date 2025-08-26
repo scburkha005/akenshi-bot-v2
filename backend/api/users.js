@@ -1,6 +1,10 @@
 import express from 'express';
 import { createUser, findUserByUsername } from '../db/adapters/users.js';
 import { hashPassword, verifyPassword } from './modules/hash.js';
+import jwt from 'jsonwebtoken';
+import { configDotenv } from 'dotenv';
+configDotenv();
+const { JWT_SECRET } = process.env;
 const userRouter = express.Router();
 
 userRouter.use(express.json());
@@ -44,10 +48,18 @@ userRouter.post('/register', async function (req, res) {
     // store user in database
     let createdUser = await createUser(newUser);
 
+    //create jwt token using username and password
+    let simpleUser = {
+      username: req.body.username,
+    }
+    const token = jwt.sign(simpleUser, JWT_SECRET, {
+      expiresIn: '1w'
+    });
+
     res.send({
       message: "User created successfully",
-      user: createdUser
-    })
+      token
+    });
   } catch (err) {
     console.log(err);
   }
@@ -75,9 +87,13 @@ userRouter.post('/login', async function (req, res) {
     }
     delete user.password;
 
+    const token = jwt.sign({
+      username: req.body.username
+    }, JWT_SECRET);
+
     res.send({
       message: "Login successful",
-      user
+      token
     })
 
   } catch (err) {
