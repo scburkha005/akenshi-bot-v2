@@ -55,8 +55,16 @@ userRouter.post('/register', async function (req, res) {
 
 userRouter.post('/login', async function (req, res) {
   try {
+    console.log(req.body)
     const user = await findUserByUsername(req.body.username);
-    let isValid = verifyPassword(req.body.password, user?.password);
+    if (!user) {
+      res.send({
+        error: "Failed to login",
+        reason: "Invalid credentials"
+      });
+      return;
+    }
+    let isValid = await verifyPassword(req.body.password, user?.password);
 
     if (!isValid) {
       res.send({
