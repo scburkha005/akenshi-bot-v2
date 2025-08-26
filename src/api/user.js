@@ -15,3 +15,18 @@ export async function login (username, password) {
     console.log(err);
   }
 }
+
+export async function register (username, password) {
+  try {
+    let { data } = await axios.post(`${VITE_API_URL}/user/register`, {
+      username,
+      password
+    });
+    console.log(data)
+    
+    return data;
+  } catch (err) {
+    console.log('error while registering account');
+    console.log(err);
+  }
+}
