@@ -3,19 +3,23 @@ import { login } from '../api/user.js';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function Login () {
-  let [user, setUser] = useState({});
+function Login ({ setToken }) {
+  let [error, setError] = useState({});
 
   async function onLogin (e) {
     e.preventDefault();
     let [{ value: username }, { value: password}] = e.target
     let result = await login(username, password);
-    setUser(result);
-    console.log(result)
+    if (result.error) {
+      setError(result);
+      console.log(result)
+    } else {
+      setToken(result.token);
+    }
   }
   return (
     <>
-      {user?.error && <div id='error-message'>{`${user.error}: ${user.reason}`}</div>}
+      {error?.error && <div id='error-message'>{`${error.error}: ${error.reason}`}</div>}
       <form id="login-form" onSubmit={onLogin}>
         <label>Username: </label>
         <input />
