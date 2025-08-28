@@ -1,21 +1,28 @@
 import './Login.css';
 import { login } from '../api/user.js';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login ({ setToken }) {
+  const navigate = useNavigate();
   let [error, setError] = useState({});
 
   async function onLogin (e) {
     e.preventDefault();
     let [{ value: username }, { value: password}] = e.target
-    let result = await login(username, password);
-    if (result.error) {
-      setError(result);
-      console.log(result)
-    } else {
-      setToken(result.token);
+    try {
+      let { token } = await login(username, password);
+      setToken(token);
+      navigate('/');
+    } catch ({ response: { data }}) {
+      setError(data);
     }
+    // if (result.error) {
+    //   setError(result);
+    //   console.log(result)
+    // } else {
+    //   setToken(result.token);
+    // }
   }
   return (
     <>
