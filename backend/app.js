@@ -154,6 +154,13 @@ apiRouter.post('/eventsub', (req, res) => {
   }
 });
 
+apiRouter.use((req, res, next) => {
+  res.status(404).send({
+    error: "IncorrectUrl",
+    reason: "Page Not Found"
+  })
+})
+
 // temp running subscriptions here
 // createChatSubscription();
 getEventSubscriptions(TWITCH_CLIENT_ID);

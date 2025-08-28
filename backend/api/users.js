@@ -9,7 +9,7 @@ const userRouter = express.Router();
 
 userRouter.use(express.json());
 
-userRouter.post('/register', async function (req, res) {
+userRouter.post('/register', async function (req, res, next) {
   // req.body required format
   // {
   //  username
@@ -18,21 +18,19 @@ userRouter.post('/register', async function (req, res) {
   try {
     // ensure that password and username exist
     if (!req.body.username || !req.body.password) {
-      res.send({
+      next({
         error: "Failed to create user",
         reason: "No username/password provided"
       });
-      return;
     }
 
     // first check if the username / user already exists
     const user = await findUserByUsername(req.body.username);
     if (user) {
-      res.send({
+      next({
         error: "Failed to create user",
         reason: "Username already exists"
       });
-      return;
     }
     const hashedPassword = await hashPassword(req.body.password);
     let newUser = {
@@ -65,25 +63,22 @@ userRouter.post('/register', async function (req, res) {
   }
 })
 
-userRouter.post('/login', async function (req, res) {
+userRouter.post('/login', async function (req, res, next) {
   try {
-    console.log(req.body)
     const user = await findUserByUsername(req.body.username);
     if (!user) {
-      res.send({
+      next({
         error: "Failed to login",
         reason: "Invalid credentials"
       });
-      return;
     }
     let isValid = await verifyPassword(req.body.password, user?.password);
 
     if (!isValid) {
-      res.send({
+      next({
         error: "Failed to login",
         reason: "Invalid credentials"
       });
-      return;
     }
     delete user.password;
 
