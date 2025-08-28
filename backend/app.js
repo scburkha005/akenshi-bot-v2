@@ -3,13 +3,43 @@ import express from 'express';
 const apiRouter = express.Router();
 import { userRouter } from './api/index.js';
 import jws from 'jws';
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 dotenv.config();
-import { createUser, findUser, updateUser } from './db/adapters/users.js';
+import { createUser, findUser, findUserByUsername, updateUser } from './db/adapters/users.js';
 import { getUserToken, validateToken } from './modules/token.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { createChatSubscription, getEventSubscriptions } from './modules/subscriptions.js';
-const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
+const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET, JWT_SECRET } = process.env;
+
+apiRouter.use(async (req, res, next) => {
+  const PREFIX = 'Bearer ';
+  const auth = req.header('Authorization');
+
+  if (!auth) {
+    next();
+  } else if (auth.startsWith(PREFIX)) {
+    const token = auth.slice(PREFIX.length);
+
+    try {
+      const { username } = jwt.verify(token, JWT_SECRET);
+
+      if (username) {
+        const user = await findUserByUsername(username);
+        req.user = user;
+        next();
+      }
+    } catch (err) {
+      console.log('error during jwt auth');
+      console.log(err);
+    }
+  } else {
+    res.send({
+      error: "Authorization Error",
+      reason: `Authorization token must start with ${PREFIX}`
+    });
+  }
+});
 
 // API Routing
 apiRouter.use('/user', userRouter);
