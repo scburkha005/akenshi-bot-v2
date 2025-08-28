@@ -68,6 +68,17 @@ app.use('*all', async (req, res) => {
   }
 })
 
+app.use(({ error, reason }, req, res, next) => {
+  if (res.statusCode < 400 || res.statusCode >= 500) {
+    res.status(500)
+  }
+
+  res.send({
+    error,
+    reason
+  })
+})
+
 // Start http server
 app.listen(port, () => {
   console.log(`Server started at http://localhost:${port}`)
