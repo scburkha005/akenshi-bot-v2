@@ -1,14 +1,19 @@
 import axios from 'axios';
 import express from 'express';
 const apiRouter = express.Router();
+import { userRouter } from './api/index.js';
 import jws from 'jws';
 import dotenv from 'dotenv'
 dotenv.config();
 import { createUser, findUser, updateUser } from './db/adapters/users.js';
-import { getUserToken, validateToken } from './api/token.js';
+import { getUserToken, validateToken } from './modules/token.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { createChatSubscription, getEventSubscriptions } from './modules/subscriptions.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
+
+// API Routing
+apiRouter.use('/user', userRouter);
+
 // POST Send Chat Message
 async function sendMessage (user, bot, message) {
 	try {
