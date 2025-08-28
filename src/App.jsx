@@ -5,6 +5,15 @@ import { Navbar, Home, Login, Register } from './components';
 
 function App () {
   const [ token, setToken ] = useState('');
+  const [ user, setUser ] = useState({});
+
+  // grab token and user on app load
+  useEffect(() => {
+    let token = localStorage.getItem('token');
+    if (token) {
+      setToken(token);
+    }
+  }, [])
 
   // store token in local storage if it exists
   useEffect(() => {
