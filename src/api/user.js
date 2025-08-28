@@ -7,12 +7,11 @@ export async function login (username, password) {
       username,
       password
     });
-    console.log(data)
 
     return data;
   } catch (err) {
     console.log('error while logging in');
-    console.log(err);
+    throw err;
   }
 }
 
@@ -22,11 +21,10 @@ export async function register (username, password) {
       username,
       password
     });
-    console.log(data)
     
     return data;
   } catch (err) {
     console.log('error while registering account');
-    console.log(err);
+    throw err;
   }
 }
