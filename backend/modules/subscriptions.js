@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { findUser } from '../db/adapters/users.js';
+import { findUserByTwitchId } from '../db/adapters/users.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
 console.log('file running')
 export const getEventSubscriptions = async (TWITCH_CLIENT_ID) => {
   console.log(TWITCH_CLIENT_ID)
   try {
-    const akenshiBot = await findUser("1265515088");
+    const akenshiBot = await findUserByTwitchId("1265515088");
     const { data } = await axios.get('https://api.twitch.tv/helix/eventsub/subscriptions', {
       headers: {
         'Authorization': `Bearer ${akenshiBot.appAccessToken}`,
@@ -29,7 +29,7 @@ export const getEventSubscriptions = async (TWITCH_CLIENT_ID) => {
 // This subscription will send a notification when any user sends a message to a channel's chat room
 export const createChatSubscription = async () => {
   try {
-    const akenshiBot = await findUser("1265515088");
+    const akenshiBot = await findUserByTwitchId("1265515088");
     console.log(akenshiBot)
     const { data } = await axios.post("https://api.twitch.tv/helix/eventsub/subscriptions", {
       type: "channel.chat.message",
