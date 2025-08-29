@@ -28,3 +28,18 @@ export async function register (username, password) {
     throw err;
   }
 }
+
+export async function getUser (token) {
+  try {
+    let { data } = await axios.get(`${VITE_API_URL}/user/myuser`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    return data;
+  } catch (err) {
+    console.log('error while getting user');
+    throw err;
+  }
+}
