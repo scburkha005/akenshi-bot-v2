@@ -2,11 +2,10 @@ import axios from 'axios';
 import express from 'express';
 const apiRouter = express.Router();
 import { userRouter } from './api/index.js';
-import jws from 'jws';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 dotenv.config();
-import { createUser, findUser, findUserByUsername, updateUser } from './db/adapters/users.js';
+import { createUser, findUserByTwitchId, findUserByUsername, updateUser } from './db/adapters/users.js';
 import { getUserToken, validateToken } from './modules/token.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { createChatSubscription, getEventSubscriptions } from './modules/subscriptions.js';
@@ -47,7 +46,7 @@ apiRouter.use('/user', userRouter);
 // POST Send Chat Message
 async function sendMessage (user, bot, message) {
 	try {
-    const akenshiBot = await findUser("1265515088");
+    const akenshiBot = await findUserByTwitchId("1265515088");
 		const { data } = await axios.post("https://api.twitch.tv/helix/chat/messages", {
         "broadcaster_id": "187093318",
         "sender_id": akenshiBot.userId,
@@ -94,7 +93,7 @@ apiRouter.get('/', async function (req, res) {
     // Does getting a new token invalidate the old token?
 		const data = await getUserToken(req.query.code);
 		const userData = await validateToken(data.access_token);
-    const user = await findUser(userData.user_id);
+    const user = await findUserByTwitchId(userData.user_id);
     console.log('database', user);
     if (user) {
       console.log('updating user');
