@@ -13,11 +13,12 @@ function Register ({ setToken }) {
         reason: "Passwords do not match"
       });
     } else {
-      let result = await register(username, password);
-      if (result?.error) {
-        setError(result);
-      } else {
-        setToken(result.token);
+      try {
+        let { token } = await register(username, password);
+        setToken(token);
+      } catch ({ response: { data }}) {
+        console.log(data);
+        setError(data);
       }
     }
     console.log(username, password, passwordRepeat)

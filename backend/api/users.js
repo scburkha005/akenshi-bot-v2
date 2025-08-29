@@ -1,6 +1,6 @@
 import express from 'express';
-import { createUser, findUserByUsername } from '../db/adapters/users.js';
-import { hashPassword, verifyPassword } from './modules/hash.js';
+import { createUser, findUserByUsername, userLogin } from '../db/adapters/users.js';
+import { requireUser } from './modules/requireUser.js';
 import jwt from 'jsonwebtoken';
 import { configDotenv } from 'dotenv';
 configDotenv();
@@ -9,7 +9,7 @@ const userRouter = express.Router();
 
 userRouter.use(express.json());
 
-userRouter.post('/register', async function (req, res) {
+userRouter.post('/register', async function (req, res, next) {
   // req.body required format
   // {
   //  username
@@ -18,7 +18,7 @@ userRouter.post('/register', async function (req, res) {
   try {
     // ensure that password and username exist
     if (!req.body.username || !req.body.password) {
-      res.send({
+      next({
         error: "Failed to create user",
         reason: "No username/password provided"
       });
@@ -28,31 +28,29 @@ userRouter.post('/register', async function (req, res) {
     // first check if the username / user already exists
     const user = await findUserByUsername(req.body.username);
     if (user) {
-      res.send({
+      next({
         error: "Failed to create user",
         reason: "Username already exists"
       });
       return;
     }
-    const hashedPassword = await hashPassword(req.body.password);
     let newUser = {
       username: req.body.username,
-      password: hashedPassword,
+      password: req.body.password,
       twitchClientId: '',
       twitchUserId: '',
       twitchDisplayName: '',
       userAccessToken: '',
       refreshToken: '',
       scopes: []
-    }
+    };
     // store user in database
-    let createdUser = await createUser(newUser);
+    let { username, _id } = await createUser(newUser);
 
-    //create jwt token using username and password
-    let simpleUser = {
-      username: req.body.username,
-    }
-    const token = jwt.sign(simpleUser, JWT_SECRET, {
+    const token = jwt.sign({
+      username,
+      _id
+    }, JWT_SECRET, {
       expiresIn: '1w'
     });
 
@@ -61,45 +59,42 @@ userRouter.post('/register', async function (req, res) {
       token
     });
   } catch (err) {
-    console.log(err);
+    console.log('error on register route');
+    next(err);
   }
 })
 
-userRouter.post('/login', async function (req, res) {
+userRouter.post('/login', async function (req, res, next) {
   try {
-    console.log(req.body)
-    const user = await findUserByUsername(req.body.username);
+    const user = await userLogin(req.body.username, req.body.password);
     if (!user) {
-      res.send({
+      next({
         error: "Failed to login",
         reason: "Invalid credentials"
       });
       return;
     }
-    let isValid = await verifyPassword(req.body.password, user?.password);
 
-    if (!isValid) {
-      res.send({
-        error: "Failed to login",
-        reason: "Invalid credentials"
-      });
-      return;
-    }
-    delete user.password;
-
+    let { username, _id } = user;
     const token = jwt.sign({
-      username: req.body.username
+      username,
+      _id
     }, JWT_SECRET);
 
     res.send({
       message: "Login successful",
       token
-    })
-
+    });
   } catch (err) {
-    console.log('error logging in');
-    console.log(err);
+    console.log('error on login route');
+    next(err);
   }
-})
+});
+
+userRouter.get('/myuser', requireUser, async (req, res, next) => {
+  res.send({
+    ...req.user
+  });
+});
 
 export default userRouter;

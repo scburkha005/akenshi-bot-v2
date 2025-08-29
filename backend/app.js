@@ -2,14 +2,43 @@ import axios from 'axios';
 import express from 'express';
 const apiRouter = express.Router();
 import { userRouter } from './api/index.js';
-import jws from 'jws';
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 dotenv.config();
-import { createUser, findUser, updateUser } from './db/adapters/users.js';
+import { createUser, findUserByTwitchId, findUserByUsername, updateUser } from './db/adapters/users.js';
 import { getUserToken, validateToken } from './modules/token.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { createChatSubscription, getEventSubscriptions } from './modules/subscriptions.js';
-const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
+const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET, JWT_SECRET } = process.env;
+
+apiRouter.use(async (req, res, next) => {
+  const PREFIX = 'Bearer ';
+  const auth = req.header('Authorization');
+
+  if (!auth) {
+    next();
+  } else if (auth.startsWith(PREFIX)) {
+    const token = auth.slice(PREFIX.length);
+
+    try {
+      const { username } = jwt.verify(token, JWT_SECRET);
+
+      if (username) {
+        const user = await findUserByUsername(username);
+        req.user = user;
+        next();
+      }
+    } catch (err) {
+      console.log('error during jwt auth');
+      console.log(err);
+    }
+  } else {
+    res.send({
+      error: "Authorization Error",
+      reason: `Authorization token must start with ${PREFIX}`
+    });
+  }
+});
 
 // API Routing
 apiRouter.use('/user', userRouter);
@@ -17,7 +46,7 @@ apiRouter.use('/user', userRouter);
 // POST Send Chat Message
 async function sendMessage (user, bot, message) {
 	try {
-    const akenshiBot = await findUser("1265515088");
+    const akenshiBot = await findUserByTwitchId("1265515088");
 		const { data } = await axios.post("https://api.twitch.tv/helix/chat/messages", {
         "broadcaster_id": "187093318",
         "sender_id": akenshiBot.userId,
@@ -64,7 +93,7 @@ apiRouter.get('/', async function (req, res) {
     // Does getting a new token invalidate the old token?
 		const data = await getUserToken(req.query.code);
 		const userData = await validateToken(data.access_token);
-    const user = await findUser(userData.user_id);
+    const user = await findUserByTwitchId(userData.user_id);
     console.log('database', user);
     if (user) {
       console.log('updating user');
@@ -123,6 +152,13 @@ apiRouter.post('/eventsub', (req, res) => {
     res.sendStatus(403);
   }
 });
+
+apiRouter.use((req, res, next) => {
+  res.status(404).send({
+    error: "IncorrectUrl",
+    reason: "Page Not Found"
+  })
+})
 
 // temp running subscriptions here
 // createChatSubscription();
