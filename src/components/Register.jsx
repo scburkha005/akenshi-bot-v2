@@ -17,11 +17,9 @@ function Register ({ setToken }) {
         let { token } = await register(username, password);
         setToken(token);
       } catch ({ response: { data }}) {
-        console.log(data);
         setError(data);
       }
     }
-    console.log(username, password, passwordRepeat)
   }
   return (
     <>
