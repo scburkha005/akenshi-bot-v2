@@ -9,6 +9,7 @@ const userRouter = express.Router();
 
 userRouter.use(express.json());
 
+// POST /api/user/register
 userRouter.post('/register', async function (req, res, next) {
   // req.body required format
   // {
@@ -37,10 +38,10 @@ userRouter.post('/register', async function (req, res, next) {
     let newUser = {
       username: req.body.username,
       password: req.body.password,
-      twitchClientId: '',
       twitchUserId: '',
       twitchDisplayName: '',
       userAccessToken: '',
+      appAccessToken: '',
       refreshToken: '',
       scopes: []
     };
@@ -64,6 +65,7 @@ userRouter.post('/register', async function (req, res, next) {
   }
 })
 
+// POST /api/user/login
 userRouter.post('/login', async function (req, res, next) {
   try {
     const user = await userLogin(req.body.username, req.body.password);
@@ -79,7 +81,9 @@ userRouter.post('/login', async function (req, res, next) {
     const token = jwt.sign({
       username,
       _id
-    }, JWT_SECRET);
+    }, JWT_SECRET, {
+      expiresIn: '1w'
+    });
 
     res.send({
       message: "Login successful",
@@ -91,6 +95,7 @@ userRouter.post('/login', async function (req, res, next) {
   }
 });
 
+// GET /api/user/myuser
 userRouter.get('/myuser', requireUser, async (req, res, next) => {
   res.send({
     ...req.user
