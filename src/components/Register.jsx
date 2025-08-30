@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { register } from "../api/user.js";
 
 function Register ({ setToken }) {
+  const navigate = useNavigate();
   let [error, setError] = useState({});
+
   async function onRegister (e) {
     e.preventDefault();
     let [{ value: username }, { value: password}, { value: passwordRepeat }] = e.target
@@ -16,12 +18,11 @@ function Register ({ setToken }) {
       try {
         let { token } = await register(username, password);
         setToken(token);
+        navigate('/');
       } catch ({ response: { data }}) {
-        console.log(data);
         setError(data);
       }
     }
-    console.log(username, password, passwordRepeat)
   }
   return (
     <>

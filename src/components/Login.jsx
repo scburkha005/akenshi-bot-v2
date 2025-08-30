@@ -17,12 +17,6 @@ function Login ({ setToken }) {
     } catch ({ response: { data }}) {
       setError(data);
     }
-    // if (result.error) {
-    //   setError(result);
-    //   console.log(result)
-    // } else {
-    //   setToken(result.token);
-    // }
   }
   return (
     <>
