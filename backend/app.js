@@ -1,7 +1,7 @@
 import axios from 'axios';
 import express from 'express';
 const apiRouter = express.Router();
-import { userRouter } from './api/index.js';
+import { userRouter, twitchRouter } from './api/index.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 dotenv.config();
@@ -10,6 +10,8 @@ import { getUserToken, validateToken } from './modules/token.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { createChatSubscription, getEventSubscriptions } from './modules/subscriptions.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET, JWT_SECRET } = process.env;
+
+apiRouter.use(express.json());
 
 apiRouter.use(async (req, res, next) => {
   const PREFIX = 'Bearer ';
@@ -42,6 +44,7 @@ apiRouter.use(async (req, res, next) => {
 
 // API Routing
 apiRouter.use('/user', userRouter);
+apiRouter.use('/twitch', twitchRouter);
 
 // POST Send Chat Message
 async function sendMessage (user, bot, message) {
@@ -80,44 +83,6 @@ let botParams = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redir
 params = params.join('');
 botParams = botParams.join('');
 
-// Need raw message body for proper signature verification, make sure to JSON.parse() the body later so it's in a readable format
-apiRouter.use(express.raw({
-  type: 'application/json'
-}));
-
-apiRouter.get('/', async function (req, res) {
-	// Store code upon validation
-	if (req.query.code && req.query.state === STATE_STRING) {
-		console.log(req.query)
-    // We don't want to get a token if we have a token
-    // Does getting a new token invalidate the old token?
-		const data = await getUserToken(req.query.code);
-		const userData = await validateToken(data.access_token);
-    const user = await findUserByTwitchId(userData.user_id);
-    console.log('database', user);
-    if (user) {
-      console.log('updating user');
-      await updateUser(userData.user_id, { 
-        accessToken: data.access_token, 
-        refreshToken: data.refresh_token, 
-        scopes: userData.scopes 
-      });
-    } else {
-      console.log('didnt find user');
-      let user = {
-        clientId: userData.client_id,
-        userId: userData.user_id,
-        displayName: userData.login,
-        userAccessToken: data.access_token,
-        appAccessToken: "",
-        refreshToken: data.refresh_token,
-        scopes: userData.scopes
-      }
-      await createUser(user);
-    }
-	}
-	res.send(`<html><a href="https://id.twitch.tv/oauth2/authorize?${params}">Click here to auth the bot</a><a href="https://id.twitch.tv/oauth2/authorize?${botParams}">Click here as BOT ACCOUNT ONLY</a></html>`)
-});
 
 // POST localhost:3000/eventsub
 apiRouter.post('/eventsub', (req, res) => {
@@ -162,7 +127,7 @@ apiRouter.use((req, res, next) => {
 
 // temp running subscriptions here
 // createChatSubscription();
-getEventSubscriptions(TWITCH_CLIENT_ID);
+// getEventSubscriptions(TWITCH_CLIENT_ID);
 
 // Host port
 // app.listen(3000, function () {
