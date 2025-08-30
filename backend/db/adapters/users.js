@@ -5,7 +5,8 @@ const usersCollection = akenshiBotDB.collection('users');
 // Schema
 /*
 user {
-  twitchClientId
+  username
+  password
   twitchUserId
   twitchDisplayName
   userAccessToken
@@ -21,8 +22,16 @@ export async function createUser(user) {
       const hashedPassword = await hashPassword(user.password);
       user.password = hashedPassword;
       const data = await usersCollection.insertOne(user)
-      console.log('Successfully created user:', data);
-      return data;
+      if (data.acknowledged) {
+        const createdUser = await findUserByUsername(user.username);
+        console.log('Successfully created user:', createdUser);
+        return createdUser;
+      } else {
+        throw {
+          error: "Error creating user",
+          reason: "Something went wrong while creating the user in the database"
+        }
+      }
     }
   } catch (err) {
     throw err;
@@ -58,10 +67,10 @@ export async function findUserByUsername (username) {
   }
 }
 // Find User by Id
-export async function findUserByTwitchId (twitchId) {
+export async function findUserByTwitchId (twitchUserId) {
   try {
     // update this in the future from userId to twitchUserId
-    const user = await usersCollection.findOne({ userId: twitchId });
+    const user = await usersCollection.findOne({ twitchUserId });
 
     return user;
   } catch (err) {
@@ -69,11 +78,13 @@ export async function findUserByTwitchId (twitchId) {
   }
 }
 // Update User
-export async function updateUser(userId, userUpdateObj) {
+export async function updateUser(username, userUpdateObj) {
   try {
-    const user = await usersCollection.updateOne({ userId }, {
+    const user = await usersCollection.updateOne({ username }, {
       $set: userUpdateObj
     });
+
+    delete user.password;
 
     return user;
   } catch (err) {
