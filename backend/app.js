@@ -6,9 +6,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 dotenv.config();
 import { createUser, findUserByTwitchId, findUserByUsername, updateUser } from './db/adapters/users.js';
-import { getUserToken, validateToken } from './modules/token.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
-import { createChatSubscription, getEventSubscriptions } from './modules/subscriptions.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET, JWT_SECRET } = process.env;
 
 apiRouter.use(express.json());
