@@ -7,6 +7,7 @@ const usersCollection = akenshiBotDB.collection('users');
 user {
   username
   password
+  isAdmin
   twitchUserId
   twitchDisplayName
   userAccessToken
@@ -21,6 +22,7 @@ export async function createUser(user) {
     if (user) {
       const hashedPassword = await hashPassword(user.password);
       user.password = hashedPassword;
+      user.isAdmin = false;
       const data = await usersCollection.insertOne(user)
       if (data.acknowledged) {
         const createdUser = await findUserByUsername(user.username);
@@ -31,6 +33,27 @@ export async function createUser(user) {
           error: "Error creating user",
           reason: "Something went wrong while creating the user in the database"
         }
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+}
+// Create Admin User
+export async function createAdminUser(user) {
+  try {
+    const hashedPassword = await hashPassword(user.password);
+    user.password = hashedPassword;
+    user.isAdmin = true;
+    const data = await usersCollection.insertOne(user)
+    if (data.acknowledged) {
+      const createdUser = await findUserByUsername(user.username);
+      console.log('Successfully created user:', createdUser);
+      return createdUser;
+    } else {
+      throw {
+        error: "Error creating user",
+        reason: "Something went wrong while creating the user in the database"
       }
     }
   } catch (err) {
