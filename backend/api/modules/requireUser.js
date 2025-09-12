@@ -7,3 +7,13 @@ export function requireUser (req, res, next) {
   }
   next();
 }
+
+export function requireAdminUser (req, res, next) {
+  if (!req.user || !req.user.isAdmin) {
+    next({
+      error: "Invalid User",
+      reason: "You must be an admin user to perform this action"
+    });
+  }
+  next();
+}
