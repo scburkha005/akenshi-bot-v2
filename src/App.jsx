@@ -1,9 +1,9 @@
 import './App.css'
 import { useState, useEffect } from 'react'
 import { Route, Routes, useSearchParams } from 'react-router-dom'
-import { Navbar, Home, Login, Register, TwitchAuth } from './components';
+import { Navbar, Home, Login, Register, TwitchAuth, AdminPage } from './components';
 import { getUser } from './api/user.js';
-import { linkAccount } from './api/twitch.js';
+import { linkAccount, linkBotAccount } from './api/twitch.js';
 
 function App () {
   const [ searchParams, setSearchParams ] = useSearchParams();
@@ -20,10 +20,15 @@ function App () {
     }
   }
 
-  async function handleLink (code, state, token) {
+  async function handleLink (code, state, token, isBotUser) {
     try {
-      const user = await linkAccount(code, state, token)
-      setUser(user);
+      if (isBotUser) {
+        const user = await linkBotAccount(code, state, token)
+        console.log(user)
+      } else {
+        const user = await linkAccount(code, state, token)
+        setUser(user);
+      }
     } catch (err) {
       throw err;
     }
@@ -43,16 +48,18 @@ function App () {
       setToken(token);
     }
     if (searchParams.size > 0) {
-      let code = searchParams.get('code')
-      let state = searchParams.get('state')
-      handleLink(code, state, token);
+      let permissions = searchParams.get('scope');
+      let isBotUser = permissions.includes('user:bot');
+      let code = searchParams.get('code');
+      let state = searchParams.get('state');
+      handleLink(code, state, token, isBotUser);
     }
   }, [])
 
 
   return (
     <div className='app'>
-      <Navbar />
+      <Navbar user={user}/>
       <Routes>
         {
           (Object.keys(user).length !== 0 && user?.userAccessToken === '') ?
@@ -62,6 +69,7 @@ function App () {
         <Route path='/' element={<Home />}/>
         <Route path='/login' element={<Login setToken={setToken} />}/>
         <Route path='/register' element={<Register setToken={setToken} />}/>
+        { user?.isAdmin && <Route path='/admin' element={<AdminPage />}/>}
       </Routes>
     </div>
   )

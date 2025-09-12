@@ -18,3 +18,21 @@ export async function linkAccount (code, state, token) {
     throw err;
   }
 }
+
+export async function linkBotAccount (code, state, token) {
+  try {
+    let { data } = await axios.post(`${VITE_API_URL}/twitch/botLink`, {
+      code,
+      state
+    }, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    return data;
+  } catch (err) {
+    console.log('error while linking account');
+    throw err;
+  }
+}

@@ -5,14 +5,30 @@ const usersCollection = akenshiBotDB.collection('users');
 // Schema
 /*
 user {
-  username
-  password
-  twitchUserId
-  twitchDisplayName
-  userAccessToken
-  appAccessToken
-  refreshToken
-  scopes
+  username string
+  password string
+  isAdmin bool
+  twitchUserId string
+  twitchDisplayName string
+  userAccessToken {
+    token string
+    refreshToken string
+  }
+  scopes array
+}
+bot user {
+  username string
+  isAdmin bool
+  twitchUserId string
+  twitchDisplayName string
+  userAccessToken {
+    token string
+    refreshToken string
+  }
+  appAccessToken {
+    token string
+  }
+  scopes array
 }
 */
 // Create User
@@ -21,6 +37,7 @@ export async function createUser(user) {
     if (user) {
       const hashedPassword = await hashPassword(user.password);
       user.password = hashedPassword;
+      user.isAdmin = false;
       const data = await usersCollection.insertOne(user)
       if (data.acknowledged) {
         const createdUser = await findUserByUsername(user.username);
@@ -31,6 +48,48 @@ export async function createUser(user) {
           error: "Error creating user",
           reason: "Something went wrong while creating the user in the database"
         }
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+}
+// Create Bot User
+export async function createBotUser(user) {
+  try {
+    if (user) {
+      user.isAdmin = false;
+      const data = await usersCollection.insertOne(user)
+      if (data.acknowledged) {
+        const createdUser = await findUserByUsername(user.username);
+        console.log('Successfully created user:', createdUser);
+        return createdUser;
+      } else {
+        throw {
+          error: "Error creating user",
+          reason: "Something went wrong while creating the user in the database"
+        }
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+}
+// Create Admin User
+export async function createAdminUser(user) {
+  try {
+    const hashedPassword = await hashPassword(user.password);
+    user.password = hashedPassword;
+    user.isAdmin = true;
+    const data = await usersCollection.insertOne(user)
+    if (data.acknowledged) {
+      const createdUser = await findUserByUsername(user.username);
+      console.log('Successfully created user:', createdUser);
+      return createdUser;
+    } else {
+      throw {
+        error: "Error creating user",
+        reason: "Something went wrong while creating the user in the database"
       }
     }
   } catch (err) {

@@ -40,9 +40,10 @@ userRouter.post('/register', async function (req, res, next) {
       password: req.body.password,
       twitchUserId: '',
       twitchDisplayName: '',
-      userAccessToken: '',
-      appAccessToken: '',
-      refreshToken: '',
+      userAccessToken: {
+        token: '',
+        refreshToken: '',
+      },
       scopes: []
     };
     // store user in database

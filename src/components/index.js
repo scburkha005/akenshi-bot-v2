@@ -3,3 +3,4 @@ export { default as Navbar } from "./Navbar";
 export { default as Login } from "./Login";
 export { default as Register } from "./Register";
 export { default as TwitchAuth } from "./TwitchAuth";
+export { default as AdminPage } from "./AdminPage";
