@@ -1,11 +1,11 @@
 import axios from 'axios';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING } = process.env;
 // TWITCH API REQUESTS
-export async function getAppToken (clientId, clientSecret) {
+export async function getAppToken () {
 	try {
 		const { data } = await axios.post('https://id.twitch.tv/oauth2/token', {
-			client_id: clientId,
-			client_secret: clientSecret,
+			client_id: TWITCH_CLIENT_ID,
+			client_secret: TWITCH_SECRET,
 			grant_type: 'client_credentials'
 		})
 		console.log(data);
