@@ -62,7 +62,7 @@ function App () {
 
   return (
     <div className='app'>
-      <Navbar user={user}/>
+      <Navbar user={user} token={token} setToken={setToken} setUser={setUser} />
       <Routes>
         {
           (Object.keys(user).length !== 0 && user?.userAccessToken === '') ?
