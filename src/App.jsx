@@ -14,9 +14,12 @@ function App () {
     try {
       const user = await getUser(token);
       setUser(user);
-    } catch (err) {
-      console.log(err)
-      throw err;
+    } catch ({ response: { data }}) {
+      if (data.message === 'jwt expired') {
+        localStorage.removeItem('token');
+      }
+      console.log(data)
+      throw data;
     }
   }
 
