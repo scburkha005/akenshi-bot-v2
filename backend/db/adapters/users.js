@@ -66,8 +66,8 @@ export async function createBotUser(user) {
         return createdUser;
       } else {
         throw {
-          error: "Error creating user",
-          reason: "Something went wrong while creating the user in the database"
+          name: "Error creating user",
+          message: "Something went wrong while creating the user in the database"
         }
       }
     }
@@ -88,8 +88,8 @@ export async function createAdminUser(user) {
       return createdUser;
     } else {
       throw {
-        error: "Error creating user",
-        reason: "Something went wrong while creating the user in the database"
+        name: "Error creating user",
+        message: "Something went wrong while creating the user in the database"
       }
     }
   } catch (err) {

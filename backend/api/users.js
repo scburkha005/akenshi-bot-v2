@@ -20,8 +20,8 @@ userRouter.post('/register', async function (req, res, next) {
     // ensure that password and username exist
     if (!req.body.username || !req.body.password) {
       next({
-        error: "Failed to create user",
-        reason: "No username/password provided"
+        name: "Failed to create user",
+        message: "No username/password provided"
       });
       return;
     }
@@ -30,8 +30,8 @@ userRouter.post('/register', async function (req, res, next) {
     const user = await findUserByUsername(req.body.username);
     if (user) {
       next({
-        error: "Failed to create user",
-        reason: "Username already exists"
+        name: "Failed to create user",
+        message: "Username already exists"
       });
       return;
     }

@@ -29,8 +29,8 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
       res.send(updatedUser);
     } else {
       next({
-        error: "Unauthorized request",
-        reason: "State string doesn't match"
+        name: "Unauthorized request",
+        message: "State string doesn't match"
       })
     }
   } catch (err) {
@@ -78,8 +78,8 @@ twitchRouter.post('/botLink', requireAdminUser, async function (req, res, next) 
       res.send({ message: "successfully linked bot account"});
     } else {
       next({
-        error: "Unauthorized request",
-        reason: "State string doesn't match"
+        name: "Unauthorized request",
+        message: "State string doesn't match"
       })
     } 
   } catch (err) {

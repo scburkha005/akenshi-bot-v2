@@ -30,12 +30,12 @@ apiRouter.use(async (req, res, next) => {
       }
     } catch (err) {
       console.log('error during jwt auth');
-      console.log(err);
+      next(err);
     }
   } else {
     res.send({
-      error: "Authorization Error",
-      reason: `Authorization token must start with ${PREFIX}`
+      name: "Authorization Error",
+      message: `Authorization token must start with ${PREFIX}`
     });
   }
 });
@@ -118,8 +118,8 @@ apiRouter.post('/eventsub', (req, res) => {
 
 apiRouter.use((req, res, next) => {
   res.status(404).send({
-    error: "IncorrectUrl",
-    reason: "Page Not Found"
+    name: "IncorrectUrl",
+    message: "Page Not Found"
   })
 })
 

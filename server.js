@@ -68,14 +68,14 @@ app.use('*all', async (req, res) => {
   }
 })
 
-app.use(({ error, reason }, req, res, next) => {
+app.use(({ name, message }, req, res, next) => {
   if (res.statusCode < 400 || res.statusCode >= 500) {
     res.status(500)
   }
 
   res.send({
-    error,
-    reason
+    name,
+    message
   })
 })
 
