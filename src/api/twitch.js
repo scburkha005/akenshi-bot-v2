@@ -36,3 +36,18 @@ export async function linkBotAccount (code, state, token) {
     throw err;
   }
 }
+
+export async function getCurrentEventSubs (token) {
+  try {
+    let { data } = await axios.get(`${VITE_API_URL}/twitch/eventsub`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    console.log(data)
+    return data;
+  } catch (err) {
+    console.log('error while getting current event subs');
+    throw err;
+  }
+}
