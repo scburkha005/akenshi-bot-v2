@@ -63,7 +63,7 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
       const data = await getUserToken(req.body.code);
       const userData = await validateToken(data.access_token);
 
-      getUserByTwitchUserId()
+      getUserByTwitchUserId(userData.user_id);
       let updatedUser = await updateUser(req.user.username, {
         twitchUserId: userData.user_id,
         twitchDisplayName: userData.login,
