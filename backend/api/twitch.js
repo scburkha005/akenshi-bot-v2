@@ -2,7 +2,7 @@ import express from 'express';
 import { configDotenv } from 'dotenv';
 import { getAppToken, getUserToken, validateToken } from '../modules/token.js';
 import { requireUser, requireAdminUser } from './modules/requireUser.js';
-import { createBotUser, findUserByUsername, updateUser } from '../db/adapters/users.js';
+import { createBotUser, findUserByUsername, updateUser, getUserByTwitchUserId } from '../db/adapters/users.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { sendMessage } from './modules/eventsub.js';
 import { getEventSubscriptions } from './modules/subscriptions.js';
@@ -62,6 +62,8 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
     if (STATE_STRING === req.body.state) {
       const data = await getUserToken(req.body.code);
       const userData = await validateToken(data.access_token);
+
+      getUserByTwitchUserId()
       let updatedUser = await updateUser(req.user.username, {
         twitchUserId: userData.user_id,
         twitchDisplayName: userData.login,

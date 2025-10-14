@@ -9,7 +9,10 @@ function Navbar ({ user, token, setToken, setUser }) {
   return (
     <div className="navbar">
       { token ?
-      <Link onClick={handleLogout}>Logout</Link> 
+      <>
+        <Link to='/account'>Account</Link> 
+        <Link onClick={handleLogout}>Logout</Link> 
+      </>
       : <Link to="/login">Login</Link> }
       {/* Admin Pages */}
       { user?.isAdmin && <Link to="/admin">Admin Page</Link> }

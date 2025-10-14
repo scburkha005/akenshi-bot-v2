@@ -38,10 +38,12 @@ export async function createUser(user) {
       const hashedPassword = await hashPassword(user.password);
       user.password = hashedPassword;
       user.isAdmin = false;
-      const data = await usersCollection.insertOne(user)
+      const data = await usersCollection.insertOne(user);
       if (data.acknowledged) {
         const createdUser = await findUserByUsername(user.username);
         console.log('Successfully created user:', createdUser);
+        console.log("Creating base-level subscriptions");
+        // check subscriptions and create base necessary subscriptions
         return createdUser;
       } else {
         throw {
@@ -85,6 +87,8 @@ export async function createAdminUser(user) {
     if (data.acknowledged) {
       const createdUser = await findUserByUsername(user.username);
       console.log('Successfully created user:', createdUser);
+      console.log("Creating base-level subscriptions");
+      // check subscriptions and create base necessary subscriptions
       return createdUser;
     } else {
       throw {
@@ -110,6 +114,16 @@ export async function userLogin (username, password) {
       delete user.password;
       return user;
     }
+  } catch (err) {
+    throw err;
+  }
+}
+// Get User by Twitch User Id
+export async function getUserByTwitchUserId (twitchUserId) {
+  try {
+    const user = await usersCollection.findOne({ twitchUserId });
+
+    return user;
   } catch (err) {
     throw err;
   }

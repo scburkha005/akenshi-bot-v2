@@ -1,7 +1,7 @@
 import './App.css'
 import { useState, useEffect } from 'react'
 import { Route, Routes, useSearchParams } from 'react-router-dom'
-import { Navbar, Home, Login, Register, TwitchAuth, AdminPage } from './components';
+import { Navbar, Home, Login, Register, TwitchAuth, AdminPage, AccountPage } from './components';
 import { getUser } from './api/user.js';
 import { linkAccount, linkBotAccount } from './api/twitch.js';
 
@@ -42,7 +42,7 @@ function App () {
       localStorage.setItem('token', token);
       handleUser(token);
     }
-  }, [token])
+  }, [token]);
 
   // grab token and user on app load
   useEffect(() => {
@@ -57,7 +57,14 @@ function App () {
       let state = searchParams.get('state');
       handleLink(code, state, token, isBotUser);
     }
-  }, [])
+  }, []);
+
+  // Create all base-level subscriptions if a user is missing them
+  useEffect(() => {
+    if (user) {
+      
+    }
+  }, [user]);
 
 
   return (
@@ -72,6 +79,7 @@ function App () {
         <Route path='/' element={<Home />}/>
         <Route path='/login' element={<Login setToken={setToken} />}/>
         <Route path='/register' element={<Register setToken={setToken} />}/>
+        <Route path='/account' element={<AccountPage token={token} />}/>
         { user?.isAdmin && <Route path='/admin' element={<AdminPage />}/>}
       </Routes>
     </div>
