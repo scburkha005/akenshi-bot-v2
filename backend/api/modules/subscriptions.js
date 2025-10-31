@@ -29,7 +29,7 @@ export const getEventSubscriptions = async () => {
 // This subscription will send a notification when any user sends a message to a channel's chat room
 export const createChatSubscription = async (twitchUserId) => {
   try {
-    const akenshiBot = await findUserByTwitchId("1265515088");
+    const akenshiBot = await findUserByUsername("akenshi__bot");
     console.log(akenshiBot)
     const { data } = await axios.post("https://api.twitch.tv/helix/eventsub/subscriptions", {
       type: "channel.chat.message",
@@ -58,7 +58,7 @@ export const createChatSubscription = async (twitchUserId) => {
 
 export const deleteFailedSubscriptions = async (failedSubscriptions) => {
   try {
-    const akenshiBot = await findUser("1265515088");
+    const akenshiBot = await findUserByUsername("akenshi__bot");
 
     failedSubscriptions.forEach(async subscription => {
       let id = subscription.id
@@ -76,9 +76,3 @@ export const deleteFailedSubscriptions = async (failedSubscriptions) => {
     console.log(err);
   }
 }
-
-// module.exports = {
-//     createChatSubscription,
-//     getEventSubscriptions,
-//     deleteFailedSubscriptions
-// }
