@@ -133,10 +133,11 @@ export async function findUserByUsername (username) {
 export async function findUserByTwitchId (twitchUserId) {
   try {
     const user = await usersCollection.findOne({ twitchUserId });
-    delete user.password;
+    delete user?.password;
 
     return user;
   } catch (err) {
+    console.log(err);
     throw err;
   }
 }
