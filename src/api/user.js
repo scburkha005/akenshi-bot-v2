@@ -43,3 +43,18 @@ export async function getUser (token) {
     throw err;
   }
 }
+
+export async function getUserById (twitchUserId, token) {
+  try {
+    let { data } = await axios.get(`${VITE_API_URL}/user/${twitchUserId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    return data;
+  } catch (err) {
+    console.log('error while fetching user by id');
+    throw err;
+  }
+}
