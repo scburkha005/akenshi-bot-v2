@@ -2,7 +2,7 @@ import express from 'express';
 import { configDotenv } from 'dotenv';
 import { getAppToken, getUserToken, validateToken } from '../modules/token.js';
 import { requireUser, requireAdminUser } from './modules/requireUser.js';
-import { createBotUser, findUserByUsername, updateUser, getUserByTwitchId } from '../db/adapters/users.js';
+import { createBotUser, findUserByUsername, updateUser, findUserByTwitchId } from '../db/adapters/users.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { sendMessage } from './modules/eventsub.js';
 import { getAllEventSubscriptions } from './modules/subscriptions.js';
