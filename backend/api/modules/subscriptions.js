@@ -45,12 +45,27 @@ export const createChatSubscription = async (twitchUserId) => {
       }
     }, {
       headers: {
-        'Authorization': `Bearer ${akenshiBot.appAccessToken}`,
+        'Authorization': `Bearer ${akenshiBot.appAccessToken.token}`,
         'Client-Id': TWITCH_CLIENT_ID,
         'Content-Type': 'application/json'
       }
     })
     console.log(data)
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export const deleteSubscriptionById = async (subscriptionId) => {
+  try {
+    console.log(`deleting subscription: ${subscriptionId}`);
+    const { data } = await axios.delete(`https://api.twitch.tv/helix/eventsub/subscriptions?id=${subscriptionId}`, {
+      headers: {
+        'Authorization': `Bearer ${akenshiBot.appAccessToken.token}`,
+        'Client-Id': TWITCH_CLIENT_ID,
+      }
+    });
+    console.log("subscription deleted successfully", data);
   } catch (err) {
     console.log(err);
   }
@@ -65,7 +80,7 @@ export const deleteFailedSubscriptions = async (failedSubscriptions) => {
       console.log(`deleting subscription: ${id}`);
       await axios.delete(`https://api.twitch.tv/helix/eventsub/subscriptions?id=${id}`, {
         headers: {
-          'Authorization': `Bearer ${akenshiBot.appAccessToken}`,
+          'Authorization': `Bearer ${akenshiBot.appAccessToken.token}`,
           'Client-Id': TWITCH_CLIENT_ID,
         }
       });
