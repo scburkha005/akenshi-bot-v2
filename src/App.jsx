@@ -59,20 +59,12 @@ function App () {
     }
   }, []);
 
-  // Create all base-level subscriptions if a user is missing them
-  useEffect(() => {
-    if (user) {
-      
-    }
-  }, [user]);
-
-
   return (
     <div className='app'>
       <Navbar user={user} token={token} setToken={setToken} setUser={setUser} />
       <Routes>
         {
-          (Object.keys(user).length !== 0 && user?.userAccessToken === '') ?
+          (Object.keys(user).length !== 0 && user?.userAccessToken.token === '') ?
             <Route path='/' element={<TwitchAuth />}/> :
             <Route path='/' element={<Home />}/>
         }
