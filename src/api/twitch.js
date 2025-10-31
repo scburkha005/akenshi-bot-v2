@@ -37,7 +37,7 @@ export async function linkBotAccount (code, state, token) {
   }
 }
 
-export async function getCurrentEventSubs (token) {
+export async function getAllEventSubs (token) {
   try {
     let { data } = await axios.get(`${VITE_API_URL}/twitch/eventsub`, {
       headers: {
