@@ -50,3 +50,16 @@ export async function getAllEventSubs (token) {
     throw err;
   }
 }
+
+export async function deleteEventSubById (subscriptionId, token) {
+  try {
+    let { data } = await axios.delete(`${VITE_API_URL}/twitch/eventsub/${subscriptionId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+  } catch (err) {
+    console.log('error while deleting event sub');
+    throw err;
+  }
+}
