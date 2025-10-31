@@ -30,17 +30,16 @@ export const getAllEventSubscriptions = async () => {
 export const createChatSubscription = async (twitchUserId) => {
   try {
     const akenshiBot = await findUserByUsername("akenshi__bot");
-    console.log(akenshiBot)
     const { data } = await axios.post("https://api.twitch.tv/helix/eventsub/subscriptions", {
       type: "channel.chat.message",
       version: "1",
       condition: {
         broadcaster_user_id: twitchUserId, // broadcaster userId
-        user_id: akenshiBot.userId, // bot userId
+        user_id: akenshiBot.twitchUserId, // bot userId
       },
       transport: {
         method: "webhook",
-        callback: "https://akenshi-bot.ashagni.live/api/eventsub",
+        callback: "https://akenshi-bot.ashagni.live/api/twitch/eventsub",
         secret: HMAC_SECRET
       }
     }, {
