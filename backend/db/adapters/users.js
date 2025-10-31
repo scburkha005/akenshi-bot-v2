@@ -118,16 +118,6 @@ export async function userLogin (username, password) {
     throw err;
   }
 }
-// Get User by Twitch User Id
-export async function getUserByTwitchUserId (twitchUserId) {
-  try {
-    const user = await usersCollection.findOne({ twitchUserId });
-
-    return user;
-  } catch (err) {
-    throw err;
-  }
-}
 // Find User by Username
 export async function findUserByUsername (username) {
   try {
@@ -142,7 +132,6 @@ export async function findUserByUsername (username) {
 // Find User by Id
 export async function findUserByTwitchId (twitchUserId) {
   try {
-    // update this in the future from userId to twitchUserId
     const user = await usersCollection.findOne({ twitchUserId });
 
     return user;
