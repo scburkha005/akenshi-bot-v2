@@ -5,7 +5,7 @@ import { requireUser, requireAdminUser } from './modules/requireUser.js';
 import { createBotUser, findUserByUsername, updateUser, findUserByTwitchId } from '../db/adapters/users.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { sendMessage } from './modules/eventsub.js';
-import { deleteSubscriptionById, getAllEventSubscriptions } from './modules/subscriptions.js';
+import { createChatSubscription, deleteSubscriptionById, getAllEventSubscriptions } from './modules/subscriptions.js';
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
@@ -74,7 +74,14 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
       const data = await getUserToken(req.body.code);
       const userData = await validateToken(data.access_token);
 
-      getUserByTwitchId(userData.user_id);
+      let user = await findUserByTwitchId(userData.user_id);
+      if (user) {
+        next({
+          name: "User Already Exists",
+          message: "This twitch user is already linked to a different account"
+        });
+        return;
+      }
       let updatedUser = await updateUser(req.user.username, {
         twitchUserId: userData.user_id,
         twitchDisplayName: userData.login,
@@ -86,6 +93,7 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
       });
       // continue to create BASELINE necessary events
       // start with createChatSubscription
+      await createChatSubscription(userData.user_id);
 
       res.send(updatedUser);
     } else {
