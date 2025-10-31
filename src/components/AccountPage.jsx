@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function AccountPage ({ token }) {
+function AccountPage () {
   const [ eventSubs, setEventSubs ] = useState()
 
   async function handleEventSubs () {

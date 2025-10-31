@@ -1,9 +1,11 @@
 import './Login.css';
 import { login } from '../api/user.js';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { AuthContext } from '../App.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 
-function Login ({ setToken }) {
+function Login () {
+  const { setToken } = useContext(AuthContext);
   const navigate = useNavigate();
   let [error, setError] = useState({});
 

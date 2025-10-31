@@ -1,11 +1,13 @@
 import './App.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, createContext } from 'react'
 import { Route, Routes, useSearchParams } from 'react-router-dom'
 import { Navbar, Home, Login, Register, TwitchAuth, AdminPage, AccountPage } from './components';
 import { getUser } from './api/user.js';
 import { linkAccount, linkBotAccount } from './api/twitch.js';
 
-function App () {
+export const AuthContext = createContext({});
+
+export function App () {
   const [ searchParams, setSearchParams ] = useSearchParams();
   const [ token, setToken ] = useState('');
   const [ user, setUser ] = useState({});
@@ -60,22 +62,22 @@ function App () {
   }, []);
 
   return (
-    <div className='app'>
-      <Navbar user={user} token={token} setToken={setToken} setUser={setUser} />
-      <Routes>
-        {
-          (Object.keys(user).length !== 0 && user?.userAccessToken.token === '') ?
-            <Route path='/' element={<TwitchAuth />}/> :
-            <Route path='/' element={<Home />}/>
-        }
-        <Route path='/' element={<Home />}/>
-        <Route path='/login' element={<Login setToken={setToken} />}/>
-        <Route path='/register' element={<Register setToken={setToken} />}/>
-        <Route path='/account' element={<AccountPage token={token} />}/>
-        { user?.isAdmin && <Route path='/admin' element={<AdminPage />}/>}
-      </Routes>
-    </div>
+    <AuthContext value={{user, token, setUser, setToken}}>
+      <div className='app'>
+        <Navbar />
+        <Routes>
+          {
+            (Object.keys(user).length !== 0 && user?.userAccessToken.token === '') ?
+              <Route path='/' element={<TwitchAuth />}/> :
+              <Route path='/' element={<Home />}/>
+          }
+          <Route path='/' element={<Home />}/>
+          <Route path='/login' element={<Login />}/>
+          <Route path='/register' element={<Register />}/>
+          <Route path='/account' element={<AccountPage />}/>
+          { user?.isAdmin && <Route path='/admin' element={<AdminPage/>}/>}
+        </Routes>
+      </div>
+    </AuthContext>
   )
 }
-
-export default App;

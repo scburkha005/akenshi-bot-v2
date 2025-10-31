@@ -1,9 +1,11 @@
 import BotTwitchAuth from './BotTwitchAuth';
-function AdminPage () {
+import Subscriptions from './Subscriptions';
+function AdminPage ({ token }) {
 
   return (
     <>
       <div>Admin page</div> 
+      <Subscriptions token={token}/>
       <BotTwitchAuth />
     </>
   );

@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
-function Navbar ({ user, token, setToken, setUser }) {
+import { useContext } from 'react';
+import { AuthContext } from "../App";
+function Navbar () {
+  const { user, token, setToken, setUser } = useContext(AuthContext);
   function handleLogout () {
     localStorage.removeItem('token');
     setToken('');
