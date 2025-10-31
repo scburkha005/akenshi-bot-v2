@@ -44,7 +44,6 @@ export async function getAllEventSubs (token) {
         "Authorization": `Bearer ${token}`
       }
     });
-    console.log(data)
     return data;
   } catch (err) {
     console.log('error while getting current event subs');
