@@ -5,7 +5,7 @@ import { requireUser, requireAdminUser } from './modules/requireUser.js';
 import { createBotUser, findUserByUsername, updateUser, findUserByTwitchId } from '../db/adapters/users.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { sendMessage } from './modules/eventsub.js';
-import { getAllEventSubscriptions } from './modules/subscriptions.js';
+import { deleteSubscriptionById, getAllEventSubscriptions } from './modules/subscriptions.js';
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
@@ -52,6 +52,17 @@ twitchRouter.post('/eventsub', (req, res) => {
   } else {
     console.log('There was an issue matching signatures: Signature verification returned false');
     res.sendStatus(403);
+  }
+});
+
+// DELETE /api/twitch/eventsub/:id
+twitchRouter.delete('/eventsub/:id', requireAdminUser, async function (req, res, next) {
+  try {
+    let subscriptionId = req.params.id;
+    await deleteSubscriptionById(subscriptionId);
+    res.send('success')
+  } catch (err) {
+    next(err);
   }
 });
 
