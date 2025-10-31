@@ -2,7 +2,7 @@ import axios from 'axios';
 import { findUserByUsername } from '../../db/adapters/users.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET } = process.env;
 
-export const getEventSubscriptions = async () => {
+export const getAllEventSubscriptions = async () => {
   try {
     const akenshiBot = await findUserByUsername("akenshi__bot");
     const { data } = await axios.get('https://api.twitch.tv/helix/eventsub/subscriptions', {

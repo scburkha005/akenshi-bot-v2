@@ -5,15 +5,15 @@ import { requireUser, requireAdminUser } from './modules/requireUser.js';
 import { createBotUser, findUserByUsername, updateUser, getUserByTwitchUserId } from '../db/adapters/users.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { sendMessage } from './modules/eventsub.js';
-import { getEventSubscriptions } from './modules/subscriptions.js';
+import { getAllEventSubscriptions } from './modules/subscriptions.js';
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
 
 // GET /api/twitch/eventsub
-twitchRouter.get('/eventsub', requireUser, async (req, res, next) => {
+twitchRouter.get('/eventsub', requireAdminUser, async (req, res, next) => {
   try {
-    let data = await getEventSubscriptions()
+    let data = await getAllEventSubscriptions();
     res.send(data);
   } catch (err) {
     console.log(err);
