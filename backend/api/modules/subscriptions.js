@@ -58,6 +58,7 @@ export const createChatSubscription = async (twitchUserId) => {
 
 export const deleteSubscriptionById = async (subscriptionId) => {
   try {
+    const akenshiBot = await findUserByUsername("akenshi__bot");
     console.log(`deleting subscription: ${subscriptionId}`);
     const { data } = await axios.delete(`https://api.twitch.tv/helix/eventsub/subscriptions?id=${subscriptionId}`, {
       headers: {
