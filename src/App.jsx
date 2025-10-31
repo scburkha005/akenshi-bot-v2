@@ -67,7 +67,7 @@ export function App () {
         <Navbar />
         <Routes>
           {
-            (Object.keys(user).length !== 0 && user?.userAccessToken.token === '') ?
+            (Object.keys(user).length !== 0 && user?.userAccessToken?.token === '') ?
               <Route path='/' element={<TwitchAuth />}/> :
               <Route path='/' element={<Home />}/>
           }
