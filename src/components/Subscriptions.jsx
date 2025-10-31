@@ -37,10 +37,17 @@ function Subscriptions () {
     handleFetch();
   }, []);
 
+  function updateSubscriptions (subscriptionId) {
+    let newSubscriptions = subscriptions.filter(subscription => {
+      return subscription.id !== subscriptionId;
+    });
+    setSubscriptions(newSubscriptions);
+  }
+
   return (
     <>
       {subscriptions.map(subscription => {
-        return <Subscription key={subscription.id} subscription={subscription} />
+        return <Subscription key={subscription.id} subscription={subscription} updateSubscriptions={updateSubscriptions}/>
       })}
     </>
   )
