@@ -8,7 +8,6 @@ dotenv.config();
 import { createUser, findUserByTwitchId, findUserByUsername, updateUser } from './db/adapters/users.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET, JWT_SECRET } = process.env;
 
-apiRouter.use(express.json());
 
 apiRouter.use(async (req, res, next) => {
   const PREFIX = 'Bearer ';
@@ -40,8 +39,10 @@ apiRouter.use(async (req, res, next) => {
 });
 
 // API Routing
-apiRouter.use('/user', userRouter);
 apiRouter.use('/twitch', twitchRouter);
+// We need to parse the body after the twitch route due to needing the raw body for signature verification on route POST /api/twitch/eventsub
+apiRouter.use(express.json());
+apiRouter.use('/user', userRouter);
 
 // channel.chat.message subscription
 // Reads chat messages that appear in a specific channel

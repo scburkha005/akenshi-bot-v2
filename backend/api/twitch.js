@@ -9,20 +9,11 @@ import { createChatSubscription, deleteSubscriptionById, getAllEventSubscription
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
-
-// GET /api/twitch/eventsub
-twitchRouter.get('/eventsub', requireAdminUser, async (req, res, next) => {
-  try {
-    let data = await getAllEventSubscriptions();
-    res.send(data);
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-})
+const rawBodyParser = express.raw({ type: 'application/json'});
 
 // POST /api/twitch/eventsub
-twitchRouter.post('/eventsub', (req, res) => {
+twitchRouter.post('/eventsub', rawBodyParser, (req, res) => {
+  // Necessary for signature verification
   // Notification Events
   // Create our own HMAC sig to compare our signature to the one provided by twitch
   const HMAC_MSG = `${req.headers["twitch-eventsub-message-id"]}${req.headers["twitch-eventsub-message-timestamp"]}${req.body}`
@@ -52,6 +43,19 @@ twitchRouter.post('/eventsub', (req, res) => {
   } else {
     console.log('There was an issue matching signatures: Signature verification returned false');
     res.sendStatus(403);
+  }
+});
+// We run this specifically after our POST eventsub route to allow it to parse the raw body for sig verification
+twitchRouter.use(express.json());
+
+// GET /api/twitch/eventsub
+twitchRouter.get('/eventsub', requireAdminUser, async (req, res, next) => {
+  try {
+    let data = await getAllEventSubscriptions();
+    res.send(data);
+  } catch (err) {
+    console.log(err);
+    next(err);
   }
 });
 
