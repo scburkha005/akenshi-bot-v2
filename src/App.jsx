@@ -1,6 +1,6 @@
 import './App.css'
 import { useState, useEffect, createContext } from 'react'
-import { Route, Routes, useSearchParams } from 'react-router-dom'
+import { Route, Routes, useSearchParams } from 'react-router'
 import { Navbar, Home, Login, Register, TwitchAuth, AdminPage, AccountPage } from './components';
 import { getUser } from './api/user.js';
 import { linkAccount, linkBotAccount } from './api/twitch.js';

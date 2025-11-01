@@ -2,7 +2,7 @@ import './Login.css';
 import { login } from '../api/user.js';
 import { useState, useContext } from 'react';
 import { AuthContext } from '../App.jsx';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 
 function Login () {
   const { setToken } = useContext(AuthContext);

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { useContext } from 'react';
 import { AuthContext } from "../App";
 function Navbar () {
@@ -11,6 +11,7 @@ function Navbar () {
 
   return (
     <div className="navbar">
+      <Link to="/">Home</Link> 
       { token ?
       <>
         <Link to='/account'>Account</Link> 
