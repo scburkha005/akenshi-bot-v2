@@ -22,6 +22,9 @@ function Subscription ({ subscription, updateSubscriptions }) {
         <Typography>
           {subscription.type}
         </Typography>
+        <Typography>
+          {subscription.status}
+        </Typography>
         <CardActions>
           <Button onClick={handleClick}>Delete Subscription</Button>
         </CardActions>
