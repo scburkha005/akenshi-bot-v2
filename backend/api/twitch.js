@@ -12,7 +12,7 @@ const twitchRouter = express.Router();
 const rawBodyParser = express.raw({ type: 'application/json'});
 
 // POST /api/twitch/eventsub
-twitchRouter.post('/eventsub', rawBodyParser, (req, res) => {
+twitchRouter.post('/eventsub', rawBodyParser, async (req, res) => {
   // Necessary for signature verification
   // Notification Events
   // Create our own HMAC sig to compare our signature to the one provided by twitch
@@ -24,9 +24,9 @@ twitchRouter.post('/eventsub', rawBodyParser, (req, res) => {
     if (req.headers["twitch-eventsub-message-type"] === 'notification') {
       console.log('notification running')
       console.log(notification)
-      // Captures message events
-      if (notification.subscription.type === 'channel.chat.message') {
-        sendMessage( 'placeholder', 'placeholder', `${notification.event.broadcaster_user_name} said ${notification.event.message.text}`);
+      // Captures message events && ignore messages sent by ourselves (i.e. messages sent by the bot)
+      if (notification.subscription.type === 'channel.chat.message' && notification.event.chatter_user_login !== 'akenshi__bot') {
+        await sendMessage(notification.event.broadcaster_user_id, `${notification.event.broadcaster_user_name} said ${notification.event.message.text}`);
       }
       res.sendStatus(204);
     } else if (req.headers["twitch-eventsub-message-type"] = 'webhook_callback_verification') {
