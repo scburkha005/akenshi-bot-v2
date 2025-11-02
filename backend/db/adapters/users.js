@@ -9,6 +9,7 @@ user {
   password string
   isAdmin bool
   twitchUserId string
+  twitchLogin string
   twitchDisplayName string
   userAccessToken {
     token string
@@ -20,6 +21,7 @@ bot user {
   username string
   isAdmin bool
   twitchUserId string
+  twitchLogin string
   twitchDisplayName string
   userAccessToken {
     token string

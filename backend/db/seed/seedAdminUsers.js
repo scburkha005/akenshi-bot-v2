@@ -6,6 +6,7 @@ const adminUser = {
   username: '',
   password: '',
   twitchUserId: '',
+  twitchLogin: '',
   twitchDisplayName: '',
   userAccessToken: {
     token: '',
