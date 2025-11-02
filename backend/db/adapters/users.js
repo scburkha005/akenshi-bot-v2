@@ -15,7 +15,6 @@ user {
     token string
     refreshToken string
   }
-  scopes array
   channelInfo {
     moderators array of strings 
   }
@@ -25,6 +24,7 @@ user {
     autoShoutoutEnabled boolean default true,
     autoShoutout array,
     autoShoutoutRaidEnabled boolean default true
+    scopes array
   }
 }
 bot user {
