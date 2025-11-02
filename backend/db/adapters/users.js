@@ -16,6 +16,13 @@ user {
     refreshToken string
   }
   scopes array
+  botSettings {
+    optInGtotMode boolean default false,
+    gtotModeEnabled boolean default false,
+    autoShoutoutEnabled boolean default true,
+    autoShoutout array,
+    autoShoutoutRaidEnabled boolean default true
+  }
 }
 bot user {
   username string

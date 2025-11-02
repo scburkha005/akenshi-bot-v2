@@ -45,7 +45,14 @@ userRouter.post('/register', async function (req, res, next) {
         token: '',
         refreshToken: '',
       },
-      scopes: []
+      scopes: [],
+      botSettings: {
+        optInGtotMode: false,
+        gtotModeEnabled: false,
+        autoShoutoutEnabled: false,
+        autoShoutout: [],
+        autoShoutoutRaidEnabled: true
+      }
     };
     // store user in database
     let { username, _id } = await createUser(newUser);

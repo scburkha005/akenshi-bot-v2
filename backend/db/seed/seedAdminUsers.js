@@ -12,7 +12,14 @@ const adminUser = {
     token: '',
     refreshToken: ''
   },
-  scopes: []
+  scopes: [],
+  botSettings: {
+    optInGtotMode: false,
+    gtotModeEnabled: false,
+    autoShoutoutEnabled: false,
+    autoShoutout: [],
+    autoShoutoutRaidEnabled: true
+  }
 };
 
 const rl = readline.createInterface({
