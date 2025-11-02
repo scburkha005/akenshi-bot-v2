@@ -4,8 +4,8 @@ import { getAppToken, getUserToken, validateToken } from '../modules/token.js';
 import { requireUser, requireAdminUser } from './modules/requireUser.js';
 import { createBotUser, findUserByUsername, updateUser, findUserByTwitchId } from '../db/adapters/users.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
-import { sendMessage } from './modules/eventsub.js';
 import { createChatSubscription, deleteSubscriptionById, getAllEventSubscriptions } from './modules/subscriptions.js';
+import messageHandler from '../botFunctionality/chatBehavior.js';
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
@@ -24,10 +24,7 @@ twitchRouter.post('/eventsub', rawBodyParser, async (req, res) => {
     if (req.headers["twitch-eventsub-message-type"] === 'notification') {
       console.log('notification running')
       console.log(notification)
-      // Captures message events && ignore messages sent by ourselves (i.e. messages sent by the bot)
-      if (notification.subscription.type === 'channel.chat.message' && notification.event.chatter_user_login !== 'akenshi__bot') {
-        await sendMessage(notification.event.broadcaster_user_id, `${notification.event.broadcaster_user_name} said ${notification.event.message.text}`);
-      }
+      await messageHandler(notification);
       res.sendStatus(204);
     } else if (req.headers["twitch-eventsub-message-type"] = 'webhook_callback_verification') {
       console.log('webhook callback verification running')
