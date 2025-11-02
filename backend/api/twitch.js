@@ -93,7 +93,9 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
           token: data.access_token,
           refreshToken: data.refresh_token,
         },
-        scopes: data.scope
+        botSettings: {
+          scopes: data.scope
+        }
       });
       // continue to create BASELINE necessary events
       // start with createChatSubscription

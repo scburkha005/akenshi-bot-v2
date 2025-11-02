@@ -16,6 +16,9 @@ user {
     refreshToken string
   }
   scopes array
+  channelInfo {
+    moderators array of strings 
+  }
   botSettings {
     optInGtotMode boolean default false,
     gtotModeEnabled boolean default false,

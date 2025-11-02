@@ -45,13 +45,16 @@ userRouter.post('/register', async function (req, res, next) {
         token: '',
         refreshToken: '',
       },
-      scopes: [],
+      channelInfo: {
+        moderators: []
+      },
       botSettings: {
         optInGtotMode: false,
         gtotModeEnabled: false,
         autoShoutoutEnabled: false,
         autoShoutout: [],
-        autoShoutoutRaidEnabled: true
+        autoShoutoutRaidEnabled: true,
+        scopes: [],
       }
     };
     // store user in database
