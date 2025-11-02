@@ -1,6 +1,6 @@
 import express from 'express';
-import { createUser, findUserByUsername, userLogin } from '../db/adapters/users.js';
-import { requireUser } from './modules/requireUser.js';
+import { createUser, findUserByUsername, userLogin, findUserByTwitchId } from '../db/adapters/users.js';
+import { requireAdminUser, requireUser } from './modules/requireUser.js';
 import jwt from 'jsonwebtoken';
 import { configDotenv } from 'dotenv';
 configDotenv();
@@ -20,8 +20,8 @@ userRouter.post('/register', async function (req, res, next) {
     // ensure that password and username exist
     if (!req.body.username || !req.body.password) {
       next({
-        error: "Failed to create user",
-        reason: "No username/password provided"
+        name: "Failed to create user",
+        message: "No username/password provided"
       });
       return;
     }
@@ -30,8 +30,8 @@ userRouter.post('/register', async function (req, res, next) {
     const user = await findUserByUsername(req.body.username);
     if (user) {
       next({
-        error: "Failed to create user",
-        reason: "Username already exists"
+        name: "Failed to create user",
+        message: "Username already exists"
       });
       return;
     }
@@ -102,5 +102,17 @@ userRouter.get('/myuser', requireUser, async (req, res, next) => {
     ...req.user
   });
 });
+
+// GET /api/user/:twitchUserId
+userRouter.get('/:twitchUserId', requireAdminUser, async (req, res, next) => {
+  try {
+    const twitchUserId = req.params.twitchUserId;
+    const user = await findUserByTwitchId(twitchUserId);
+    res.send(user);
+  } catch (err) {
+    console.log('error while getting user by twitch user id');
+    next(err);
+  }
+})
 
 export default userRouter;

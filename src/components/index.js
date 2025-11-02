@@ -4,3 +4,4 @@ export { default as Login } from "./Login";
 export { default as Register } from "./Register";
 export { default as TwitchAuth } from "./TwitchAuth";
 export { default as AdminPage } from "./AdminPage";
+export { default as AccountPage } from "./AccountPage";

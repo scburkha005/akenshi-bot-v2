@@ -36,3 +36,30 @@ export async function linkBotAccount (code, state, token) {
     throw err;
   }
 }
+
+export async function getAllEventSubs (token) {
+  try {
+    let { data } = await axios.get(`${VITE_API_URL}/twitch/eventsub`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return data;
+  } catch (err) {
+    console.log('error while getting current event subs');
+    throw err;
+  }
+}
+
+export async function deleteEventSubById (subscriptionId, token) {
+  try {
+    let { data } = await axios.delete(`${VITE_API_URL}/twitch/eventsub/${subscriptionId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+  } catch (err) {
+    console.log('error while deleting event sub');
+    throw err;
+  }
+}

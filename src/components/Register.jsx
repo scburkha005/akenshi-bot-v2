@@ -1,8 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { useState, useContext } from "react";
+import { AuthContext } from "../App.jsx";
 import { register } from "../api/user.js";
 
-function Register ({ setToken }) {
+function Register () {
+  const { setToken } = useContext(AuthContext);
   const navigate = useNavigate();
   let [error, setError] = useState({});
 

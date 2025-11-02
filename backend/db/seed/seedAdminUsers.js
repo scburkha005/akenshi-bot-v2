@@ -7,9 +7,10 @@ const adminUser = {
   password: '',
   twitchUserId: '',
   twitchDisplayName: '',
-  userAccessToken: '',
-  appAccessToken: '',
-  refreshToken: '',
+  userAccessToken: {
+    token: '',
+    refreshToken: ''
+  },
   scopes: []
 };
 

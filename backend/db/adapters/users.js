@@ -38,10 +38,12 @@ export async function createUser(user) {
       const hashedPassword = await hashPassword(user.password);
       user.password = hashedPassword;
       user.isAdmin = false;
-      const data = await usersCollection.insertOne(user)
+      const data = await usersCollection.insertOne(user);
       if (data.acknowledged) {
         const createdUser = await findUserByUsername(user.username);
         console.log('Successfully created user:', createdUser);
+        console.log("Creating base-level subscriptions");
+        // check subscriptions and create base necessary subscriptions
         return createdUser;
       } else {
         throw {
@@ -66,8 +68,8 @@ export async function createBotUser(user) {
         return createdUser;
       } else {
         throw {
-          error: "Error creating user",
-          reason: "Something went wrong while creating the user in the database"
+          name: "Error creating user",
+          message: "Something went wrong while creating the user in the database"
         }
       }
     }
@@ -85,11 +87,13 @@ export async function createAdminUser(user) {
     if (data.acknowledged) {
       const createdUser = await findUserByUsername(user.username);
       console.log('Successfully created user:', createdUser);
+      console.log("Creating base-level subscriptions");
+      // check subscriptions and create base necessary subscriptions
       return createdUser;
     } else {
       throw {
-        error: "Error creating user",
-        reason: "Something went wrong while creating the user in the database"
+        name: "Error creating user",
+        message: "Something went wrong while creating the user in the database"
       }
     }
   } catch (err) {
@@ -128,11 +132,12 @@ export async function findUserByUsername (username) {
 // Find User by Id
 export async function findUserByTwitchId (twitchUserId) {
   try {
-    // update this in the future from userId to twitchUserId
     const user = await usersCollection.findOne({ twitchUserId });
+    delete user?.password;
 
     return user;
   } catch (err) {
+    console.log(err);
     throw err;
   }
 }
