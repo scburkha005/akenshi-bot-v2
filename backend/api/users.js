@@ -39,6 +39,7 @@ userRouter.post('/register', async function (req, res, next) {
       username: req.body.username,
       password: req.body.password,
       twitchUserId: '',
+      twitchLogin: '',
       twitchDisplayName: '',
       userAccessToken: {
         token: '',

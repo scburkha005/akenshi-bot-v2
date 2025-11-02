@@ -1,11 +1,12 @@
 import express from 'express';
 import { configDotenv } from 'dotenv';
-import { getAppToken, getUserToken, validateToken } from '../modules/token.js';
+import { getAppToken, getUserToken, validateToken } from './modules/token.js';
 import { requireUser, requireAdminUser } from './modules/requireUser.js';
 import { createBotUser, findUserByUsername, updateUser, findUserByTwitchId } from '../db/adapters/users.js';
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { createChatSubscription, deleteSubscriptionById, getAllEventSubscriptions } from './modules/subscriptions.js';
 import messageHandler from '../botFunctionality/chatBehavior.js';
+import { getAdditionalUserInfo } from './modules/twitchRequest.js';
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
@@ -74,6 +75,7 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
     if (STATE_STRING === req.body.state) {
       const data = await getUserToken(req.body.code);
       const userData = await validateToken(data.access_token);
+      const [twitchLogin, twitchDisplayName] = await getAdditionalUserInfo(userData.user_id, data.access_token);
 
       let user = await findUserByTwitchId(userData.user_id);
       if (user) {
@@ -85,7 +87,8 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
       }
       let updatedUser = await updateUser(req.user.username, {
         twitchUserId: userData.user_id,
-        twitchDisplayName: userData.login,
+        twitchLogin,
+        twitchDisplayName,
         userAccessToken: {
           token: data.access_token,
           refreshToken: data.refresh_token,
