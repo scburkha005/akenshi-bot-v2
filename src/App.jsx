@@ -1,6 +1,6 @@
 import './App.css'
-import { useState, useEffect, createContext } from 'react'
-import { Route, Routes, useSearchParams } from 'react-router'
+import { useState, useEffect, createContext  } from 'react'
+import { Route, Routes, useSearchParams, useNavigate } from 'react-router'
 import { Navbar, Home, Login, Register, TwitchAuth, AdminPage, AccountPage } from './components';
 import { getUser } from './api/user.js';
 import { linkAccount, linkBotAccount } from './api/twitch.js';
@@ -11,6 +11,7 @@ export function App () {
   const [ searchParams, setSearchParams ] = useSearchParams();
   const [ token, setToken ] = useState('');
   const [ user, setUser ] = useState({});
+  const navigate = useNavigate();
 
   async function handleUser (token) {
     try {
@@ -29,10 +30,10 @@ export function App () {
     try {
       if (isBotUser) {
         const user = await linkBotAccount(code, state, token)
-        console.log(user)
       } else {
         const user = await linkAccount(code, state, token)
         setUser(user);
+        navigate('/');
       }
     } catch (err) {
       throw err;
