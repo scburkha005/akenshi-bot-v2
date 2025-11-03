@@ -1,6 +1,6 @@
 import express from 'express';
-import { createUser, findUserByUsername, userLogin, findUserByTwitchId } from '../db/adapters/users.js';
-import { requireAdminUser, requireUser } from './modules/requireUser.js';
+import { createUser, findUserByUsername, userLogin, findUserByTwitchId } from '../../db/adapters/users.js';
+import { requireAdminUser, requireUser } from '../modules/requireUser.js';
 import jwt from 'jsonwebtoken';
 import { configDotenv } from 'dotenv';
 configDotenv();
@@ -124,6 +124,17 @@ userRouter.get('/:twitchUserId', requireAdminUser, async (req, res, next) => {
     res.send(user);
   } catch (err) {
     console.log('error while getting user by twitch user id');
+    next(err);
+  }
+})
+
+// PATCH /api/user
+userRouter.patch('/', requireUser, async (req, res, next) => {
+  try {
+    console.log(req.user, req.body)
+    res.send('request received')
+  } catch (err) {
+    console.log('error while updating user');
     next(err);
   }
 })
