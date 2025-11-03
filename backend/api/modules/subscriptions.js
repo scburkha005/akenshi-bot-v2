@@ -51,7 +51,36 @@ export const createChatSubscription = async (twitchUserId) => {
     })
     console.log(data)
   } catch (err) {
-    console.log(err);
+    console.log('error while creating chat subscription');
+    throw err;
+  }
+}
+
+export const createRaidSubscription = async (broadcasterId) => {
+  try {
+    const akenshiBot = await findUserByUsername("akenshi__bot");
+    const { data } = await axios.post("https://api.twitch.tv/helix/eventsub/subscriptions", {
+      type: "channel.raid",
+      version: "1",
+      condition: {
+        "to_broadcaster_user_id": `${broadcasterId}`
+      },
+      transport: {
+        method: "webhook",
+        callback: "https://akenshi-bot.ashagni.live/api/twitch/eventsub",
+        secret: HMAC_SECRET
+      }
+    }, {
+      headers: {
+        'Authorization': `Bearer ${akenshiBot.appAccessToken.token}`,
+        'Client-Id': TWITCH_CLIENT_ID,
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(data)
+  } catch (err) {
+    console.log('error while creating raid subscription');
+    throw err;
   }
 }
 
