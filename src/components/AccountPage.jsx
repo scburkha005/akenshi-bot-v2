@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button } from '@mui/material';
+import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Box } from '@mui/material';
 import { AuthContext } from '../App';
 import { updateUser } from '../api/user.js';
 
@@ -13,9 +13,11 @@ function objectComparison (sourceObj, changedObj) {
 }
 
 function AccountPage () {
-  const { user, token } = useContext(AuthContext);
+  const { user, token, setUser } = useContext(AuthContext);
   const [botToggleSettings, setBotToggleSettings] = useState({});
   const [isChanged, setIsChanged] = useState(false);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMsg, setSnackbarMsg] = useState('');
 
   useEffect(() => {
     // Ensures proper data assignment on refresh after loading user from context
@@ -35,16 +37,27 @@ function AccountPage () {
 
   const handleSubmit = async () => {
     try {
-      await updateUser(token, {
+      let updatedUser = await updateUser(token, {
         botSettings: {
           toggle: botToggleSettings
         }
       });
+      setUser(updatedUser);
+      setSnackbarMsg("Changes Saved Successfully");
+      setIsSnackbarOpen(true);
+      setIsChanged(false);
     } catch (err) {
+      setSnackbarMsg("Something went wrong...")
+      setIsSnackbarOpen(true);
       console.log('error while sending update request');
       console.log(err);
     }
   }
+
+  const handleSnackbarClose = () => {
+    setIsSnackbarOpen(false);
+  }
+
 
   return (
     <>
@@ -61,6 +74,13 @@ function AccountPage () {
           />
         })}
         <Button disabled={!isChanged} onClick={handleSubmit}>Save Changes</Button>
+        <Snackbar 
+          anchorOrigin={{horizontal: 'center', vertical: 'top'}}
+          open={isSnackbarOpen}
+          autoHideDuration={2000}
+          onClose={handleSnackbarClose}
+          message={snackbarMsg}
+        />
       </FormGroup>
 
     </FormControl>
