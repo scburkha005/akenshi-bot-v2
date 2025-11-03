@@ -161,9 +161,10 @@ export async function updateUser(username, userUpdateObj) {
   try {
     const flattenedObj = flattenObject(userUpdateObj);
 
-    const user = await usersCollection.updateOne({ username }, {
+    await usersCollection.updateOne({ username }, {
       $set: flattenedObj
     });
+    const user = await findUserByUsername(username);
 
     delete user.password;
 
