@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { findUserByUsername } from '../../db/adapters/users.js';
 const { TWITCH_CLIENT_ID } = process.env;
 
 export async function getAdditionalUserInfo (userId, userAccessToken) {
@@ -32,6 +33,23 @@ export async function getChannelModerators (broadcasterId, userAccessToken) {
   } catch (err) {
     console.log('error while fetching mods info from twitch');
     console.log(err)
+    throw err;
+  }
+}
+
+export async function getChannelInformation (broadcasterId) {
+  try {
+    const akenshiBot = await findUserByUsername("akenshi__bot");
+    const { data: { data: [ data ] } } = await axios.get(`https://api.twitch.tv/helix/channels?broadcaster_id=${broadcasterId}`, {
+      headers: {
+        'Authorization': `Bearer ${akenshiBot.appAccessToken.token}`,
+        'Client-Id': TWITCH_CLIENT_ID
+      }
+    });
+    console.log(data)
+    return data;
+  } catch (err) {
+    console.log('error while attempting to fetch channel information')
     throw err;
   }
 }
