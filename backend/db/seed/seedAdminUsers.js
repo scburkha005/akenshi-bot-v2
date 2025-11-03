@@ -12,13 +12,16 @@ const adminUser = {
     token: '',
     refreshToken: ''
   },
-  scopes: [],
+  channelInfo: {
+    moderators: []
+  },
   botSettings: {
     optInGtotMode: false,
     gtotModeEnabled: false,
     autoShoutoutEnabled: false,
     autoShoutout: [],
-    autoShoutoutRaidEnabled: true
+    autoShoutoutRaidEnabled: true,
+    scopes: [],
   }
 };
 
