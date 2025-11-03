@@ -4,9 +4,10 @@ import { getAppToken, getUserToken, validateToken } from '../modules/token.js';
 import { requireUser, requireAdminUser } from '../modules/requireUser.js';
 import { createBotUser, findUserByUsername, updateUser, findUserByTwitchId } from '../../db/adapters/users.js';
 import { createHmac, verifySignatures } from '../modules/hmac.js';
-import { createChatSubscription, deleteSubscriptionById, getAllEventSubscriptions } from '../modules/subscriptions.js';
-import messageHandler from '../botFunctionality/chatBehavior.js';
+import { createChatSubscription, createRaidSubscription, deleteSubscriptionById, getAllEventSubscriptions } from '../modules/subscriptions.js';
 import { getAdditionalUserInfo, getChannelModerators } from '../modules/twitchRequest.js';
+import messageHandler from '../botFunctionality/chatBehavior.js';
+import raidHandler from '../botFunctionality/raidBehavior.js';
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
@@ -26,6 +27,7 @@ twitchRouter.post('/eventsub', rawBodyParser, async (req, res) => {
       console.log('notification running')
       console.log(notification)
       await messageHandler(notification);
+      await raidHandler(notification);
       res.sendStatus(204);
     } else if (req.headers["twitch-eventsub-message-type"] = 'webhook_callback_verification') {
       console.log('webhook callback verification running')
@@ -104,6 +106,7 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
       // continue to create BASELINE necessary events
       // start with createChatSubscription
       await createChatSubscription(userData.user_id);
+      await createRaidSubscription(userData.user_id);
 
       res.send(updatedUser);
     } else {
