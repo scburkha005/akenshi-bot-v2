@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, findUserByUsername, userLogin, findUserByTwitchId } from '../../db/adapters/users.js';
+import { createUser, findUserByUsername, userLogin, findUserByTwitchId, updateUser } from '../../db/adapters/users.js';
 import { requireAdminUser, requireUser } from '../modules/requireUser.js';
 import jwt from 'jsonwebtoken';
 import { configDotenv } from 'dotenv';
@@ -129,10 +129,21 @@ userRouter.get('/:twitchUserId', requireAdminUser, async (req, res, next) => {
 })
 
 // PATCH /api/user
+  // req.body does NOT need to contain all fields, but DOES require to follow the user object format from the root
+  // Example: to update the toggleable bot settings, we must pass a req.body = {
+  //   botSettings: {
+  //     toggle: {
+  //       gtotMode: true
+  //     }
+  //   }
+  // }
 userRouter.patch('/', requireUser, async (req, res, next) => {
   try {
-    console.log(req.user, req.body)
-    res.send('request received')
+    let updatedUser = await updateUser(req.user.username, req.body);
+    res.send({
+      message: "user updated successfully",
+      updatedUser
+    });
   } catch (err) {
     console.log('error while updating user');
     next(err);
