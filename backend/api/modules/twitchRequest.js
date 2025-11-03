@@ -53,3 +53,21 @@ export async function getChannelInformation (broadcasterId) {
     throw err;
   }
 }
+
+export async function sendShoutout (sendingBroadcasterId, receivingBroadcasterId, userAccessToken) {
+   try {
+    console.log(sendingBroadcasterId, receivingBroadcasterId, userAccessToken)
+    await axios({
+      method: 'post',
+      url: `https://api.twitch.tv/helix/chat/shoutouts?from_broadcaster_id=${sendingBroadcasterId}&to_broadcaster_id=${receivingBroadcasterId}&moderator_id=${sendingBroadcasterId}`,
+      headers: {
+        'Authorization': `Bearer ${userAccessToken}`,
+        'Client-Id': TWITCH_CLIENT_ID
+      }
+    });
+   } catch (err) {
+    console.log("error while sending shoutout");
+    console.log(err)
+    throw err;
+   }
+}
