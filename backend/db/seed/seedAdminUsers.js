@@ -6,12 +6,25 @@ const adminUser = {
   username: '',
   password: '',
   twitchUserId: '',
+  twitchLogin: '',
   twitchDisplayName: '',
   userAccessToken: {
     token: '',
     refreshToken: ''
   },
-  scopes: []
+  channelInfo: {
+    moderators: []
+  },
+  botSettings: {
+    toggle: {
+      gtotMode: false,
+      autoShoutout: false,
+      autoShoutoutRaid: true
+    },
+    gtotModeEnabled: false,
+    autoShoutout: [],
+    scopes: [],
+  }
 };
 
 const rl = readline.createInterface({

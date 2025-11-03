@@ -73,6 +73,7 @@ app.use(({ name, message }, req, res, next) => {
     res.status(500)
   }
 
+  console.log(name, message);
   res.send({
     name,
     message

@@ -1,6 +1,6 @@
 import express from 'express';
-import { createUser, findUserByUsername, userLogin, findUserByTwitchId } from '../db/adapters/users.js';
-import { requireAdminUser, requireUser } from './modules/requireUser.js';
+import { createUser, findUserByUsername, userLogin, findUserByTwitchId, updateUser } from '../../db/adapters/users.js';
+import { requireAdminUser, requireUser } from '../modules/requireUser.js';
 import jwt from 'jsonwebtoken';
 import { configDotenv } from 'dotenv';
 configDotenv();
@@ -39,12 +39,25 @@ userRouter.post('/register', async function (req, res, next) {
       username: req.body.username,
       password: req.body.password,
       twitchUserId: '',
+      twitchLogin: '',
       twitchDisplayName: '',
       userAccessToken: {
         token: '',
         refreshToken: '',
       },
-      scopes: []
+      channelInfo: {
+        moderators: []
+      },
+      botSettings: {
+        toggle: {
+          gtotMode: false,
+          autoShoutout: false,
+          autoShoutoutRaid: true
+        },
+        gtotModeEnabled: false,
+        autoShoutout: [],
+        scopes: [],
+      }
     };
     // store user in database
     let { username, _id } = await createUser(newUser);
@@ -111,6 +124,28 @@ userRouter.get('/:twitchUserId', requireAdminUser, async (req, res, next) => {
     res.send(user);
   } catch (err) {
     console.log('error while getting user by twitch user id');
+    next(err);
+  }
+})
+
+// PATCH /api/user
+  // req.body does NOT need to contain all fields, but DOES require to follow the user object format from the root
+  // Example: to update the toggleable bot settings, we must pass a req.body = {
+  //   botSettings: {
+  //     toggle: {
+  //       gtotMode: true
+  //     }
+  //   }
+  // }
+userRouter.patch('/', requireUser, async (req, res, next) => {
+  try {
+    let updatedUser = await updateUser(req.user.username, req.body);
+    res.send({
+      message: "user updated successfully",
+      updatedUser
+    });
+  } catch (err) {
+    console.log('error while updating user');
     next(err);
   }
 })

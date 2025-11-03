@@ -25,7 +25,7 @@ function Subscriptions () {
         }, {});
         // Add that username to every subscription for easier viewing
         let subscriptions = data.data.map(subscription => {
-          subscription.condition.twitchUsername = broadcasterIdNamePair[subscription.condition.broadcaster_user_id];
+          subscription.condition.twitchUsername = broadcasterIdNamePair[subscription.condition.broadcaster_user_id || subscription.condition.to_broadcaster_user_id];
           return subscription;
         })
         console.log(subscriptions)

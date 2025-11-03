@@ -1,5 +1,6 @@
 import client from '../index.js';
 import { verifyPassword, hashPassword } from '../../modules/hash.js';
+import { flattenObject } from '../../modules/utility.js';
 const akenshiBotDB = client.db('akenshiBotDB');
 const usersCollection = akenshiBotDB.collection('users');
 // Schema
@@ -9,17 +10,37 @@ user {
   password string
   isAdmin bool
   twitchUserId string
+  twitchLogin string
   twitchDisplayName string
   userAccessToken {
     token string
     refreshToken string
   }
-  scopes array
+  channelInfo {
+    moderators array of strings 
+  }
+  botSettings {
+    toggle {
+      gtotMode boolean default false,
+      autoShoutout boolean default true,
+      autoShoutoutRaid boolean default true
+    }
+    gtotModeEnabled boolean default false,
+    autoShoutout [
+      {
+        twitchDisplayName string
+        needsShoutout boolean default true 
+      },
+      repeat obj
+    ],
+    scopes array
+  }
 }
 bot user {
   username string
   isAdmin bool
   twitchUserId string
+  twitchLogin string
   twitchDisplayName string
   userAccessToken {
     token string
@@ -144,9 +165,12 @@ export async function findUserByTwitchId (twitchUserId) {
 // Update User
 export async function updateUser(username, userUpdateObj) {
   try {
-    const user = await usersCollection.updateOne({ username }, {
-      $set: userUpdateObj
+    const flattenedObj = flattenObject(userUpdateObj);
+
+    await usersCollection.updateOne({ username }, {
+      $set: flattenedObj
     });
+    const user = await findUserByUsername(username);
 
     delete user.password;
 

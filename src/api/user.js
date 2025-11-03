@@ -58,3 +58,26 @@ export async function getUserById (twitchUserId, token) {
     throw err;
   }
 }
+
+export async function updateUser (token, updateObj) {
+  // updateObj does NOT need to contain all fields, but DOES require to follow the user object format from the root
+  // Example: to update the toggleable bot settings, we must pass an updateObj = {
+  //   botSettings: {
+  //     toggle: {
+  //       gtotMode: true
+  //     }
+  //   }
+  // }
+  try {
+    let { data: { updatedUser: user } } = await axios.patch(`${VITE_API_URL}/user`, updateObj, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return user;
+  } catch (err) {
+    console.log('error while updating user');
+    throw err;
+  }
+}
