@@ -49,11 +49,13 @@ userRouter.post('/register', async function (req, res, next) {
         moderators: []
       },
       botSettings: {
-        optInGtotMode: false,
+        toggle: {
+          gtotMode: false,
+          autoShoutout: false,
+          autoShoutoutRaid: true
+        },
         gtotModeEnabled: false,
-        autoShoutoutEnabled: false,
         autoShoutout: [],
-        autoShoutoutRaidEnabled: true,
         scopes: [],
       }
     };

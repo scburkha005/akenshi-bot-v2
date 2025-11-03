@@ -20,11 +20,13 @@ user {
     moderators array of strings 
   }
   botSettings {
-    optInGtotMode boolean default false,
+    toggle {
+      gtotMode boolean default false,
+      autoShoutout boolean default true,
+      autoShoutoutRaid boolean default true
+    }
     gtotModeEnabled boolean default false,
-    autoShoutoutEnabled boolean default true,
     autoShoutout array,
-    autoShoutoutRaidEnabled boolean default true
     scopes array
   }
 }
