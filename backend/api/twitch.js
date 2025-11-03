@@ -6,7 +6,7 @@ import { createBotUser, findUserByUsername, updateUser, findUserByTwitchId } fro
 import { createHmac, verifySignatures } from './modules/hmac.js';
 import { createChatSubscription, deleteSubscriptionById, getAllEventSubscriptions } from './modules/subscriptions.js';
 import messageHandler from '../botFunctionality/chatBehavior.js';
-import { getAdditionalUserInfo } from './modules/twitchRequest.js';
+import { getAdditionalUserInfo, getChannelModerators } from './modules/twitchRequest.js';
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
@@ -76,6 +76,7 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
       const data = await getUserToken(req.body.code);
       const userData = await validateToken(data.access_token);
       const [twitchLogin, twitchDisplayName] = await getAdditionalUserInfo(userData.user_id, data.access_token);
+      const modsDisplayNames = await getChannelModerators(userData.user_id, data.access_token);
 
       let user = await findUserByTwitchId(userData.user_id);
       if (user) {
@@ -92,6 +93,9 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
         userAccessToken: {
           token: data.access_token,
           refreshToken: data.refresh_token,
+        },
+        channelInfo: {
+          moderators: modsDisplayNames
         },
         botSettings: {
           scopes: data.scope
