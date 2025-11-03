@@ -26,7 +26,13 @@ user {
       autoShoutoutRaid boolean default true
     }
     gtotModeEnabled boolean default false,
-    autoShoutout array,
+    autoShoutout [
+      {
+        twitchDisplayName string
+        needsShoutout boolean default true 
+      },
+      repeat obj
+    ],
     scopes array
   }
 }
