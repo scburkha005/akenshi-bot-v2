@@ -6,6 +6,7 @@ export const flattenObject = (obj, currentPath = '', flatObj = {}) => {
     if (typeof currValue === 'object' && !Array.isArray(currValue)) {
       flattenObject(currValue, `${currentPath}.${key}`, flatObj);
     } else {
+      // Slice is to remove an extra . that is being added to the beginning of every key => there may be a better implementation for this
       flatObj[`${currentPath}.${key}`.slice(1)] = currValue;
     }
   });
