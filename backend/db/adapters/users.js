@@ -1,5 +1,6 @@
 import client from '../index.js';
 import { verifyPassword, hashPassword } from '../../modules/hash.js';
+import { flattenObject } from '../../modules/utility.js';
 const akenshiBotDB = client.db('akenshiBotDB');
 const usersCollection = akenshiBotDB.collection('users');
 // Schema
@@ -156,8 +157,10 @@ export async function findUserByTwitchId (twitchUserId) {
 // Update User
 export async function updateUser(username, userUpdateObj) {
   try {
+    const flattenedObj = flattenObject(userUpdateObj);
+
     const user = await usersCollection.updateOne({ username }, {
-      $set: userUpdateObj
+      $set: flattenedObj
     });
 
     delete user.password;
