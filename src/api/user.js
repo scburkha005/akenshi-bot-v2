@@ -69,11 +69,13 @@ export async function updateUser (token, updateObj) {
   //   }
   // }
   try {
-    let { data } = await axios.patch(`${VITE_API_URL}/user`, updateObj, {
+    let { data: { updatedUser: user } } = await axios.patch(`${VITE_API_URL}/user`, updateObj, {
       headers: {
         "Authorization": `Bearer ${token}`
       }
     })
+
+    return user;
   } catch (err) {
     console.log('error while updating user');
     throw err;
