@@ -1,5 +1,5 @@
-import { sendMessage } from "../api/modules/eventsub.js";
-import { findUserByTwitchId, updateUser } from "../db/adapters/users.js";
+import { sendMessage } from "../modules/eventsub.js";
+import { findUserByTwitchId, updateUser } from "../../db/adapters/users.js";
 const gtotModeHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
