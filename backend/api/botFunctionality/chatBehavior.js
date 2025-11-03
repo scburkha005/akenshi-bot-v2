@@ -3,7 +3,7 @@ import { findUserByTwitchId, updateUser } from "../../db/adapters/users.js";
 const gtotModeHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
-    if (!broadcaster.botSettings.optInGtotMode) {
+    if (!broadcaster.botSettings.toggle.gtotMode) {
       return;
     }
     const moderatorsList = broadcaster.channelInfo.moderators;
@@ -12,13 +12,17 @@ const gtotModeHandler = async (broadcaster, notification) => {
     // Handle gtot mode toggling
     if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === 'enter gtot mode') {
       await updateUser(broadcaster.username, {
-        gtotModeEnabled: true
+        botSettings: {
+          gtotModeEnabled: true
+        }
       });
       await sendMessage(notification.event.broadcaster_user_id, `Okayge`);
     }
     if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === 'exit gtot mode') {
       await updateUser(broadcaster.username, {
-        gtotModeEnabled: false
+        botSettings: {
+          gtotModeEnabled: false
+        }
       });
       await sendMessage(notification.event.broadcaster_user_id, `Deadge`);
     }
@@ -31,11 +35,10 @@ const gtotModeHandler = async (broadcaster, notification) => {
 // This will be the parent of all message handlers
 const messageHandler = async (notification) => {
   try {
-    const broadcaster = await findUserByTwitchId(notification.event.broadcaster_user_id);
-    // Captures message events && ignore messages sent by ourselves (i.e. messages sent by the bot)
+    // Captures channel.chat.message events subscriptions && ignore messages sent by ourselves (i.e. messages sent by the bot)
     if (notification.subscription.type === 'channel.chat.message' && notification.event.chatter_user_login !== 'akenshi__bot') {
+      const broadcaster = await findUserByTwitchId(notification.event.broadcaster_user_id);
       await gtotModeHandler(broadcaster, notification);
-      await sendMessage(notification.event.broadcaster_user_id, `${notification.event.broadcaster_user_name} said ${notification.event.message.text}`);
     }
   } catch (err) {
     console.log('there was an error during the message process');
