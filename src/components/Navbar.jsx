@@ -11,7 +11,11 @@ function Navbar () {
   }
 
   return (
-    <Box sx={{display: 'flex', justifyContent: "space-around"}}>
+    <Box sx={{
+      display: 'flex',
+      justifyContent: "space-around",
+      minWidth: '100vw'
+    }}>
       <Link to="/">Home</Link> 
       { token ?
       <>
