@@ -14,7 +14,7 @@ function Subscription ({ subscription, updateSubscriptions }) {
     }
   }
   return (
-    <Card>
+    <Card sx={{m: 1}}>
       <CardContent sx={{ minWidth: 275 }}>
         <Typography>
           {subscription.condition.twitchUsername}
