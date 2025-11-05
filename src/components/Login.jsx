@@ -30,7 +30,7 @@ function Login () {
         <input />
         <button type="submit">Login</button>
       </form>
-      <Link to='/register'>Don't have an account? Sign up!</Link>
+      <Link to='/register'>Don't have an account? Sign up here</Link>
     </>
   );
 }
