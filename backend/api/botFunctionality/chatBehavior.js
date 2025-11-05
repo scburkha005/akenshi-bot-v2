@@ -26,6 +26,14 @@ const gtotModeHandler = async (broadcaster, notification) => {
       });
       await sendMessage(notification.event.broadcaster_user_id, `Deadge`);
     }
+    // Chat features for when gtot mode is enabled
+    if (broadcaster.botSettings.gtotModeEnabled) {
+      // Handle gtot random ya mama
+      let onePercentChance = (Math.floor(Math.random() * 100) + 1) === 100;
+      if (onePercentChance) {
+        await sendMessage(notification.event.broadcaster_user_id, `Ya mama @${currentUser}`);
+      }
+    }
   } catch (err) {
     console.log('there was an error in gtot mode handler');
     throw err;
