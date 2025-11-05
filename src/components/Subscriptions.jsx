@@ -3,6 +3,7 @@ import { AuthContext } from "../App";
 import { getAllEventSubs } from "../api/twitch";
 import { getUserById } from "../api/user";
 import Subscription from "./Subscription";
+import { Box } from "@mui/material";
 function Subscriptions () {
   const [ subscriptions, setSubscriptions ] = useState([]);
   const { token } = useContext(AuthContext);
@@ -45,11 +46,11 @@ function Subscriptions () {
   }
 
   return (
-    <>
+    <Box sx={{display: 'flex', justifyContent: "center", flexWrap: "wrap"}}>
       {subscriptions.map(subscription => {
         return <Subscription key={subscription.id} subscription={subscription} updateSubscriptions={updateSubscriptions}/>
       })}
-    </>
+    </Box>
   )
 }
 

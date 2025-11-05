@@ -1,11 +1,13 @@
 #root {
   max-width: 1280px;
+  min-height: 100vh;
+  height: 100%;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+  /* text-align: center; */
 }
 
-.app {
+/* .app {
   display: flex;
   flex-direction: column;
 }
@@ -16,4 +18,4 @@
 
 .read-the-docs {
   color: #888;
-}
+} */

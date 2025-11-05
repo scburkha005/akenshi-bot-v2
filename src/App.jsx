@@ -4,6 +4,7 @@ import { Route, Routes, useSearchParams, useNavigate } from 'react-router'
 import { Navbar, Home, Login, Register, TwitchAuth, AdminPage, AccountPage } from './components';
 import { getUser } from './api/user.js';
 import { linkAccount, linkBotAccount } from './api/twitch.js';
+import { Box, Container } from '@mui/material';
 
 export const AuthContext = createContext({});
 
@@ -63,22 +64,32 @@ export function App () {
   }, []);
 
   return (
-    <AuthContext value={{user, token, setUser, setToken}}>
-      <div className='app'>
-        <Navbar />
-        <Routes>
-          {
-            (Object.keys(user).length !== 0 && user?.userAccessToken?.token === '') ?
-              <Route path='/' element={<TwitchAuth />}/> :
+    <Container>
+      <AuthContext value={{user, token, setUser, setToken}}>
+        <div className='app'>
+          <Navbar />
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            m: 4
+          }}>
+            <Routes>
+              {
+                (Object.keys(user).length !== 0 && user?.userAccessToken?.token === '') ?
+                  <Route path='/' element={<TwitchAuth />}/> :
+                  <Route path='/' element={<Home />}/>
+              }
               <Route path='/' element={<Home />}/>
-          }
-          <Route path='/' element={<Home />}/>
-          <Route path='/login' element={<Login />}/>
-          <Route path='/register' element={<Register />}/>
-          <Route path='/account' element={<AccountPage />}/>
-          { user?.isAdmin && <Route path='/admin' element={<AdminPage/>}/>}
-        </Routes>
-      </div>
-    </AuthContext>
+              <Route path='/login' element={<Login />}/>
+              <Route path='/register' element={<Register />}/>
+              <Route path='/account' element={<AccountPage />}/>
+              { user?.isAdmin && <Route path='/admin' element={<AdminPage/>}/>}
+            </Routes>
+          </Box>
+        </div>
+      </AuthContext>
+    </Container>
   )
 }

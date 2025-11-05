@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Box } from '@mui/material';
+import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper } from '@mui/material';
 import { AuthContext } from '../App';
 import { updateUser } from '../api/user.js';
 
@@ -60,31 +60,39 @@ function AccountPage () {
 
 
   return (
-    <>
-    <FormControl>
-      <FormLabel>Akenshi Bot Settings</FormLabel>
-      <FormGroup>
-        {Object.keys(botToggleSettings).map(setting => {
-          return <FormControlLabel 
-            key={setting}
-            control={
-              <Switch checked={botToggleSettings[setting]} onChange={handleChange} name={setting} />
-            }
-            label={setting}
+    <Paper elevation={2} sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      maxWidth: 350
+    }}>
+      <FormControl sx={{
+        display: 'flex',
+        alignItems: 'center',
+        m: 2
+      }}>
+        <FormLabel>Akenshi Bot Settings</FormLabel>
+        <FormGroup>
+          {Object.keys(botToggleSettings).map(setting => {
+            return <FormControlLabel 
+              key={setting}
+              control={
+                <Switch checked={botToggleSettings[setting]} onChange={handleChange} name={setting} />
+              }
+              label={setting}
+            />
+          })}
+          <Button disabled={!isChanged} onClick={handleSubmit}>Save Changes</Button>
+          <Snackbar 
+            anchorOrigin={{horizontal: 'center', vertical: 'top'}}
+            open={isSnackbarOpen}
+            autoHideDuration={2000}
+            onClose={handleSnackbarClose}
+            message={snackbarMsg}
           />
-        })}
-        <Button disabled={!isChanged} onClick={handleSubmit}>Save Changes</Button>
-        <Snackbar 
-          anchorOrigin={{horizontal: 'center', vertical: 'top'}}
-          open={isSnackbarOpen}
-          autoHideDuration={2000}
-          onClose={handleSnackbarClose}
-          message={snackbarMsg}
-        />
-      </FormGroup>
+        </FormGroup>
 
-    </FormControl>
-    </>
+      </FormControl>
+    </Paper>
   )
 }
 

@@ -38,7 +38,7 @@ function Register () {
         <input />
         <button type="submit">Register</button>
       </form>
-      <Link to='/login'>Already have an account? Login up!</Link>
+      <Link to='/login'>Already have an account? Login here</Link>
     </>
   )
 }
