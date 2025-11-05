@@ -14,7 +14,7 @@ function Navbar () {
     <Box sx={{
       display: 'flex',
       justifyContent: "space-around",
-      minWidth: '100vw'
+      minWidth: '100%'
     }}>
       <Link to="/">Home</Link> 
       { token ?
@@ -25,7 +25,6 @@ function Navbar () {
       : <Link to="/login">Login</Link> }
       {/* Admin Pages */}
       { user?.isAdmin && <Link to="/admin">Admin Page</Link> }
-
     </Box>
   )
 }
