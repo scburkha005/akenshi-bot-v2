@@ -68,7 +68,13 @@ export function App () {
       <AuthContext value={{user, token, setUser, setToken}}>
         <div className='app'>
           <Navbar />
-          <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            m: 4
+          }}>
             <Routes>
               {
                 (Object.keys(user).length !== 0 && user?.userAccessToken?.token === '') ?
