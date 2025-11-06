@@ -1,5 +1,6 @@
 import { sendMessage } from "../modules/eventsub.js";
 import { findUserByTwitchId, updateUser } from "../../db/adapters/users.js";
+import { createGPTMessage } from "../modules/openAi.js";
 const gtotModeHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
@@ -40,6 +41,25 @@ const gtotModeHandler = async (broadcaster, notification) => {
   }
 }
 
+const randomInsultHandler = async (broadcaster, notification) => {
+  try {
+    // If feature is disabled, do nothing
+    if (!broadcaster.botSettings.toggle.randomInsult) {
+      return;
+    }
+    let onePercentChance = (Math.floor(Math.random() * 100) + 1) === 100;
+    if (onePercentChance) {
+      const currentUser = notification.event.chatter_user_name;
+      const currentMsg = notification.event.message.text.toLowerCase();
+      const response = await createGPTMessage(currentMsg);
+      await sendMessage(notification.event.broadcaster_user_id, `${response} @${currentUser}`)
+    }
+  } catch (err) {
+    console.log('there was an error in randomInsultHandler');
+    throw err;
+  }
+}
+
 // This will be the parent of all message handlers
 const messageHandler = async (notification) => {
   try {
@@ -47,6 +67,7 @@ const messageHandler = async (notification) => {
     if (notification.subscription.type === 'channel.chat.message' && notification.event.chatter_user_login !== 'akenshi__bot') {
       const broadcaster = await findUserByTwitchId(notification.event.broadcaster_user_id);
       await gtotModeHandler(broadcaster, notification);
+      await randomInsultHandler(broadcaster, notification);
     }
   } catch (err) {
     console.log('there was an error during the message process');
