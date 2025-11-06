@@ -19,7 +19,8 @@ const adminUser = {
     toggle: {
       gtotMode: false,
       autoShoutout: false,
-      autoShoutoutRaid: true
+      autoShoutoutRaid: true,
+      randomInsult: false
     },
     gtotModeEnabled: false,
     autoShoutout: [],

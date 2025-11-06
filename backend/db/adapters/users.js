@@ -24,6 +24,7 @@ user {
       gtotMode boolean default false,
       autoShoutout boolean default true,
       autoShoutoutRaid boolean default true
+      randomInsult
     }
     gtotModeEnabled boolean default false,
     autoShoutout [
