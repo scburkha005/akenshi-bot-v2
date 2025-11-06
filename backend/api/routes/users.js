@@ -52,7 +52,8 @@ userRouter.post('/register', async function (req, res, next) {
         toggle: {
           gtotMode: false,
           autoShoutout: false,
-          autoShoutoutRaid: true
+          autoShoutoutRaid: true,
+          randomInsult: false
         },
         gtotModeEnabled: false,
         autoShoutout: [],
