@@ -8,6 +8,7 @@ import { createChatSubscription, createRaidSubscription, deleteSubscriptionById,
 import { getAdditionalUserInfo, getChannelModerators } from '../modules/twitchRequest.js';
 import messageHandler from '../botFunctionality/chatBehavior.js';
 import raidHandler from '../botFunctionality/raidBehavior.js';
+import { createEventSubscriptionLog, getEventSubscriptionLogByBroadcasterId } from '../../db/adapters/eventSubs.js';
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
@@ -22,10 +23,20 @@ twitchRouter.post('/eventsub', rawBodyParser, async (req, res) => {
   let HMAC_SIG = 'sha256=' + createHmac(HMAC_SECRET, HMAC_MSG);
   if(verifySignatures(HMAC_SIG, req.headers['twitch-eventsub-message-signature'])) {
     let notification = JSON.parse(req.body);
+    let broadcasterId = notification.subscription.condition.broadcaster_user_id;
+    let eventsubLog = await getEventSubscriptionLogByBroadcasterId(broadcasterId);
+    // Immediately respond to the subscription if it is a repeat
+    if (eventsubLog.includes(notification.event.message_id)) {
+      res.sendStatus(204);
+      return;
+    }
     // Handle notification
     if (req.headers["twitch-eventsub-message-type"] === 'notification') {
       console.log('notification running')
       console.log(notification)
+      // Log the subscription to avoid repeat handling
+      await createEventSubscriptionLog(broadcasterId, notification.event.message_id);
+      // Handlers
       await messageHandler(notification);
       await raidHandler(notification);
       res.sendStatus(204);
