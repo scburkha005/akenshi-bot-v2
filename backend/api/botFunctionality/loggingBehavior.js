@@ -7,6 +7,8 @@ export const eventsubLogHandler = async (notification, broadcasterId) => {
     if (isDuplicateEvent) {
       return isDuplicateEvent;
     }
+    console.log('notification running')
+    console.log(notification)
     // Log subscriptions, different subscription types may require different identifiers to be logged
     if (subscriptionType === 'channel.chat.message') {
       await createEventSubscriptionLog(broadcasterId, notification.event.message_id);

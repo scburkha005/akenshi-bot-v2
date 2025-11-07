@@ -26,8 +26,6 @@ twitchRouter.post('/eventsub', rawBodyParser, async (req, res) => {
     let broadcasterId = notification.subscription.condition.broadcaster_user_id;
     // Handle notification
     if (req.headers["twitch-eventsub-message-type"] === 'notification') {
-      console.log('notification running')
-      console.log(notification)
       // Log the subscription to avoid repeat handling
       let isDuplicateEvent = await eventsubLogHandler(notification, broadcasterId)
       if (isDuplicateEvent) {
