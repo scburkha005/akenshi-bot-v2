@@ -8,7 +8,7 @@ import { createChatSubscription, createRaidSubscription, deleteSubscriptionById,
 import { getAdditionalUserInfo, getChannelModerators } from '../modules/twitchRequest.js';
 import messageHandler from '../botFunctionality/chatBehavior.js';
 import raidHandler from '../botFunctionality/raidBehavior.js';
-import { createEventSubscriptionLog, getEventSubscriptionLogByBroadcasterId } from '../../db/adapters/eventSubs.js';
+import { eventsubLogHandler } from '../botFunctionality/loggingBehavior.js';
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
@@ -24,21 +24,19 @@ twitchRouter.post('/eventsub', rawBodyParser, async (req, res) => {
   if(verifySignatures(HMAC_SIG, req.headers['twitch-eventsub-message-signature'])) {
     let notification = JSON.parse(req.body);
     let broadcasterId = notification.subscription.condition.broadcaster_user_id;
-    let eventsubLog = await getEventSubscriptionLogByBroadcasterId(broadcasterId);
-    // Immediately respond to the subscription if it is a repeat
-    if (eventsubLog.includes(notification.event.message_id)) {
-      res.sendStatus(204);
-      return;
-    }
     // Handle notification
     if (req.headers["twitch-eventsub-message-type"] === 'notification') {
       console.log('notification running')
       console.log(notification)
       // Log the subscription to avoid repeat handling
-      await createEventSubscriptionLog(broadcasterId, notification.event.message_id);
+      let isDuplicateEvent = await eventsubLogHandler(notification, broadcasterId)
+      if (isDuplicateEvent) {
+        res.sendStatus(204);
+        return;
+      }
       // Handlers
-      await messageHandler(notification);
-      await raidHandler(notification);
+      await messageHandler(notification, eventsubLog);
+      await raidHandler(notification, eventsubLog);
       res.sendStatus(204);
     } else if (req.headers["twitch-eventsub-message-type"] = 'webhook_callback_verification') {
       console.log('webhook callback verification running')
