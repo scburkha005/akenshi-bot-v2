@@ -47,7 +47,7 @@ const randomInsultHandler = async (broadcaster, notification) => {
     if (!broadcaster.botSettings.toggle.randomInsult) {
       return;
     }
-    let onePercentChance = (Math.floor(Math.random() * 100) + 1) === 100;
+    let onePercentChance = (Math.floor(Math.random() * 250) + 1) === 100;
     if (onePercentChance) {
       const currentUser = notification.event.chatter_user_name;
       const currentMsg = notification.event.message.text.toLowerCase();
