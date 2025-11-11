@@ -14,18 +14,23 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
     setAutoShoutoutList(user.botSettings?.autoShoutout)
   }, [user])
 
-  const handleAdd = async (e) => {
-    try {
-      e.preventDefault();
-      let copyArr = [...autoShoutoutList];
-      copyArr.push(inputVal);
-      setAutoShoutoutList(copyArr);
-      setInputVal('');
-      setIsChanged(true);
-    } catch (err) {
-      console.log('error while adding name to autoshoutout list')
-      console.log(err);
-    }
+  const handleAdd = (e) => {
+    e.preventDefault();
+    let copyArr = [...autoShoutoutList];
+    copyArr.push(inputVal);
+    setAutoShoutoutList(copyArr);
+    setInputVal('');
+    setIsChanged(true);
+  }
+
+  const handleDelete = (e) => {
+    e.preventDefault();
+    let clickedName = event.target.innerText;
+    let copyArr = [...autoShoutoutList];
+    let indexToRemove = copyArr.findIndex((element) => element === clickedName);
+    copyArr.splice(indexToRemove, 1);
+    setAutoShoutoutList(copyArr);
+    setIsChanged(true);
   }
 
   const handleChange = (e) => {
@@ -77,7 +82,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
             flexWrap: 'wrap',
           }}>
             {autoShoutoutList?.map(username => {
-              return <ListItem key={username} sx={{
+              return <ListItem key={username} onClick={handleDelete} sx={{
                 flexBasis: 'content',
                 flexGrow: 0,
                 flexShrink: 0
