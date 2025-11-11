@@ -4,6 +4,7 @@ import { AuthContext } from "../App";
 
 function AutoShoutoutForm ({ autoShoutoutEnabled }) {
   const { user, token, setUser } = useContext(AuthContext);
+  const [isChanged, setIsChanged] = useState(false);
   const [inputVal, setInputVal] = useState('');
   const [autoShoutoutList, setAutoShoutoutList] = useState([]);
 
@@ -19,6 +20,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled }) {
       copyArr.push(inputVal);
       setAutoShoutoutList(copyArr);
       setInputVal('');
+      setIsChanged(true);
     } catch (err) {
       console.log('error while adding name to autoshoutout list')
       console.log(err);
@@ -56,7 +58,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled }) {
             flexDirection: 'row',
             flexWrap: 'wrap',
           }}>
-            {autoShoutoutList.map(username => {
+            {autoShoutoutList?.map(username => {
               return <ListItem key={username} sx={{
                 flexBasis: 'content',
                 flexGrow: 0,
@@ -65,6 +67,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled }) {
             })}
           </List>
         </Paper>
+            <Button disabled={!isChanged}>Save Changes</Button>
       </FormControl>
     </Paper>
   );
