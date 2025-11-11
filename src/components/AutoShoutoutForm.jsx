@@ -32,7 +32,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
     setInputVal(e.target.value)
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
     try {
       let updatedUser = await updateUser(token, {
         botSettings: {
