@@ -18,6 +18,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
     e.preventDefault();
     let copyArr = [...autoShoutoutList];
     copyArr.push(inputVal);
+    copyArr.sort();
     setAutoShoutoutList(copyArr);
     setInputVal('');
     setIsChanged(true);
