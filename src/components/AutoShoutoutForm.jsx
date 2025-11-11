@@ -1,8 +1,9 @@
 import { TextField, Paper, FormLabel, FormControl, Button, Box, List, ListItem } from "@mui/material";
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from "../App";
+import { updateUser } from "../api/user";
 
-function AutoShoutoutForm ({ autoShoutoutEnabled }) {
+function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbarMsg }) {
   const { user, token, setUser } = useContext(AuthContext);
   const [isChanged, setIsChanged] = useState(false);
   const [inputVal, setInputVal] = useState('');
@@ -29,6 +30,23 @@ function AutoShoutoutForm ({ autoShoutoutEnabled }) {
 
   const handleChange = (e) => {
     setInputVal(e.target.value)
+  }
+
+  const handleSubmit = async (e) => {
+    try {
+      let updatedUser = await updateUser(token, {
+        botSettings: {
+          autoShoutout: autoShoutoutList
+        }
+      });
+      setUser(updatedUser);
+      setSnackbarMsg("Changes Saved Successfully");
+      setIsSnackbarOpen(true);
+      setIsChanged(false);
+    } catch (err) {
+      console.log('error while sending changes to backend');
+      console.log(err);
+    }
   }
 
   return (
@@ -67,7 +85,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled }) {
             })}
           </List>
         </Paper>
-            <Button disabled={!isChanged}>Save Changes</Button>
+        <Button disabled={!isChanged} onClick={handleSubmit}>Save Changes</Button>
       </FormControl>
     </Paper>
   );
