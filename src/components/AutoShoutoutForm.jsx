@@ -18,6 +18,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled }) {
       let copyArr = [...autoShoutoutList];
       copyArr.push(inputVal);
       setAutoShoutoutList(copyArr);
+      setInputVal('');
     } catch (err) {
       console.log('error while adding name to autoshoutout list')
       console.log(err);
