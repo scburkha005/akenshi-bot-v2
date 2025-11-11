@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper, Box } from '@mui/material';
+import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper, Box, SnackbarContent } from '@mui/material';
 import { AuthContext } from '../App';
 import { updateUser } from '../api/user.js';
 import AutoShoutoutForm from './AutoShoutoutForm.jsx';
@@ -94,7 +94,9 @@ function AccountPage () {
               autoHideDuration={2000}
               onClose={handleSnackbarClose}
               message={snackbarMsg}
-            />
+            >
+              <SnackbarContent message={snackbarMsg}/>
+            </Snackbar>
           </FormGroup>
         </FormControl>
       </Paper>
