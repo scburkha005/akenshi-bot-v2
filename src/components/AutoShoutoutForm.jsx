@@ -1,4 +1,4 @@
-import { TextField, Paper, FormLabel, FormControl, Button, Box, List, ListItem } from "@mui/material";
+import { TextField, Paper, FormLabel, FormControl, Button, Box, List, ListItem, Typography } from "@mui/material";
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from "../App";
 import { updateUser } from "../api/user";
@@ -75,6 +75,10 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
           <TextField label="Twitch Display Name" variant="outlined" value={inputVal} onChange={handleChange}/>
           <Button type='submit'>Add</Button>
         </Box>
+        {autoShoutoutList?.length > 0 && <Typography variant="subtitle2" sx={{
+          pt: 1,
+          fontStyle: "italic"
+        }}>Click a name below to remove</Typography>}
         <Paper sx={{mt: 2}}>
           <List sx={{
             display: 'flex',
