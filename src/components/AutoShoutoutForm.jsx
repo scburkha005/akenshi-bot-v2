@@ -17,7 +17,14 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
   const handleAdd = (e) => {
     e.preventDefault();
     let copyArr = [...autoShoutoutList];
-    copyArr.push(inputVal);
+    // Check to see if name already exists
+    let displayName = inputVal.toLocaleLowerCase();
+    if (copyArr.includes(displayName)) {
+      setSnackbarMsg("User already in list");
+      setIsSnackbarOpen(true);
+      return;
+    }
+    copyArr.push(displayName);
     copyArr.sort();
     setAutoShoutoutList(copyArr);
     setInputVal('');
