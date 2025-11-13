@@ -13,7 +13,6 @@ export async function createFirstMessageLog (broadcasterId, displayName) {
   try {
     // Create an expiry date that is always the next day at 6 am PST
     let expireDate = new Date();
-    console.log(expireDate.getHours())
     // If the current hour is after 6 am but before midnight, add a day to the date
     if (expireDate.getHours() > 6) {
       expireDate.setDate(expireDate.getDate() + 1);

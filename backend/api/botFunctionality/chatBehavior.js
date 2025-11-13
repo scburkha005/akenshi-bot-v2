@@ -64,7 +64,6 @@ const randomInsultHandler = async (broadcaster, notification) => {
 
 const autoShoutoutHandler = async (broadcaster, notification) => {
   try {
-    // Search the first message log
     let broadcasterId = broadcaster.twitchUserId;
     let autoShoutoutList = broadcaster.botSettings.autoShoutout;
     let chatter = notification.event.chatter_user_name.toLowerCase();
