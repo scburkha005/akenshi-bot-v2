@@ -1,7 +1,8 @@
 import { useState, useContext, useEffect } from 'react';
-import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper } from '@mui/material';
+import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper, Box, SnackbarContent } from '@mui/material';
 import { AuthContext } from '../App';
 import { updateUser } from '../api/user.js';
+import AutoShoutoutForm from './AutoShoutoutForm.jsx';
 
 function objectComparison (sourceObj, changedObj) {
   return Object.keys(sourceObj).reduce((isChanged, key) => {
@@ -60,39 +61,47 @@ function AccountPage () {
 
 
   return (
-    <Paper elevation={2} sx={{
+    <Box sx={{
       display: 'flex',
-      justifyContent: 'center',
-      maxWidth: 350
     }}>
-      <FormControl sx={{
+      <Paper elevation={2} sx={{
         display: 'flex',
-        alignItems: 'center',
-        m: 2
+        justifyContent: 'center',
+        maxWidth: 350,
+        my: 2,
+        mx: 1
       }}>
-        <FormLabel>Akenshi Bot Settings</FormLabel>
-        <FormGroup>
-          {Object.keys(botToggleSettings).map(setting => {
-            return <FormControlLabel 
-              key={setting}
-              control={
-                <Switch checked={botToggleSettings[setting]} onChange={handleChange} name={setting} />
-              }
-              label={setting}
-            />
-          })}
-          <Button disabled={!isChanged} onClick={handleSubmit}>Save Changes</Button>
-          <Snackbar 
-            anchorOrigin={{horizontal: 'center', vertical: 'top'}}
-            open={isSnackbarOpen}
-            autoHideDuration={2000}
-            onClose={handleSnackbarClose}
-            message={snackbarMsg}
-          />
-        </FormGroup>
-
-      </FormControl>
-    </Paper>
+        <FormControl sx={{
+          display: 'flex',
+          alignItems: 'center',
+          m: 2
+        }}>
+          <FormLabel>Akenshi Bot Settings</FormLabel>
+          <FormGroup>
+            {Object.keys(botToggleSettings).map(setting => {
+              return <FormControlLabel 
+                key={setting}
+                control={
+                  <Switch checked={botToggleSettings[setting]} onChange={handleChange} name={setting} />
+                }
+                label={setting}
+              />
+            })}
+            <Button disabled={!isChanged} onClick={handleSubmit}>Save Changes</Button>
+            <Snackbar 
+              anchorOrigin={{horizontal: 'center', vertical: 'top'}}
+              open={isSnackbarOpen}
+              autoHideDuration={2000}
+              onClose={handleSnackbarClose}
+              message={snackbarMsg}
+            >
+              <SnackbarContent message={snackbarMsg}/>
+            </Snackbar>
+          </FormGroup>
+        </FormControl>
+      </Paper>
+      <AutoShoutoutForm autoShoutoutEnabled={botToggleSettings.autoShoutout} setIsSnackbarOpen={setIsSnackbarOpen} setSnackbarMsg={setSnackbarMsg}/>
+    </Box>
   )
 }
 

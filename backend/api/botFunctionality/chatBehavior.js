@@ -1,6 +1,8 @@
 import { sendMessage } from "../modules/eventsub.js";
 import { findUserByTwitchId, updateUser } from "../../db/adapters/users.js";
 import { createGPTMessage } from "../modules/openAi.js";
+import { createFirstMessageLog, getFirstMessageLogByBroadcasterId } from "../../db/adapters/firstMessage.js";
+import { getChannelInformation, sendShoutout } from "../modules/twitchRequest.js";
 const gtotModeHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
@@ -60,12 +62,39 @@ const randomInsultHandler = async (broadcaster, notification) => {
   }
 }
 
+const autoShoutoutHandler = async (broadcaster, notification) => {
+  try {
+    let broadcasterId = broadcaster.twitchUserId;
+    let autoShoutoutList = broadcaster.botSettings.autoShoutout;
+    let chatter = notification.event.chatter_user_name.toLowerCase();
+    let chatterId = notification.event.chatter_user_id;
+    let gtotMode = broadcaster.botSettings.toggle.gtotMode;
+    let firstMessageDisplayNames = await getFirstMessageLogByBroadcasterId(broadcasterId);
+    // Omit every message that 1. is not a user in the autoshoutoutlist 2. is already in the first message log
+    if (!autoShoutoutList.includes(chatter) || firstMessageDisplayNames.includes(chatter)) {
+      return;
+    }
+    if (gtotMode && broadcaster.botSettings.gtotModeEnabled) {
+      await sendMessage(broadcasterId, `Yo shoutout my dawg ${chatter}`);
+      return;
+    }
+    const { game_name } = await getChannelInformation(chatterId);
+    await sendMessage(broadcasterId, `Check out ${chatter}, they are playing ${game_name} at https://twitch.tv/${chatter}`);
+    await createFirstMessageLog(broadcasterId, chatter);
+    await sendShoutout(broadcasterId, chatterId, broadcaster.userAccessToken.token);
+  } catch (err) {
+    console.log('there was an error in autoShoutoutHandler');
+    throw err;
+  }
+}
+
 // This will be the parent of all message handlers
 const messageHandler = async (notification) => {
   try {
     // Captures channel.chat.message events subscriptions && ignore messages sent by ourselves (i.e. messages sent by the bot)
     if (notification.subscription.type === 'channel.chat.message' && notification.event.chatter_user_login !== 'akenshi__bot') {
       const broadcaster = await findUserByTwitchId(notification.event.broadcaster_user_id);
+      await autoShoutoutHandler(broadcaster, notification);
       await gtotModeHandler(broadcaster, notification);
       await randomInsultHandler(broadcaster, notification);
     }

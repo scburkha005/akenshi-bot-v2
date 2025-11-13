@@ -33,8 +33,8 @@ twitchRouter.post('/eventsub', rawBodyParser, async (req, res) => {
         return;
       }
       // Handlers
-      await messageHandler(notification, eventsubLog);
-      await raidHandler(notification, eventsubLog);
+      await messageHandler(notification);
+      await raidHandler(notification);
       res.sendStatus(204);
     } else if (req.headers["twitch-eventsub-message-type"] = 'webhook_callback_verification') {
       console.log('webhook callback verification running')

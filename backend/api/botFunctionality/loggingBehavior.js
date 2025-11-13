@@ -1,4 +1,4 @@
-import { createEventSubscriptionLog } from '../../db/adapters/eventSubs.js';
+import { createEventSubscriptionLog, getEventSubscriptionLogByBroadcasterId } from '../../db/adapters/eventSubs.js';
 export const eventsubLogHandler = async (notification, broadcasterId) => {
   try {
     let subscriptionType = notification.subscription.type;

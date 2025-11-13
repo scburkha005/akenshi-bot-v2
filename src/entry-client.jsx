@@ -18,6 +18,15 @@ const darkTheme = createTheme({
       paper: 'rgb(42 42 42 / 46%)'
     },
   },
+  components: {
+    MuiSnackbarContent: {
+      styleOverrides: {
+        root: {
+          color: '#90caf9',
+        }
+      }
+    }
+  }
 });
 
 hydrateRoot(
