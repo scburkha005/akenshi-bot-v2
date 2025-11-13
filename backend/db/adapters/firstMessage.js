@@ -18,7 +18,7 @@ export async function createFirstMessageLog (broadcasterId, displayName) {
     if (expireDate.getHours() > 6) {
       expireDate.setDate(expireDate.getDate() + 1);
     }
-    expireDate.setHours(6, 0, 0, 0);
+    expireDate.setHours(14, 0, 0, 0);
 
     await firstMessageLogCollection.insertOne({
       broadcasterId,
