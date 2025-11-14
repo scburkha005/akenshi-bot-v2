@@ -7,11 +7,22 @@ import { Paper, Box, Typography, FormControl, FormLabel, OutlinedInput, Button, 
 function Login () {
   const { setToken } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [ username, setUsername ] = useState('');
+  const [ password, setPassword ] = useState('');
   const [error, setError] = useState({});
+  // Storing references to state setters in an object in order to call them modularly based on string for onChange
+  const setters = {
+    setUsername,
+    setPassword,
+  }
+
+  function onChange (e) {
+    let fieldType = e.target.id
+    setters[`set${fieldType}`](e.target.value);
+  }
 
   async function onLogin (e) {
     e.preventDefault();
-    let [{ value: username }, { value: password}] = e.target
     try {
       let { token } = await login(username, password);
       setToken(token);
@@ -36,16 +47,16 @@ function Login () {
         p: 2
       }}>
         <FormControl>
-          <FormLabel variant='standard' for="username">Username</FormLabel>
-          <OutlinedInput id="username" sx={{
+          <FormLabel variant='standard' for="Username">Username</FormLabel>
+          <OutlinedInput id="Username" onChange={onChange} sx={{
             height: '2.5rem',
             mt: 1,
             mb: 2
           }}/>
         </FormControl>
         <FormControl>
-          <FormLabel variant='standard' for="password">Password</FormLabel>
-          <OutlinedInput id="password" type='password' sx={{
+          <FormLabel variant='standard' for="Password">Password</FormLabel>
+          <OutlinedInput id="Password" type='password' onChange={onChange} sx={{
             height: '2.5rem',
             mt: 1,
             mb: 2
