@@ -1,9 +1,11 @@
 import './index.css'
-import { StrictMode } from 'react'
+import React, { StrictMode } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 import { App } from './App'
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material'
+import { Link as RouterLink } from 'react-router';
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -24,6 +26,12 @@ const darkTheme = createTheme({
         root: {
           color: '#90caf9',
         }
+      }
+    },
+    // Allows use of mui links that inherit the behavior of react router links
+    MuiLink: {
+      defaultProps: {
+        component: RouterLink
       }
     }
   }
