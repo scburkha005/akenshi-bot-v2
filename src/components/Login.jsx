@@ -7,7 +7,7 @@ import { Paper, Box, Typography, FormControl, FormLabel, OutlinedInput, Button, 
 function Login () {
   const { setToken } = useContext(AuthContext);
   const navigate = useNavigate();
-  let [error, setError] = useState({});
+  const [error, setError] = useState({});
 
   async function onLogin (e) {
     e.preventDefault();
@@ -23,7 +23,10 @@ function Login () {
   return (
     <Paper variant='outlined' sx={{
       p: 3,
-      backgroundColor: "#202020"
+      backgroundColor: "#202020",
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
     }}>
       {error?.error && <div id='error-message'>{`${error.error}: ${error.reason}`}</div>}
       <Typography variant='h4'>Sign In</Typography>
