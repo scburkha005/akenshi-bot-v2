@@ -72,7 +72,7 @@ export async function renewSubscription (subscriptionType, broadcasterId, adminT
       headers: {
         'Authorization': `Bearer ${adminToken}`,
       },
-      body: {
+      data: {
         subscriptionType,
         broadcasterId
       }
