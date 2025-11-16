@@ -13,17 +13,19 @@ function Subscriptions () {
         let data = await getAllEventSubs(token);
         // Filter out unique broadcaster ids
         let broadcasterIds = data.data.reduce((arr, subscription) => {
-          if (!arr.includes(subscription.condition.broadcaster_user_id)) {
-            return [ ...arr, subscription.condition.broadcaster_user_id]
+          let broadcasterId = subscription.condition.broadcaster_user_id || subscription.condition.to_broadcaster_user_id;
+          if (!arr.includes(broadcasterId)) {
+            return [ ...arr, broadcasterId];
           }
           return arr;
         }, []);
         // Search for twitch username by those ids
-        let broadcasterIdNamePair = await broadcasterIds.reduce(async (obj, broadcasterId) => {
+        let broadcasterIdNamePair = {};
+        for (let i = 0; i < broadcasterIds.length; i++) {
+          let broadcasterId = broadcasterIds[i];
           let data = await getUserById(broadcasterId, token);
-          obj[broadcasterId] = data.twitchDisplayName
-          return obj;
-        }, {});
+          broadcasterIdNamePair[broadcasterId] = data.twitchDisplayName;
+        }
         // Add that username to every subscription for easier viewing
         let subscriptions = data.data.map(subscription => {
           subscription.condition.twitchUsername = broadcasterIdNamePair[subscription.condition.broadcaster_user_id || subscription.condition.to_broadcaster_user_id];

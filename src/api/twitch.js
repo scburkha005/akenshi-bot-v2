@@ -63,3 +63,24 @@ export async function deleteEventSubById (subscriptionId, token) {
     throw err;
   }
 }
+
+export async function renewSubscription (subscriptionType, broadcasterId, adminToken) {
+  try {
+    let { data } = await axios({
+      method: "post",
+      url: `${VITE_API_URL}/twitch/subscription/renew`,
+      headers: {
+        'Authorization': `Bearer ${adminToken}`,
+      },
+      data: {
+        subscriptionType,
+        broadcasterId
+      }
+    });
+    
+    return data;
+  } catch (err) {
+    console.log('error while renewing subscription')
+    throw err;
+  }
+}
