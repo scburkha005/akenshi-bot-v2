@@ -1,5 +1,5 @@
 import { Card, CardContent, Typography, CardActions, Button } from '@mui/material';
-import { deleteEventSubById } from '../api/twitch';
+import { deleteEventSubById, renewSubscription } from '../api/twitch';
 import { useContext } from 'react';
 import { AuthContext } from '../App';
 function Subscription ({ subscription, updateSubscriptions }) {
@@ -9,6 +9,14 @@ function Subscription ({ subscription, updateSubscriptions }) {
     try {
       await deleteEventSubById(subscription.id, token);
       updateSubscriptions(subscription.id);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleResubscribe () {
+    try {
+      await renewSubscription(subscription.type, subscription.condition.broadcaster_user_id, token);
     } catch (err) {
       console.log(err);
     }
@@ -28,6 +36,11 @@ function Subscription ({ subscription, updateSubscriptions }) {
         <CardActions>
           <Button onClick={handleClick}>Delete Subscription</Button>
         </CardActions>
+        { subscription.status === 'notification_failures_exceeded' && 
+        <CardActions>
+          <Button onClick={handleResubscribe}>Resubscribe</Button>
+        </CardActions> 
+        }
       </CardContent>
     </Card>
   )
