@@ -9,6 +9,7 @@ import { getAdditionalUserInfo, getChannelModerators } from '../modules/twitchRe
 import messageHandler from '../botFunctionality/chatBehavior.js';
 import raidHandler from '../botFunctionality/raidBehavior.js';
 import { eventsubLogHandler } from '../botFunctionality/loggingBehavior.js';
+import subscriptionRouter from './twitch/subscriptions.js';
 configDotenv();
 const { HMAC_SECRET, STATE_STRING } = process.env;
 const twitchRouter = express.Router();
@@ -175,9 +176,7 @@ twitchRouter.post('/botLink', requireAdminUser, async function (req, res, next) 
     next(err);
   }
 });
+// Routes
+twitchRouter.use('/subscription', subscriptionRouter);
 
-// Need raw message body for proper signature verification, make sure to JSON.parse() the body later so it's in a readable format
-// twitchRouter.use(express.raw({
-//   type: 'application/json'
-// }));
 export default twitchRouter;
