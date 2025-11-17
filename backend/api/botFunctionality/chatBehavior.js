@@ -3,7 +3,7 @@ import { findUserByTwitchId, updateUser } from "../../db/adapters/users.js";
 import { createGPTMessage } from "../modules/openAi.js";
 import { createFirstMessageLog, getFirstMessageLogByBroadcasterId } from "../../db/adapters/firstMessage.js";
 import { getChannelInformation, sendShoutout } from "../modules/twitchRequest.js";
-import { createRaffleEntry, getAllRaffleEntryByBroadcasterId } from "../../db/adapters/raffle.js";
+import { createRaffleEntry, deleteAllRaffleEntryByBroadcasterId, getAllRaffleEntryByBroadcasterId } from "../../db/adapters/raffle.js";
 const gtotModeHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
@@ -102,7 +102,7 @@ const raffleHandler = async (broadcaster, notification) => {
     }
     // If moderator or broadcaster && msg is !raffle
     // Handle opening/closing of raffle
-    if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === '!testraffle' && !raffleOpen) {
+    if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === '!startlottery' && !raffleOpen) {
       // set raffleOpen in broadcaster settings to true
       await updateUser(broadcaster.username, {
         botSettings: {
@@ -111,7 +111,7 @@ const raffleHandler = async (broadcaster, notification) => {
       });
 
       // Tell users raffle is open
-      await sendMessage(broadcasterId, `The raffle is open, enter with command !pickme`);
+      await sendMessage(broadcasterId, `peepoGamble ${broadcaster.twitchDisplayName} lottery is open, type !pickme to enter peepoGamble`);
 
       // Send warning messages at 15 seconds and 5 seconds
       setTimeout(async () => {
@@ -124,13 +124,22 @@ const raffleHandler = async (broadcaster, notification) => {
       // Finalize raffle outcome
       setTimeout(async () => {
         // decide raffle winner
+        const allEntries = await getAllRaffleEntryByBroadcasterId(broadcasterId);
+        const indexPick = Math.floor(Math.random() * (allEntries.length - 1));
+        const chosenUser = allEntries[indexPick];
+        console.log(allEntries, indexPick, chosenUser);
         // set raffleOpen in broadcaster settings to false
         await updateUser(broadcaster.username, {
           botSettings: {
             raffleOpen: false
           }
         });
-        await sendMessage(broadcasterId, `raffle is done`);
+        await deleteAllRaffleEntryByBroadcasterId(broadcasterId);
+        if (chosenUser) {
+          await sendMessage(broadcasterId, `peepoCheer ${chosenUser} was picked peepoCheer`);
+        } else {
+          await sendMessage(broadcasterId, `Nobody entered the raffle Smoge`)
+        }
       }, 30000)
     }
     // Handle chatter entry to raffle
