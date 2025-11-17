@@ -1,30 +1,59 @@
-import { Link } from "react-router";
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from "../App";
-import { Box } from "@mui/material";
+import { Box, Link, AppBar, Toolbar, IconButton, Drawer } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
 function Navbar () {
   const { user, token, setToken, setUser } = useContext(AuthContext);
+  const [open, setOpen] = useState(false);
   function handleLogout () {
     localStorage.removeItem('token');
     setToken('');
     setUser({});
   }
 
+  const toggleDrawer = (isOpen) => {
+    setOpen(isOpen);
+  }
+
   return (
     <Box sx={{
-      display: 'flex',
-      justifyContent: "space-around",
-      minWidth: '100%'
+      flexGrow: 1
     }}>
-      <Link to="/">Home</Link> 
-      { token ?
-      <>
-        <Link to='/account'>Account</Link> 
-        <Link onClick={handleLogout}>Logout</Link> 
-      </>
-      : <Link to="/login">Login</Link> }
-      {/* Admin Pages */}
-      { user?.isAdmin && <Link to="/admin">Admin Page</Link> }
+      <AppBar>
+        <Toolbar>
+          <IconButton
+            size='large'
+            edge='start'
+            onClick={() => {
+              toggleDrawer(true)
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Drawer 
+            open={open}
+            onClose={() => {
+              toggleDrawer(false)
+            }}
+          >
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '250'
+            }}>
+              <Link to="/">Home</Link> 
+              { token ?
+              <>
+                <Link to='/account'>Account</Link> 
+                <Link onClick={handleLogout}>Logout</Link> 
+              </>
+              : <Link to="/login">Login</Link> }
+              {/* Admin Pages */}
+              { user?.isAdmin && <Link to="/admin">Admin Page</Link> }
+            </Box>
+          </Drawer>
+        </Toolbar>
+      </AppBar>
     </Box>
   )
 }
