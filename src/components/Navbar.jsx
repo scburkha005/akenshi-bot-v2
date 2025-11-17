@@ -1,10 +1,11 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from "../App";
-import { Box, Link, AppBar, Toolbar, IconButton, Drawer } from "@mui/material";
+import { Box, Link, AppBar, Toolbar, IconButton, Drawer, Typography } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 function Navbar () {
   const { user, token, setToken, setUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState('Home')
   function handleLogout () {
     localStorage.removeItem('token');
     setToken('');
@@ -30,6 +31,7 @@ function Navbar () {
           >
             <MenuIcon />
           </IconButton>
+          <Typography>{currentPage}</Typography>
           <Drawer 
             open={open}
             onClose={() => {
@@ -41,15 +43,15 @@ function Navbar () {
               flexDirection: 'column',
               width: '250'
             }}>
-              <Link to="/">Home</Link> 
+              <Link to="/" onClick={() => setCurrentPage('Home')}>Home</Link> 
               { token ?
               <>
-                <Link to='/account'>Account</Link> 
+                <Link to='/account' onClick={() => setCurrentPage('Account')}>Account</Link> 
                 <Link onClick={handleLogout}>Logout</Link> 
               </>
-              : <Link to="/login">Login</Link> }
+              : <Link to="/login" onClick={() => setCurrentPage('Sign In')}>Login</Link> }
               {/* Admin Pages */}
-              { user?.isAdmin && <Link to="/admin">Admin Page</Link> }
+              { user?.isAdmin && <Link to="/admin" onClick={() => setCurrentPage('Admin Page')}>Admin Page</Link> }
             </Box>
           </Drawer>
         </Toolbar>
