@@ -127,7 +127,6 @@ const raffleHandler = async (broadcaster, notification) => {
         const allEntries = await getAllRaffleEntryByBroadcasterId(broadcasterId);
         const indexPick = Math.floor(Math.random() * (allEntries.length - 1));
         const chosenUser = allEntries[indexPick];
-        console.log(allEntries, indexPick, chosenUser);
         // set raffleOpen in broadcaster settings to false
         await updateUser(broadcaster.username, {
           botSettings: {
