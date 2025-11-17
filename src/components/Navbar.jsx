@@ -38,7 +38,7 @@ function Navbar () {
               toggleDrawer(false)
             }}
           >
-            <Box onClick={()  => toggleDrawer(false)}sx={{
+            <Box onClick={() => toggleDrawer(false)} sx={{
               display: 'flex',
               flexDirection: 'column',
               width: '250'
