@@ -88,6 +88,55 @@ const autoShoutoutHandler = async (broadcaster, notification) => {
   }
 }
 
+const raffleHandler = async (broadcaster, notification) => {
+  try {
+    const moderatorsList = broadcaster.channelInfo.moderators;
+    const broadcasterId = broadcaster.twitchUserId;
+    const currentUser = notification.event.chatter_user_name;
+    const currentMsg = notification.event.message.text.toLowerCase();
+    const raffleOpen = broadcaster.botSettings.raffleOpen;
+    // If moderator or broadcaster && msg is !raffle
+    // Handle opening/closing of raffle
+    if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === '!testraffle' && !raffleOpen) {
+      // set raffleOpen in broadcaster settings to true
+      await updateUser(broadcaster.username, {
+        botSettings: {
+          raffleOpen: true
+        }
+      });
+
+      // Tell users raffle is open
+      await sendMessage(broadcasterId, `The raffle is open, enter with command !pickmepls`);
+
+      // Send warning messages at 15 seconds and 5 seconds
+      setTimeout(async () => {
+        await sendMessage(broadcasterId, `15 seconds left in the raffle`);
+      }, 15000)
+
+      setTimeout(async () => {
+        await sendMessage(broadcasterId, `5 seconds left in the raffle`);
+      }, 25000)
+      // Finalize raffle outcome
+      setTimeout(async () => {
+        // decide raffle winner
+        // set raffleOpen in broadcaster settings to false
+        await updateUser(broadcaster.username, {
+          botSettings: {
+            raffleOpen: false
+          }
+        });
+        await sendMessage(broadcasterId, `raffle is done`);
+      }, 30000)
+    }
+
+    // Handle chatter entry to raffle
+
+  } catch (err) {
+    console.log('there was an error in raffleHandler');
+    throw err;
+  }
+}
+
 // This will be the parent of all message handlers
 const messageHandler = async (notification) => {
   try {
@@ -96,6 +145,7 @@ const messageHandler = async (notification) => {
       const broadcaster = await findUserByTwitchId(notification.event.broadcaster_user_id);
       await autoShoutoutHandler(broadcaster, notification);
       await gtotModeHandler(broadcaster, notification);
+      await raffleHandler(broadcaster, notification);
       await randomInsultHandler(broadcaster, notification);
     }
   } catch (err) {
