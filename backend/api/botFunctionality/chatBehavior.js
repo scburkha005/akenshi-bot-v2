@@ -3,6 +3,7 @@ import { findUserByTwitchId, updateUser } from "../../db/adapters/users.js";
 import { createGPTMessage } from "../modules/openAi.js";
 import { createFirstMessageLog, getFirstMessageLogByBroadcasterId } from "../../db/adapters/firstMessage.js";
 import { getChannelInformation, sendShoutout } from "../modules/twitchRequest.js";
+import { createRaffleEntry, getAllRaffleEntryByBroadcasterId } from "../../db/adapters/raffle.js";
 const gtotModeHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
@@ -95,6 +96,10 @@ const raffleHandler = async (broadcaster, notification) => {
     const currentUser = notification.event.chatter_user_name;
     const currentMsg = notification.event.message.text.toLowerCase();
     const raffleOpen = broadcaster.botSettings.raffleOpen;
+    // If feature is disabled, do nothing
+    if (!broadcaster.botSettings.toggle.raffle) {
+      return;
+    }
     // If moderator or broadcaster && msg is !raffle
     // Handle opening/closing of raffle
     if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === '!testraffle' && !raffleOpen) {
@@ -106,7 +111,7 @@ const raffleHandler = async (broadcaster, notification) => {
       });
 
       // Tell users raffle is open
-      await sendMessage(broadcasterId, `The raffle is open, enter with command !pickmepls`);
+      await sendMessage(broadcasterId, `The raffle is open, enter with command !pickme`);
 
       // Send warning messages at 15 seconds and 5 seconds
       setTimeout(async () => {
@@ -128,9 +133,14 @@ const raffleHandler = async (broadcaster, notification) => {
         await sendMessage(broadcasterId, `raffle is done`);
       }, 30000)
     }
-
     // Handle chatter entry to raffle
-
+    if (raffleOpen && currentMsg === '!pickme') {
+      const raffleEntries = await getAllRaffleEntryByBroadcasterId(broadcasterId);
+      if (raffleEntries.includes(currentUser)) {
+        return;
+      }
+      await createRaffleEntry(broadcasterId, currentUser);
+    }
   } catch (err) {
     console.log('there was an error in raffleHandler');
     throw err;
