@@ -24,16 +24,12 @@ user {
       gtotMode boolean default false,
       autoShoutout boolean default true,
       autoShoutoutRaid boolean default true
-      randomInsult
+      raffle boolean default true
+      randomInsult boolean default false
     }
     gtotModeEnabled boolean default false,
-    autoShoutout [
-      {
-        twitchDisplayName string
-        needsShoutout boolean default true 
-      },
-      repeat obj
-    ],
+    raffleOpen boolean default false,
+    autoShoutout [string, string, ...string ],
     scopes array
   }
 }
