@@ -31,3 +31,14 @@ export async function deleteAllRaffleEntryByBroadcasterId (broadcasterId) {
     throw err;
   }
 }
+
+export async function getAllRaffleEntryByBroadcasterId (broadcasterId) {
+  try {
+    const data = await raffleEntriesCollection.find({ broadcasterId }).toArray();
+    const raffleDisplayNames = data.map(entry => entry.displayName);
+    return raffleDisplayNames;
+  } catch (err) {
+    console.log('error while getting all raffle_entries by broadcaster id');
+    throw err;
+  }
+}
