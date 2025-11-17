@@ -3,6 +3,7 @@ import { findUserByTwitchId, updateUser } from "../../db/adapters/users.js";
 import { createGPTMessage } from "../modules/openAi.js";
 import { createFirstMessageLog, getFirstMessageLogByBroadcasterId } from "../../db/adapters/firstMessage.js";
 import { getChannelInformation, sendShoutout } from "../modules/twitchRequest.js";
+import { createRaffleEntry, deleteAllRaffleEntryByBroadcasterId, getAllRaffleEntryByBroadcasterId } from "../../db/adapters/raffle.js";
 const gtotModeHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
@@ -88,6 +89,72 @@ const autoShoutoutHandler = async (broadcaster, notification) => {
   }
 }
 
+const raffleHandler = async (broadcaster, notification) => {
+  try {
+    const moderatorsList = broadcaster.channelInfo.moderators;
+    const broadcasterId = broadcaster.twitchUserId;
+    const currentUser = notification.event.chatter_user_name;
+    const currentMsg = notification.event.message.text.toLowerCase();
+    const raffleOpen = broadcaster.botSettings.raffleOpen;
+    // If feature is disabled, do nothing
+    if (!broadcaster.botSettings.toggle.raffle) {
+      return;
+    }
+    // If moderator or broadcaster && msg is !raffle
+    // Handle opening/closing of raffle
+    if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === '!startlottery' && !raffleOpen) {
+      // set raffleOpen in broadcaster settings to true
+      await updateUser(broadcaster.username, {
+        botSettings: {
+          raffleOpen: true
+        }
+      });
+
+      // Tell users raffle is open
+      await sendMessage(broadcasterId, `peepoGamble ${broadcaster.twitchDisplayName} lottery is open, type !pickme to enter peepoGamble`);
+
+      // Send warning messages at 15 seconds and 5 seconds
+      setTimeout(async () => {
+        await sendMessage(broadcasterId, `15 seconds left in the raffle`);
+      }, 15000)
+
+      setTimeout(async () => {
+        await sendMessage(broadcasterId, `5 seconds left in the raffle`);
+      }, 25000)
+      // Finalize raffle outcome
+      setTimeout(async () => {
+        // decide raffle winner
+        const allEntries = await getAllRaffleEntryByBroadcasterId(broadcasterId);
+        const indexPick = Math.floor(Math.random() * (allEntries.length - 1));
+        const chosenUser = allEntries[indexPick];
+        // set raffleOpen in broadcaster settings to false
+        await updateUser(broadcaster.username, {
+          botSettings: {
+            raffleOpen: false
+          }
+        });
+        await deleteAllRaffleEntryByBroadcasterId(broadcasterId);
+        if (chosenUser) {
+          await sendMessage(broadcasterId, `peepoCheer ${chosenUser} was picked peepoCheer`);
+        } else {
+          await sendMessage(broadcasterId, `Nobody entered the raffle Smoge`)
+        }
+      }, 30000)
+    }
+    // Handle chatter entry to raffle
+    if (raffleOpen && currentMsg === '!pickme') {
+      const raffleEntries = await getAllRaffleEntryByBroadcasterId(broadcasterId);
+      if (raffleEntries.includes(currentUser)) {
+        return;
+      }
+      await createRaffleEntry(broadcasterId, currentUser);
+    }
+  } catch (err) {
+    console.log('there was an error in raffleHandler');
+    throw err;
+  }
+}
+
 // This will be the parent of all message handlers
 const messageHandler = async (notification) => {
   try {
@@ -96,6 +163,7 @@ const messageHandler = async (notification) => {
       const broadcaster = await findUserByTwitchId(notification.event.broadcaster_user_id);
       await autoShoutoutHandler(broadcaster, notification);
       await gtotModeHandler(broadcaster, notification);
+      await raffleHandler(broadcaster, notification);
       await randomInsultHandler(broadcaster, notification);
     }
   } catch (err) {

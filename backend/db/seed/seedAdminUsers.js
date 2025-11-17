@@ -20,9 +20,11 @@ const adminUser = {
       gtotMode: false,
       autoShoutout: false,
       autoShoutoutRaid: true,
+      raffle: true,
       randomInsult: false
     },
     gtotModeEnabled: false,
+    raffleOpen: false,
     autoShoutout: [],
     scopes: [],
   }
