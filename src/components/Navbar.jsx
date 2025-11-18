@@ -6,6 +6,12 @@ function Navbar () {
   const { user, token, setToken, setUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('Home')
+  const linkSx = {
+    fontSize: '2rem',
+    color: 'white',
+    textDecoration: 'none',
+    py: 1
+  }
   function handleLogout () {
     localStorage.removeItem('token');
     setToken('');
@@ -28,10 +34,15 @@ function Navbar () {
             onClick={() => {
               toggleDrawer(true)
             }}
+            sx={{
+              ":focus": {
+                outline: 'none'
+              }
+            }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography>{currentPage}</Typography>
+          <Typography variant='h5'>{currentPage}</Typography>
           <Drawer 
             open={open}
             onClose={() => {
@@ -41,17 +52,18 @@ function Navbar () {
             <Box onClick={() => toggleDrawer(false)} sx={{
               display: 'flex',
               flexDirection: 'column',
-              width: '250'
+              justifyContent: 'left',
+              px: '8rem'
             }}>
-              <Link to="/" onClick={() => setCurrentPage('Home')}>Home</Link> 
+              <Link to="/" onClick={() => setCurrentPage('Home')} sx={linkSx}>Home</Link> 
               { token ?
               <>
-                <Link to='/account' onClick={() => setCurrentPage('Account')}>Account</Link> 
-                <Link onClick={handleLogout}>Logout</Link> 
+                <Link to='/account' onClick={() => setCurrentPage('Account')} sx={linkSx}>Account</Link> 
+                <Link onClick={handleLogout} sx={linkSx}>Logout</Link> 
               </>
-              : <Link to="/login" onClick={() => setCurrentPage('Sign In')}>Login</Link> }
+              : <Link to="/login" onClick={() => setCurrentPage('Sign In')} sx={linkSx}>Login</Link> }
               {/* Admin Pages */}
-              { user?.isAdmin && <Link to="/admin" onClick={() => setCurrentPage('Admin Page')}>Admin Page</Link> }
+              { user?.isAdmin && <Link to="/admin" onClick={() => setCurrentPage('Admin Page')} sx={linkSx}>Admin Page</Link> }
             </Box>
           </Drawer>
         </Toolbar>
