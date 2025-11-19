@@ -1,13 +1,20 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from "../App";
-import { Box, Link, AppBar, Toolbar, IconButton, Drawer, Typography } from "@mui/material";
+import { Box, Link, AppBar, Toolbar, IconButton, Drawer, Typography, Avatar, Menu, MenuItem } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 function Navbar () {
   const { user, token, setToken, setUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('Home')
-  const linkSx = {
+  const [anchorUser, setAnchorUser] = useState(null);
+  const linkDrawerStyle = {
     fontSize: '2rem',
+    color: 'white',
+    textDecoration: 'none',
+    py: 1
+  }
+  const linkMenuStyle = {
+    fontSize: '1.2rem',
     color: 'white',
     textDecoration: 'none',
     py: 1
@@ -18,54 +25,99 @@ function Navbar () {
     setUser({});
   }
 
-  const toggleDrawer = (isOpen) => {
+  function toggleDrawer (isOpen) {
     setOpen(isOpen);
   }
 
+  function handleOpenUserMenu (e) {
+    setAnchorUser(e.currentTarget);
+  }
+
+  function handleCloseUserMenu () {
+    setAnchorUser(null);
+  }
+
   return (
-    <Box sx={{
-      flexGrow: 1
-    }}>
+    <Box>
       <AppBar>
         <Toolbar>
-          <IconButton
-            size='large'
-            edge='start'
-            onClick={() => {
-              toggleDrawer(true)
-            }}
-            sx={{
-              ":focus": {
-                outline: 'none'
-              }
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant='h5'>{currentPage}</Typography>
-          <Drawer 
-            open={open}
-            onClose={() => {
-              toggleDrawer(false)
-            }}
-          >
-            <Box onClick={() => toggleDrawer(false)} sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'left',
-              px: '8rem'
-            }}>
-              <Link to="/" onClick={() => setCurrentPage('Home')} sx={linkSx}>Home</Link> 
-              { token ?
-              <>
-                <Link to='/account' onClick={() => setCurrentPage('Account')} sx={linkSx}>Account</Link> 
-                <Link onClick={handleLogout} sx={linkSx}>Logout</Link> 
-              </>
-              : <Link to="/login" onClick={() => setCurrentPage('Sign In')} sx={linkSx}>Login</Link> }
-              {/* Admin Pages */}
-              { user?.isAdmin && <Link to="/admin" onClick={() => setCurrentPage('Admin Page')} sx={linkSx}>Admin Page</Link> }
-            </Box>
-          </Drawer>
+          <Box>
+            <IconButton
+              size='large'
+              edge='start'
+              onClick={() => {
+                toggleDrawer(true)
+              }}
+              sx={{
+                ":focus": {
+                  outline: 'none'
+                }
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Drawer 
+              open={open}
+              onClose={() => {
+                toggleDrawer(false)
+              }}
+            >
+              <Box onClick={() => toggleDrawer(false)} sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'left',
+                px: '8rem'
+              }}>
+                <Link to="/" onClick={() => setCurrentPage('Home')} sx={linkDrawerStyle}>Home</Link> 
+                { token && <Link to='/account' onClick={() => setCurrentPage('Account')} sx={linkDrawerStyle}>Account</Link> }
+                {/* Admin Pages */}
+                { user?.isAdmin && <Link to="/admin" onClick={() => setCurrentPage('Admin Page')} sx={linkDrawerStyle}>Admin Page</Link> }
+              </Box>
+            </Drawer>
+          </Box>
+          <Box sx={{flexGrow: 1}}>
+            <Typography variant='h5'>{currentPage}</Typography>
+          </Box>
+          <Box>
+          { token ? 
+          <>
+            <IconButton onClick={handleOpenUserMenu} 
+              sx={{
+                ":focus": {
+                  outline: 'none'
+                }
+              }}
+            >
+              <Avatar />
+            </IconButton>
+            <Menu open={Boolean(anchorUser)} onClose={handleCloseUserMenu} anchorEl={anchorUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              sx={{
+                mt: '2.5rem'
+              }}
+            >
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Link to='/account' onClick={() => setCurrentPage('Account')} sx={linkMenuStyle}>Account</Link> 
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Link onClick={handleLogout} sx={linkMenuStyle}>Logout</Link> 
+              </MenuItem>
+            </Menu>
+          </>
+            :
+          <Link to="/login" onClick={() => setCurrentPage('Sign In')} sx={{
+            color: 'white',
+            fontSize: '1.2rem'
+          }}>Login</Link>
+          }
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>
