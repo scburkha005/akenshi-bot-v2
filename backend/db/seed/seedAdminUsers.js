@@ -8,6 +8,7 @@ const adminUser = {
   twitchUserId: '',
   twitchLogin: '',
   twitchDisplayName: '',
+  twitchProfileImageUrl: '',
   userAccessToken: {
     token: '',
     refreshToken: ''

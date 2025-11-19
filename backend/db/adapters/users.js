@@ -12,6 +12,7 @@ user {
   twitchUserId string
   twitchLogin string
   twitchDisplayName string
+  twitchProfileImageUrl
   userAccessToken {
     token string
     refreshToken string
