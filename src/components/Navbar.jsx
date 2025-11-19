@@ -88,7 +88,7 @@ function Navbar () {
                 }
               }}
             >
-              <Avatar />
+              <Avatar src={user.twitchProfileImageUrl}/>
             </IconButton>
             <Menu open={Boolean(anchorUser)} onClose={handleCloseUserMenu} anchorEl={anchorUser}
               anchorOrigin={{
