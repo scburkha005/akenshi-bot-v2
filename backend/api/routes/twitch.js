@@ -85,7 +85,7 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
     if (STATE_STRING === req.body.state) {
       const data = await getUserToken(req.body.code);
       const userData = await validateToken(data.access_token);
-      const [twitchLogin, twitchDisplayName] = await getAdditionalUserInfo(userData.user_id, data.access_token);
+      const { login: twitchLogin, display_name: twitchDisplayName } = await getAdditionalUserInfo(userData.user_id, data.access_token);
       const modsDisplayNames = await getChannelModerators(userData.user_id, data.access_token);
 
       let user = await findUserByTwitchId(userData.user_id);

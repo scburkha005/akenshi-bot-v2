@@ -11,7 +11,7 @@ export async function getAdditionalUserInfo (userId, userAccessToken) {
         'Client-Id': TWITCH_CLIENT_ID
       }
     });
-    return [data.login, data.display_name];
+    return data;
   } catch (err) {
     console.log('error while fetching user info from twitch');
     console.log(err)
