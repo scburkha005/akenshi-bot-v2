@@ -39,7 +39,7 @@ function Navbar () {
 
   return (
     <Box>
-      <AppBar>
+      <AppBar sx={{ backgroundColor: "rgb(42 42 42 / 46%)"}}>
         <Toolbar>
           <Box>
             <IconButton
