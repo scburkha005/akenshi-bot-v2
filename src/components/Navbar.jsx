@@ -117,7 +117,7 @@ function Navbar () {
                 <Link to='/account' sx={linkMenuStyle}>Account</Link> 
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}>
-                <Link onClick={handleLogout} sx={linkMenuStyle}>Logout</Link> 
+                <Link onClick={handleLogout} sx={linkMenuStyle} to="/">Logout</Link> 
               </MenuItem>
             </Menu>
           </>
