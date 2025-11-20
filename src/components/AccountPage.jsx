@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
-import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper, Box, SnackbarContent } from '@mui/material';
+import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper, Box, SnackbarContent, IconButton } from '@mui/material';
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import { AuthContext } from '../App';
 import { updateUser } from '../api/user.js';
 import AutoShoutoutForm from './AutoShoutoutForm.jsx';
@@ -79,13 +80,22 @@ function AccountPage () {
           <FormLabel>Akenshi Bot Settings</FormLabel>
           <FormGroup>
             {Object.keys(botToggleSettings).map(setting => {
-              return <FormControlLabel 
-                key={setting}
-                control={
-                  <Switch checked={botToggleSettings[setting]} onChange={handleChange} name={setting} />
-                }
-                label={setting}
-              />
+              return <Box sx={{
+                display: 'flex',
+                flexDirection: "row",
+                justifyContent: "space-between"
+              }}>
+                <FormControlLabel 
+                  key={setting}
+                  control={
+                    <Switch checked={botToggleSettings[setting]} onChange={handleChange} name={setting} />
+                  }
+                  label={setting}
+                />
+                <IconButton>
+                  <InfoOutlineIcon />
+                </IconButton>
+              </Box>
             })}
             <Button disabled={!isChanged} onClick={handleSubmit}>Save Changes</Button>
             <Snackbar 
