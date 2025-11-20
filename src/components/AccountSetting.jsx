@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, Switch, IconButton, Typography } from "@mui/material";
+import { Box, FormControlLabel, Switch, IconButton, Typography, Paper, Card } from "@mui/material";
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import { useState } from "react";
 function AccountSetting ({ setting, botToggleSettings, handleChange }) {
@@ -29,7 +29,11 @@ function AccountSetting ({ setting, botToggleSettings, handleChange }) {
         </IconButton>
       </Box>
       { infoOpen && 
-        <Typography>I am info</Typography>
+        <Paper variant="outlined" sx={{
+          p: 2
+        }}>
+          <Typography>I am info</Typography>
+        </Paper>
       }
     </>
   );
