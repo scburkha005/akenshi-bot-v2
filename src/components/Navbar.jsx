@@ -1,4 +1,5 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
+import { useLocation } from 'react-router';
 import { AuthContext } from "../App";
 import { Box, Link, AppBar, Toolbar, IconButton, Drawer, Typography, Avatar, Menu, MenuItem } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
@@ -7,6 +8,15 @@ function Navbar () {
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('Home')
   const [anchorUser, setAnchorUser] = useState(null);
+  let location = useLocation();
+
+  useEffect(() => {
+    // Calculate page name based on url route
+    let pageName = location.pathname.slice(1) || "Home";
+    pageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+    setCurrentPage(pageName);
+  }, [location])
+
   const linkDrawerStyle = {
     fontSize: '2rem',
     color: 'white',
@@ -68,10 +78,10 @@ function Navbar () {
                 justifyContent: 'left',
                 px: '8rem'
               }}>
-                <Link to="/" onClick={() => setCurrentPage('Home')} sx={linkDrawerStyle}>Home</Link> 
-                { token && <Link to='/account' onClick={() => setCurrentPage('Account')} sx={linkDrawerStyle}>Account</Link> }
+                <Link to="/" sx={linkDrawerStyle}>Home</Link> 
+                { token && <Link to='/account' sx={linkDrawerStyle}>Account</Link> }
                 {/* Admin Pages */}
-                { user?.isAdmin && <Link to="/admin" onClick={() => setCurrentPage('Admin Page')} sx={linkDrawerStyle}>Admin Page</Link> }
+                { user?.isAdmin && <Link to="/admin" sx={linkDrawerStyle}>Admin Page</Link> }
               </Box>
             </Drawer>
           </Box>
@@ -104,15 +114,15 @@ function Navbar () {
               }}
             >
               <MenuItem onClick={handleCloseUserMenu}>
-                <Link to='/account' onClick={() => setCurrentPage('Account')} sx={linkMenuStyle}>Account</Link> 
+                <Link to='/account' sx={linkMenuStyle}>Account</Link> 
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}>
-                <Link onClick={handleLogout} sx={linkMenuStyle}>Logout</Link> 
+                <Link onClick={handleLogout} sx={linkMenuStyle} to="/">Logout</Link> 
               </MenuItem>
             </Menu>
           </>
             :
-          <Link to="/login" onClick={() => setCurrentPage('Sign In')} sx={{
+          <Link to="/login" sx={{
             color: 'white',
             fontSize: '1.2rem'
           }}>Login</Link>
