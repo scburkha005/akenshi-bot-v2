@@ -68,14 +68,14 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
       justifyContent: 'center',
       alignSelf: 'flex-start',
       width: '15vw',
-      my: 2,
-      mx: 1,
+      my: '1rem',
+      mx: '.5rem',
       opacity: autoShoutoutEnabled ? 1 : 0.25
     }}>
       <FormControl sx={{
         display: 'flex',
         alignItems: 'center',
-        m: 2
+        m: '1rem'
       }}>
         <Typography sx={{mb: 1}}>Auto Shoutout Settings</Typography>
         <Box component='form' onSubmit={handleAdd} sx={{
@@ -85,11 +85,11 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
           <Button type='submit'>Add</Button>
         </Box>
         {autoShoutoutList?.length > 0 && <Typography variant="subtitle2" sx={{
-          pt: 1,
+          pt: '.5rem',
           fontStyle: "italic"
         }}>Click a name below to remove</Typography>}
         <Divider sx={{ borderColor: 'white' }}></Divider>
-        <Paper sx={{mt: 2}}>
+        <Paper sx={{mt: '1rem'}}>
           <List sx={{
             display: 'flex',
             flexDirection: 'row',

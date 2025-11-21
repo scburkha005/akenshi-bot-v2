@@ -70,13 +70,13 @@ function AccountPage () {
         justifyContent: 'center',
         alignSelf: 'flex-start',
         width: '15vw',
-        my: 2,
-        mx: 1
+        my: '1rem',
+        mx: '.5rem'
       }}>
         <FormControl sx={{
           display: 'flex',
           flexGrow: 1,
-          m: 2
+          m: '1rem'
         }}>
           <Typography sx={{ textAlign: 'center' }}>Akenshi Bot Settings</Typography>
           <FormGroup>
