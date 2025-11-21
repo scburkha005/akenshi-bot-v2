@@ -21,13 +21,13 @@ function Navbar () {
     fontSize: '2rem',
     color: 'white',
     textDecoration: 'none',
-    py: 1
+    py: '.5rem'
   }
   const linkMenuStyle = {
     fontSize: '1.2rem',
     color: 'white',
     textDecoration: 'none',
-    py: 1
+    py: '.5rem'
   }
   function handleLogout () {
     localStorage.removeItem('token');
