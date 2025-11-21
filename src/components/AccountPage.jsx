@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper, Box, SnackbarContent, IconButton } from '@mui/material';
+import { FormGroup, FormControl, Button, Snackbar, Paper, Box, SnackbarContent, Typography } from '@mui/material';
 import { AuthContext } from '../App';
 import { updateUser } from '../api/user.js';
 import AccountSetting from './AccountSetting.jsx';
