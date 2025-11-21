@@ -69,15 +69,16 @@ function AccountPage () {
         display: 'flex',
         justifyContent: 'center',
         maxWidth: 350,
+        width: 350,
         my: 2,
         mx: 1
       }}>
         <FormControl sx={{
           display: 'flex',
-          alignItems: 'center',
+          flexGrow: 1,
           m: 2
         }}>
-          <FormLabel>Akenshi Bot Settings</FormLabel>
+          <FormLabel sx={{ textAlign: 'center' }}>Akenshi Bot Settings</FormLabel>
           <FormGroup>
             {Object.keys(botToggleSettings).map(setting => {
               return <AccountSetting key={setting} setting={setting} botToggleSettings={botToggleSettings} handleChange={handleChange} />
