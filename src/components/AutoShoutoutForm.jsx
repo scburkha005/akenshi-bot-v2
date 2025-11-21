@@ -1,4 +1,4 @@
-import { TextField, Paper, FormLabel, FormControl, Button, Box, List, ListItem, Typography } from "@mui/material";
+import { TextField, Paper, FormLabel, FormControl, Button, Box, List, ListItem, Typography, Divider } from "@mui/material";
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from "../App";
 import { updateUser } from "../api/user";
@@ -67,7 +67,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
       display: 'flex',
       justifyContent: 'center',
       alignSelf: 'flex-start',
-      maxWidth: 300,
+      width: '15vw',
       my: 2,
       mx: 1,
       opacity: autoShoutoutEnabled ? 1 : 0.25
@@ -77,7 +77,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
         alignItems: 'center',
         m: 2
       }}>
-        <FormLabel sx={{mb: 1}}>Auto Shoutout Settings</FormLabel>
+        <Typography sx={{mb: 1}}>Auto Shoutout Settings</Typography>
         <Box component='form' onSubmit={handleAdd} sx={{
           display: 'flex'
         }}>
@@ -88,6 +88,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
           pt: 1,
           fontStyle: "italic"
         }}>Click a name below to remove</Typography>}
+        <Divider sx={{ borderColor: 'white' }}></Divider>
         <Paper sx={{mt: 2}}>
           <List sx={{
             display: 'flex',

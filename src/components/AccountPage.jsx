@@ -69,8 +69,7 @@ function AccountPage () {
         display: 'flex',
         justifyContent: 'center',
         alignSelf: 'flex-start',
-        maxWidth: 350,
-        width: 350,
+        width: '15vw',
         my: 2,
         mx: 1
       }}>
@@ -79,7 +78,7 @@ function AccountPage () {
           flexGrow: 1,
           m: 2
         }}>
-          <FormLabel sx={{ textAlign: 'center' }}>Akenshi Bot Settings</FormLabel>
+          <Typography sx={{ textAlign: 'center' }}>Akenshi Bot Settings</Typography>
           <FormGroup>
             {Object.keys(botToggleSettings).map(setting => {
               return <AccountSetting key={setting} setting={setting} botToggleSettings={botToggleSettings} handleChange={handleChange} />
