@@ -1,7 +1,8 @@
 import { useState, useContext, useEffect } from 'react';
-import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper, Box, SnackbarContent } from '@mui/material';
+import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper, Box, SnackbarContent, IconButton } from '@mui/material';
 import { AuthContext } from '../App';
 import { updateUser } from '../api/user.js';
+import AccountSetting from './AccountSetting.jsx';
 import AutoShoutoutForm from './AutoShoutoutForm.jsx';
 
 function objectComparison (sourceObj, changedObj) {
@@ -68,24 +69,19 @@ function AccountPage () {
         display: 'flex',
         justifyContent: 'center',
         maxWidth: 350,
+        width: 350,
         my: 2,
         mx: 1
       }}>
         <FormControl sx={{
           display: 'flex',
-          alignItems: 'center',
+          flexGrow: 1,
           m: 2
         }}>
-          <FormLabel>Akenshi Bot Settings</FormLabel>
+          <FormLabel sx={{ textAlign: 'center' }}>Akenshi Bot Settings</FormLabel>
           <FormGroup>
             {Object.keys(botToggleSettings).map(setting => {
-              return <FormControlLabel 
-                key={setting}
-                control={
-                  <Switch checked={botToggleSettings[setting]} onChange={handleChange} name={setting} />
-                }
-                label={setting}
-              />
+              return <AccountSetting key={setting} setting={setting} botToggleSettings={botToggleSettings} handleChange={handleChange} />
             })}
             <Button disabled={!isChanged} onClick={handleSubmit}>Save Changes</Button>
             <Snackbar 
