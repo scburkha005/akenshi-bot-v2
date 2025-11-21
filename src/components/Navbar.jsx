@@ -88,7 +88,10 @@ function Navbar () {
               </Box>
             </Drawer>
           </Box>
-          <Box sx={{flexGrow: 1}}>
+          <Box sx={{
+            flexGrow: 1,
+            ml: '.5rem'
+          }}>
             <Typography variant='h5'>{currentPage}</Typography>
           </Box>
           <Box>
