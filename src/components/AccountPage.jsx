@@ -68,6 +68,7 @@ function AccountPage () {
       <Paper elevation={2} sx={{
         display: 'flex',
         justifyContent: 'center',
+        alignSelf: 'flex-start',
         maxWidth: 350,
         width: 350,
         my: 2,
