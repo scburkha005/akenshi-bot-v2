@@ -66,6 +66,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
     <Paper elevation={2} sx={{
       display: 'flex',
       justifyContent: 'center',
+      alignSelf: 'flex-start',
       maxWidth: 300,
       my: 2,
       mx: 1,
