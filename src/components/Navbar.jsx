@@ -51,7 +51,6 @@ function Navbar () {
     <Box>
       <AppBar sx={{
         backgroundColor: "rgb(42 42 42)",
-        opacity: 1
       }}>
         <Toolbar>
           <Box>
