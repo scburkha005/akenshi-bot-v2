@@ -3,6 +3,9 @@ import { useLocation } from 'react-router';
 import { AuthContext } from "../App";
 import { Box, Link, AppBar, Toolbar, IconButton, Drawer, Typography, Avatar, Menu, MenuItem } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 function Navbar () {
   const { user, token, setToken, setUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
@@ -18,16 +21,21 @@ function Navbar () {
   }, [location])
 
   const linkDrawerStyle = {
-    fontSize: '2rem',
+    display: 'flex',
+    alignItems: 'center',
     color: 'white',
     textDecoration: 'none',
-    py: 1
+    py: '.5rem'
   }
   const linkMenuStyle = {
     fontSize: '1.2rem',
     color: 'white',
     textDecoration: 'none',
-    py: 1
+    py: '.5rem'
+  }
+  const drawerTextStyle = {
+    fontSize: '1.8rem',
+    pl: '1rem' 
   }
   function handleLogout () {
     localStorage.removeItem('token');
@@ -49,7 +57,9 @@ function Navbar () {
 
   return (
     <Box>
-      <AppBar sx={{ backgroundColor: "rgb(42 42 42 / 46%)"}}>
+      <AppBar sx={{
+        backgroundColor: "rgb(42 42 42)",
+      }}>
         <Toolbar>
           <Box>
             <IconButton
@@ -76,16 +86,33 @@ function Navbar () {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'left',
-                px: '8rem'
+                width: '16rem',
+                pl: '1rem'
               }}>
-                <Link to="/" sx={linkDrawerStyle}>Home</Link> 
-                { token && <Link to='/account' sx={linkDrawerStyle}>Account</Link> }
+                <Link to="/" sx={linkDrawerStyle}>
+                  <HomeIcon />
+                  <Typography sx={drawerTextStyle}>Home</Typography>
+                </Link> 
+                { token && 
+                <Link to='/account' sx={linkDrawerStyle}>
+                  <AccountBoxIcon />
+                  <Typography sx={drawerTextStyle}>Account</Typography>
+                </Link> 
+                }
                 {/* Admin Pages */}
-                { user?.isAdmin && <Link to="/admin" sx={linkDrawerStyle}>Admin Page</Link> }
+                { user?.isAdmin && 
+                <Link to="/admin" sx={linkDrawerStyle}>
+                  <AdminPanelSettingsIcon />
+                  <Typography sx={drawerTextStyle}>Admin Page</Typography>
+                </Link> 
+                }
               </Box>
             </Drawer>
           </Box>
-          <Box sx={{flexGrow: 1}}>
+          <Box sx={{
+            flexGrow: 1,
+            ml: '.5rem'
+          }}>
             <Typography variant='h5'>{currentPage}</Typography>
           </Box>
           <Box>

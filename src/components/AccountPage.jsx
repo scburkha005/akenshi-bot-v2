@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { FormGroup, FormLabel, FormControl, FormControlLabel, Switch, Button, Snackbar, Paper, Box, SnackbarContent, IconButton } from '@mui/material';
+import { FormGroup, FormControl, Button, Snackbar, Paper, Box, SnackbarContent, Typography } from '@mui/material';
 import { AuthContext } from '../App';
 import { updateUser } from '../api/user.js';
 import AccountSetting from './AccountSetting.jsx';
@@ -68,17 +68,17 @@ function AccountPage () {
       <Paper elevation={2} sx={{
         display: 'flex',
         justifyContent: 'center',
-        maxWidth: 350,
-        width: 350,
-        my: 2,
-        mx: 1
+        alignSelf: 'flex-start',
+        width: '15vw',
+        my: '1rem',
+        mx: '.5rem'
       }}>
         <FormControl sx={{
           display: 'flex',
           flexGrow: 1,
-          m: 2
+          m: '1rem'
         }}>
-          <FormLabel sx={{ textAlign: 'center' }}>Akenshi Bot Settings</FormLabel>
+          <Typography sx={{ textAlign: 'center' }}>Akenshi Bot Settings</Typography>
           <FormGroup>
             {Object.keys(botToggleSettings).map(setting => {
               return <AccountSetting key={setting} setting={setting} botToggleSettings={botToggleSettings} handleChange={handleChange} />
