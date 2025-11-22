@@ -34,6 +34,13 @@ const darkTheme = createTheme({
         component: RouterLink
       }
     }
+  },
+  breakpoints: {
+    values: {
+      mobile: 0,
+      tablet: 640,
+      desktop: 1024
+    }
   }
 });
 
