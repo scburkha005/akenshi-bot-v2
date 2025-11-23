@@ -1,4 +1,3 @@
-import './index.css'
 import React, { StrictMode } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
@@ -33,6 +32,13 @@ const darkTheme = createTheme({
       defaultProps: {
         component: RouterLink
       }
+    }
+  },
+  breakpoints: {
+    values: {
+      mobile: 0,
+      tablet: 640,
+      desktop: 1024
     }
   }
 });

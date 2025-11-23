@@ -68,8 +68,11 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
       justifyContent: 'center',
       alignSelf: 'flex-start',
       width: '15vw',
+      minWidth: '20rem',
       my: '1rem',
-      mx: '.5rem',
+      mx: {
+        tablet: ".5rem"
+      },
       opacity: autoShoutoutEnabled ? 1 : 0.25
     }}>
       <FormControl sx={{
