@@ -64,14 +64,18 @@ function AccountPage () {
   return (
     <Box sx={{
       display: 'flex',
+      flexWrap: 'wrap',
     }}>
       <Paper elevation={2} sx={{
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignSelf: 'flex-start',
         width: '15vw',
+        minWidth: '20rem',
         my: '1rem',
-        mx: '.5rem'
+        mx: {
+          tablet: ".5rem"
+        }
       }}>
         <FormControl sx={{
           display: 'flex',
