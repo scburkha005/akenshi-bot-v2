@@ -1,4 +1,3 @@
-import './App.css'
 import { useState, useEffect, createContext  } from 'react'
 import { Route, Routes, useSearchParams, useNavigate } from 'react-router'
 import { Navbar, Home, Login, Register, TwitchAuth, AdminPage, AccountPage } from './components';
@@ -64,7 +63,10 @@ export function App () {
   }, []);
 
   return (
-    <Container>
+    <Container sx={{
+      maxWidth: '100vw',
+      pt: '2rem',
+    }}>
       <AuthContext value={{user, token, setUser, setToken}}>
         <div className='app'>
           <Navbar />
