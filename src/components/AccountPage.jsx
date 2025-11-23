@@ -65,6 +65,7 @@ function AccountPage () {
     <Box sx={{
       display: 'flex',
       flexWrap: 'wrap',
+      justifyContent: 'center'
     }}>
       <Paper elevation={2} sx={{
         display: 'flex',
