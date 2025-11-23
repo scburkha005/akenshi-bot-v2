@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext  } from 'react'
 import { Route, Routes, useSearchParams, useNavigate } from 'react-router'
-import { Navbar, Home, Login, Register, TwitchAuth, AdminPage, AccountPage } from './components';
+import { Navbar, Home, Login, Register, TwitchAuth, AdminPage, AccountPage, TestingArea } from './components';
 import { getUser } from './api/user.js';
 import { linkAccount, linkBotAccount } from './api/twitch.js';
 import { Box, Container } from '@mui/material';
@@ -87,6 +87,7 @@ export function App () {
               <Route path='/login' element={<Login />}/>
               <Route path='/register' element={<Register />}/>
               <Route path='/account' element={<AccountPage />}/>
+              <Route path='/testing' element={<TestingArea />}/>
               { user?.isAdmin && <Route path='/admin' element={<AdminPage/>}/>}
             </Routes>
           </Box>
