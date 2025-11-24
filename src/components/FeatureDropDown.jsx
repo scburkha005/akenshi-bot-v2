@@ -22,7 +22,7 @@ function FeatureDropDown () {
         label="Feature"
       >
         {user.botSettings?.toggle && Object.keys(user.botSettings.toggle).map((featureName) => {
-          return <MenuItem value={featureName}>{featureName}</MenuItem>
+          return user.botSettings.toggle[featureName] ? <MenuItem value={featureName}>{featureName}</MenuItem> : <MenuItem disabled value={featureName}>{featureName}</MenuItem>
         })}
       </Select>
     </FormControl>
