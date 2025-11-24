@@ -14,10 +14,12 @@ function FeatureDropDown () {
     <FormControl fullWidth sx={{
       maxWidth: '320px'
     }}>
-      <InputLabel>Feature</InputLabel>
+      <InputLabel id='feature-dropdown-label'>Feature</InputLabel>
       <Select
+        labelId='feature-dropdown-label'
         value={selectedFeature}
         onChange={handleChange}
+        label="Feature"
       >
         {user.botSettings?.toggle && Object.keys(user.botSettings.toggle).map((featureName) => {
           return <MenuItem value={featureName}>{featureName}</MenuItem>
