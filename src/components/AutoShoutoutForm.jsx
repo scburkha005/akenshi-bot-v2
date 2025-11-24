@@ -91,7 +91,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
           pt: '.5rem',
           fontStyle: "italic"
         }}>Click a name below to remove</Typography>}
-        <Divider sx={{ borderColor: 'white' }}></Divider>
+        <Divider sx={{ borderColor: 'lightgrey', width: '100%', pt: '.5rem' }}></Divider>
         <Paper sx={{mt: '1rem'}}>
           <List sx={{
             display: 'flex',
