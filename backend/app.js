@@ -1,7 +1,7 @@
 import axios from 'axios';
 import express from 'express';
 const apiRouter = express.Router();
-import { userRouter, twitchRouter } from './api/index.js';
+import { userRouter, twitchRouter, demoRouter } from './api/index.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 dotenv.config();
@@ -43,6 +43,7 @@ apiRouter.use('/twitch', twitchRouter);
 // We need to parse the body after the twitch route due to needing the raw body for signature verification on route POST /api/twitch/eventsub
 apiRouter.use(express.json());
 apiRouter.use('/user', userRouter);
+apiRouter.use('/demo', demoRouter);
 
 // channel.chat.message subscription
 // Reads chat messages that appear in a specific channel
