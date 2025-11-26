@@ -45,24 +45,6 @@ apiRouter.use(express.json());
 apiRouter.use('/user', userRouter);
 apiRouter.use('/demo', demoRouter);
 
-// channel.chat.message subscription
-// Reads chat messages that appear in a specific channel
-async function handleChannelMessages () {
-  try {
-    
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-// // Request user auth
-// let params = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=https://akenshi-bot.ashagni.live`, `&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls+channel%3Abot`, `&state=${STATE_STRING}`]
-// let botParams = ['response_type=code', `&client_id=${TWITCH_CLIENT_ID}`, `&redirect_uri=https://akenshi-bot.ashagni.live`, `&scope=user%3Abot+user%3Aread%3Achat+user%3Awrite%3Achat`, `&state=${STATE_STRING}`]
-// params = params.join('');
-// botParams = botParams.join('');
-
-
-
 apiRouter.use((req, res, next) => {
   res.status(404).send({
     name: "IncorrectUrl",
@@ -70,12 +52,4 @@ apiRouter.use((req, res, next) => {
   })
 })
 
-// temp running subscriptions here
-// createChatSubscription();
-// getEventSubscriptions(TWITCH_CLIENT_ID);
-
-// Host port
-// app.listen(3000, function () {
-// 	console.log('Twitch auth server listening on http://localhost:3000');
-// });
 export default apiRouter;
