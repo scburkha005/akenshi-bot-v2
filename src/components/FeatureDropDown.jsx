@@ -1,11 +1,19 @@
-import { FormControl, InputLabel, Select, MenuItem, Typography, Paper } from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem, Typography, Paper, Button } from "@mui/material";
 import { AuthContext } from "../App";
 import { useContext, useState } from "react";
+import { toggleGtotMode } from "../api/demo";
 
 function FeatureDropDown () {
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
   const [selectedFeature, setSelectedFeature] = useState('')
 
+  async function handleToggleGtotMode () {
+    try {
+      await toggleGtotMode(token)
+    } catch (err) {
+      console.log(err);
+    }
+  }
   const infoBoxElements = {
     gtotMode:
     // This feature requires a mod to activate and deactivate
@@ -13,6 +21,7 @@ function FeatureDropDown () {
     // Should we add a button to trigger a raid event to demo
     <>
       <Typography></Typography> 
+      <Button onClick={handleToggleGtotMode}>Simulate toggle</Button>
     </>,
     autoShoutout:
     // Instruct user to add their twitch account to the autoshoutout list
