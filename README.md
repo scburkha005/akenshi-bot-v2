@@ -10,3 +10,8 @@ Currently, Akenshi Bot is a vite SSR app using Caddy as a reverse-proxy to serve
 #### Frontend
 - React
 - Vite
+
+## Public Account available for testing
+Feel free to use the following account credentials below to test the features of the application!
+  - Username: **TestingGrounds**
+  - Password: **TestingGrounds**
