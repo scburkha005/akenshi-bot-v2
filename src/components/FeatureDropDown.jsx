@@ -1,7 +1,8 @@
-import { FormControl, InputLabel, Select, MenuItem, Typography, Paper, Button } from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem, Typography, Paper, Button, Box, Tooltip, Divider } from "@mui/material";
 import { AuthContext } from "../App";
 import { useContext, useState } from "react";
 import { toggleGtotMode } from "../api/demo";
+import HelpIcon from '@mui/icons-material/Help';
 
 function FeatureDropDown () {
   const { user, token } = useContext(AuthContext);
@@ -20,8 +21,30 @@ function FeatureDropDown () {
     // Should we add a button to prime or trigger one percent events
     // Should we add a button to trigger a raid event to demo
     <>
-      <Typography></Typography> 
-      <Button onClick={handleToggleGtotMode}>Simulate toggle</Button>
+      <Typography>To toggle gtot mode, type "enter gtot mode" or "exit gtot mode" in your twitch chat (moderator permissions required)</Typography> 
+      <Divider sx={{ my: '.6rem' }}></Divider>
+      <Typography variant='overline'>While in gtot mode: </Typography> 
+      <Typography component={'li'} sx={{
+          pt: 1,
+          ml: '1.5rem',
+      }}>All shoutouts will instead be replaced with "Yo shoutout my dawg USER"</Typography>
+      <Typography component={'li'} sx={{
+        ml: '1.5rem'
+      }}>On every user message, there is a one percent chance akenshi bot will respond with "ya mama"</Typography>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <Button onClick={handleToggleGtotMode}>Simulate Moderator Toggle</Button>
+        <Tooltip
+          title={<Typography>Simulates as if a mod had typed either "enter gtot mode" or "exit gtot mode" in the twitch chat causing the bot to switch which mode it's in</Typography>}
+          placement='top'
+        >
+          <HelpIcon />
+        </Tooltip>
+      </Box>
+      {/* simulate raid */}
     </>,
     autoShoutout:
     // Instruct user to add their twitch account to the autoshoutout list
