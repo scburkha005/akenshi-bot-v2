@@ -11,5 +11,3 @@ export function triggerRaidEvent (secret, broadcasterId) {
     console.log(`stderr: ${stderr}`)
   });
 }
-
-triggerRaidEvent('jf2ue92u92mk@m5f8f@j5kl_WSmOS8%@@BzpAkmfmdiOQmb^_-85+DCJ_', '187093318');
