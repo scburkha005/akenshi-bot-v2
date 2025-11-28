@@ -2,6 +2,8 @@ import express from 'express';
 import { sendMessage } from '../modules/eventsub.js';
 import { updateUser } from '../../db/adapters/users.js';
 import { requireUser } from '../modules/requireUser.js';
+import { triggerRaidEvent } from '../modules/execShell.js';
+const { HMAC_SECRET } = process.env;
 const demoRouter = express.Router();
 
 // PATCH /api/demo/toggleGtotMode
@@ -19,6 +21,17 @@ demoRouter.patch('/toggleGtotMode', requireUser, async (req, res, next) => {
 
   } catch (err) {
     console.log('error while toggling gtot mode for demo');
+    next(err);
+  }
+});
+
+// POST /api/demo/raid
+demoRouter.post('/raid', requireUser, async (req, res, next) => {
+  try {
+    let broadcasterId = req.user.twitchUserId;
+    triggerRaidEvent(HMAC_SECRET, broadcasterId)
+  } catch (err) {
+    console.log('error while simulating raid in demo');
     next(err);
   }
 })
