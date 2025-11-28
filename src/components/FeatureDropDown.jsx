@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, Select, MenuItem, Typography, Paper, Button, Box, Tooltip, Divider } from "@mui/material";
 import { AuthContext } from "../App";
 import { useContext, useState } from "react";
-import { toggleGtotMode } from "../api/demo";
+import { toggleGtotMode, triggerRaidEvent } from "../api/demo";
 import HelpIcon from '@mui/icons-material/Help';
 
 function FeatureDropDown () {
@@ -11,6 +11,14 @@ function FeatureDropDown () {
   async function handleToggleGtotMode () {
     try {
       await toggleGtotMode(token)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleTriggerRaid () {
+    try {
+      await triggerRaidEvent(token);
     } catch (err) {
       console.log(err);
     }
@@ -45,6 +53,10 @@ function FeatureDropDown () {
         </Tooltip>
       </Box>
       {/* simulate raid */}
+      <Box>
+        <Button onClick={handleTriggerRaid}>Simulate raid event</Button>
+
+      </Box>
     </>,
     autoShoutout:
     // Instruct user to add their twitch account to the autoshoutout list
