@@ -15,3 +15,18 @@ export async function toggleGtotMode (token) {
     throw err;
   }
 }
+
+export async function triggerRaidEvent(token) {
+  try {
+    await axios({
+      method: 'post',
+      url: `${VITE_API_URL}/demo/raid`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  } catch (err) {
+    console.log('error while triggering raid event');
+    throw err;
+  }
+}
