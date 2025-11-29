@@ -6,6 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import ConstructionIcon from '@mui/icons-material/Construction';
 function Navbar () {
   const { user, token, setToken, setUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
@@ -94,10 +95,16 @@ function Navbar () {
                   <Typography sx={drawerTextStyle}>Home</Typography>
                 </Link> 
                 { token && 
+                <>
                 <Link to='/account' sx={linkDrawerStyle}>
                   <AccountBoxIcon />
                   <Typography sx={drawerTextStyle}>Account</Typography>
                 </Link> 
+                <Link to='/testing' sx={linkDrawerStyle}>
+                  <ConstructionIcon />
+                  <Typography sx={drawerTextStyle}>Testing Area</Typography>
+                </Link>
+                </>
                 }
                 {/* Admin Pages */}
                 { user?.isAdmin && 

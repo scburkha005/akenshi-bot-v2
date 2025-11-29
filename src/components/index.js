@@ -5,3 +5,4 @@ export { default as Register } from "./Register";
 export { default as TwitchAuth } from "./TwitchAuth";
 export { default as AdminPage } from "./AdminPage";
 export { default as AccountPage } from "./AccountPage";
+export { default as TestingArea } from './TestingArea';
