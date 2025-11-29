@@ -30,3 +30,18 @@ export async function triggerRaidEvent(token) {
     throw err;
   }
 }
+
+export async function resetFirstMessageLogs (token) {
+  try {
+    await axios({
+      method: "delete",
+      url: `${VITE_API_URL}/demo/firstMessageLogs`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  } catch (err) {
+    console.log('error while reseting first message logs');
+    throw err;
+  }
+}

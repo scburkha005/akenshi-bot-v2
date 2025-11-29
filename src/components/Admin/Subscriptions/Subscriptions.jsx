@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from "react"
-import { AuthContext } from "../App";
-import { getAllEventSubs } from "../api/twitch";
-import { getUserById } from "../api/user";
-import Subscription from "./Subscription";
+import { AuthContext } from "../../../App";
+import { getAllEventSubs } from "../../../api/twitch";
+import { getUserById } from "../../../api/user";
+import Subscription from "./Subscription/Subscription";
 import { Box } from "@mui/material";
 function Subscriptions () {
   const [ subscriptions, setSubscriptions ] = useState([]);

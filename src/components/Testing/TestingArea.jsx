@@ -1,5 +1,5 @@
-import TwitchEmbedChat from "./TwitchEmbedChat";
-import FeatureDropDown from "./FeatureDropDown";
+import TwitchEmbedChat from "./TwitchEmbedChat/TwitchEmbedChat";
+import FeatureDropDown from "./FeatureDropDown/FeatureDropDown";
 import { Box, Typography, Divider } from "@mui/material";
 function TestingArea () {
 

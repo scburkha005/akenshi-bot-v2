@@ -1,7 +1,7 @@
 import { TextField, Paper, FormLabel, FormControl, Button, Box, List, ListItem, Typography, Divider } from "@mui/material";
 import { useState, useContext, useEffect } from 'react';
-import { AuthContext } from "../App";
-import { updateUser } from "../api/user";
+import { AuthContext } from "../../../App";
+import { updateUser } from "../../../api/user";
 
 function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbarMsg }) {
   const { user, token, setUser } = useContext(AuthContext);

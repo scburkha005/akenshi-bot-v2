@@ -1,7 +1,7 @@
 import { Card, CardContent, Typography, CardActions, Button } from '@mui/material';
-import { deleteEventSubById, renewSubscription } from '../api/twitch';
+import { deleteEventSubById, renewSubscription } from '../../../../api/twitch';
 import { useContext } from 'react';
-import { AuthContext } from '../App';
+import { AuthContext } from '../../../../App';
 function Subscription ({ subscription, updateSubscriptions }) {
   const { token } = useContext(AuthContext);
 

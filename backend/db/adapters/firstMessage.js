@@ -42,3 +42,12 @@ export async function getFirstMessageLogByBroadcasterId (broadcasterId) {
     throw err;
   }
 }
+
+export async function deleteAllFirstMessageLogsByBroadcasterId (broadcasterId) {
+  try {
+    await firstMessageLogCollection.deleteMany({ broadcasterId });
+  } catch (err) {
+    console.log('error while deleting all message logs');
+    throw err;
+  }
+}
