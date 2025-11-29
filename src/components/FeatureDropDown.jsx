@@ -42,7 +42,8 @@ function FeatureDropDown () {
       <Box sx={{
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        my: '.5rem'
       }}>
         <Button onClick={handleToggleGtotMode}>Simulate Moderator Toggle</Button>
         <Tooltip
@@ -53,8 +54,19 @@ function FeatureDropDown () {
         </Tooltip>
       </Box>
       {/* simulate raid */}
-      <Box>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        my: '.5rem'
+      }}>
         <Button onClick={handleTriggerRaid}>Simulate raid event</Button>
+        <Tooltip
+          title={<Typography>Simulates as if the broadcaster received a raid. This functionality uses the Twitch CLI to simulate a raid. Due to the nature of the Twitch CLI, sometimes no "last streamed game" is available to be displayed in the message, as the id of the user pulled may have never streamed</Typography>}
+          placement='top'
+        >
+          <HelpIcon />
+        </Tooltip>
 
       </Box>
     </>,
