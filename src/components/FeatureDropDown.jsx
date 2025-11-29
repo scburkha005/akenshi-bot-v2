@@ -3,6 +3,7 @@ import { AuthContext } from "../App";
 import { useContext, useState } from "react";
 import { toggleGtotMode, triggerRaidEvent } from "../api/demo";
 import HelpIcon from '@mui/icons-material/Help';
+import DemoButton from "./DemoButton";
 
 function FeatureDropDown () {
   const { user, token } = useContext(AuthContext);
@@ -36,42 +37,18 @@ function FeatureDropDown () {
       <Typography component={'li'} sx={{
         ml: '1.5rem'
       }}>On every user message, there is a one percent chance akenshi bot will respond with "ya mama"</Typography>
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        my: '.5rem'
-      }}>
-        <Button onClick={handleToggleGtotMode}>Simulate Moderator Toggle</Button>
-        <Tooltip
-          title={<Typography>Simulates as if a mod had typed either "enter gtot mode" or "exit gtot mode" in the twitch chat causing the bot to switch which mode it's in</Typography>}
-          placement='top'
-        >
-          <HelpIcon />
-        </Tooltip>
-      </Box>
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        my: '.5rem'
-      }}>
-        <Button onClick={handleTriggerRaid}>Simulate Raid Event</Button>
-        <Tooltip
-          title={<Typography>Simulates as if the broadcaster received a raid. This functionality uses the Twitch CLI to simulate a raid. Due to the nature of the Twitch CLI, sometimes no "last streamed game" is available to be displayed in the message, as the id of the user pulled may have never streamed</Typography>}
-          placement='top'
-        >
-          <HelpIcon />
-        </Tooltip>
-
-      </Box>
+      <DemoButton buttonHandler={handleToggleGtotMode} buttonText={'Simulate Moderator Toggle'} tooltipText={`Simulates as if a mod had typed either "enter gtot mode" or "exit gtot mode" in the twitch chat causing the bot to switch which mode it's in`}/>
+      <DemoButton buttonHandler={handleTriggerRaid} buttonText={'Simulate Raid Event'} tooltipText={`Simulates as if the broadcaster received a raid. This functionality uses the Twitch CLI to simulate a raid. Due to the nature of the Twitch CLI, sometimes no "last streamed game" is available to be displayed in the message, as the id of the user pulled may have never streamed`}/>
     </>,
     autoShoutout:
     // Instruct user to add their twitch account to the autoshoutout list
     // Afterwards, type in chat
     // Should we add a button to reset the 24 hour timer
     <>
-      <Typography></Typography> 
+      <Typography variant="subtitle2" sx={{ fontWeight: 'bold', textAlign: 'center'}}>To test this feature, a twitch account is required.</Typography> 
+      <Typography>Navigate to Account and add your twitch account display name to the auto shoutout list. Afterwards, type anything in the chat below</Typography> 
+      <Typography>Please note, automatic shoutouts are set to only occur once a day, resetting at 6 am PST. If you'd like to test the feature again, please reset the timer using the button below</Typography> 
+      {/* more button */}
     </>,
     autoShoutoutRaid:
     // Add a button to trigger a raid event to demo
