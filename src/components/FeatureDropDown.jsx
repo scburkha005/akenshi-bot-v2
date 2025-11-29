@@ -25,9 +25,6 @@ function FeatureDropDown () {
   }
   const infoBoxElements = {
     gtotMode:
-    // This feature requires a mod to activate and deactivate
-    // Should we add a button to prime or trigger one percent events
-    // Should we add a button to trigger a raid event to demo
     <>
       <Typography>To toggle gtot mode, type "enter gtot mode" or "exit gtot mode" in your twitch chat (moderator permissions required)</Typography> 
       <Divider sx={{ my: '.6rem' }}></Divider>
@@ -53,14 +50,13 @@ function FeatureDropDown () {
           <HelpIcon />
         </Tooltip>
       </Box>
-      {/* simulate raid */}
       <Box sx={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         my: '.5rem'
       }}>
-        <Button onClick={handleTriggerRaid}>Simulate raid event</Button>
+        <Button onClick={handleTriggerRaid}>Simulate Raid Event</Button>
         <Tooltip
           title={<Typography>Simulates as if the broadcaster received a raid. This functionality uses the Twitch CLI to simulate a raid. Due to the nature of the Twitch CLI, sometimes no "last streamed game" is available to be displayed in the message, as the id of the user pulled may have never streamed</Typography>}
           placement='top'
