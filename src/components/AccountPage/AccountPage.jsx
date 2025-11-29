@@ -1,9 +1,9 @@
 import { useState, useContext, useEffect } from 'react';
 import { FormGroup, FormControl, Button, Snackbar, Paper, Box, SnackbarContent, Typography } from '@mui/material';
-import { AuthContext } from '../App';
-import { updateUser } from '../api/user.js';
-import AccountSetting from './AccountSetting.jsx';
-import AutoShoutoutForm from './AutoShoutoutForm.jsx';
+import { AuthContext } from '../../App.jsx';
+import { updateUser } from '../../api/user.js';
+import AccountSetting from './AccountSetting/AccountSetting.jsx';
+import AutoShoutoutForm from './AutoShoutoutForm/AutoShoutoutForm.jsx';
 
 function objectComparison (sourceObj, changedObj) {
   return Object.keys(sourceObj).reduce((isChanged, key) => {

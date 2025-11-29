@@ -1,5 +1,5 @@
-import BotTwitchAuth from './BotTwitchAuth';
-import Subscriptions from './Subscriptions';
+import BotTwitchAuth from './BotTwitchAuth/BotTwitchAuth';
+import Subscriptions from './Subscriptions/Subscriptions';
 import { Typography, Box } from '@mui/material';
 function AdminPage () {
 
