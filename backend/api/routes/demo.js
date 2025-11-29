@@ -17,7 +17,7 @@ demoRouter.patch('/toggleGtotMode', requireUser, async (req, res, next) => {
         gtotModeEnabled: !req.user.botSettings.gtotModeEnabled
       }
     });
-    await sendMessage(broadcasterId, !req.user.botSettings.gtotModeEnabled ? `Gtot mode disabled: Deadge` : `Gtot mode enabled: Okayge`);
+    await sendMessage(broadcasterId, !req.user.botSettings.gtotModeEnabled ? `Gtot mode enabled: Okayge` : `Gtot mode disabled: Deadge`);
 
   } catch (err) {
     console.log('error while toggling gtot mode for demo');
