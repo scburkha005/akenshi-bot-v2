@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, Select, MenuItem, Typography, Paper, Divider } from "@mui/material";
 import { AuthContext } from "../../../App";
 import { useContext, useState } from "react";
-import { toggleGtotMode, triggerRaidEvent } from "../../../api/demo";
+import { resetFirstMessageLogs, toggleGtotMode, triggerRaidEvent } from "../../../api/demo";
 import DemoButton from "./DemoButton/DemoButton";
 
 function FeatureDropDown () {
@@ -19,6 +19,14 @@ function FeatureDropDown () {
   async function handleTriggerRaid () {
     try {
       await triggerRaidEvent(token);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleResetShoutoutTimer () {
+    try {
+      await resetFirstMessageLogs(token);
     } catch (err) {
       console.log(err);
     }
@@ -47,7 +55,7 @@ function FeatureDropDown () {
       <Typography variant="subtitle2" sx={{ fontWeight: 'bold', textAlign: 'center'}}>To test this feature, a twitch account is required.</Typography> 
       <Typography>Navigate to Account and add your twitch account display name to the auto shoutout list. Afterwards, type anything in the chat below</Typography> 
       <Typography>Please note, automatic shoutouts are set to only occur once a day, resetting at 6 am PST. If you'd like to test the feature again, please reset the timer using the button below</Typography> 
-      {/* more button */}
+      <DemoButton buttonHandler={handleResetShoutoutTimer} buttonText={'Reset Timer for Shoutouts'} tooltipText={`Resets all timers for auto shoutout`}/>
     </>,
     autoShoutoutRaid:
     // Add a button to trigger a raid event to demo
