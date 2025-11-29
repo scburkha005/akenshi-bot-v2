@@ -4,7 +4,6 @@ import { updateUser } from '../../db/adapters/users.js';
 import { requireUser } from '../modules/requireUser.js';
 import { triggerRaidEvent } from '../modules/execShell.js';
 import { deleteAllFirstMessageLogsByBroadcasterId } from '../../db/adapters/firstMessage.js';
-import { ResponseStream } from 'openai/lib/responses/ResponseStream.js';
 const { HMAC_SECRET } = process.env;
 const demoRouter = express.Router();
 
@@ -46,7 +45,7 @@ demoRouter.post('/raid', requireUser, async (req, res, next) => {
 
 demoRouter.delete('/firstMessageLogs', requireUser, async (req, res, next) => {
   try {
-    await deleteAllFirstMessageLogsByBroadcasterId(user.broadcasterId);
+    await deleteAllFirstMessageLogsByBroadcasterId(req.user.twitchUserId);
     res.send({
       message: "All first message logs cleared successfully"
     })
