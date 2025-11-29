@@ -54,7 +54,8 @@ function FeatureDropDown () {
     <>
       <Typography variant="subtitle2" sx={{ fontWeight: 'bold', textAlign: 'center'}}>To test this feature, a twitch account is required.</Typography> 
       <Typography>Navigate to Account and add your twitch account display name to the auto shoutout list. Afterwards, type anything in the chat below</Typography> 
-      <Typography>Please note, automatic shoutouts are set to only occur once a day, resetting at 6 am PST. If you'd like to test the feature again, please reset the timer using the button below</Typography> 
+      <Divider sx={{ my: '.6rem' }}></Divider>
+      <Typography>Please note, automatic shoutouts are set to only occur once a day, resetting at 6 am PST. If you'd like to test the feature again, please reset the timer using the button below.</Typography> 
       <DemoButton buttonHandler={handleResetShoutoutTimer} buttonText={'Reset Timer for Shoutouts'} tooltipText={`Resets all timers for auto shoutout`}/>
     </>,
     autoShoutoutRaid:
