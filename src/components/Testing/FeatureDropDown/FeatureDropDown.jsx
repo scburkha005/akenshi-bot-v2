@@ -1,8 +1,7 @@
-import { FormControl, InputLabel, Select, MenuItem, Typography, Paper, Button, Box, Tooltip, Divider } from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem, Typography, Paper, Divider } from "@mui/material";
 import { AuthContext } from "../../../App";
 import { useContext, useState } from "react";
 import { toggleGtotMode, triggerRaidEvent } from "../../../api/demo";
-import HelpIcon from '@mui/icons-material/Help';
 import DemoButton from "./DemoButton/DemoButton";
 
 function FeatureDropDown () {
