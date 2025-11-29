@@ -7,6 +7,7 @@ Currently, Akenshi Bot is a vite SSR app using Caddy as a reverse-proxy to serve
 - Express
 - Mongodb
 - Caddy
+- Twitch CLI
 #### Frontend
 - React
 - Vite
