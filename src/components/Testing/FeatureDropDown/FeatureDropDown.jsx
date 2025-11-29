@@ -48,9 +48,6 @@ function FeatureDropDown () {
       <DemoButton buttonHandler={handleTriggerRaid} buttonText={'Simulate Raid Event'} tooltipText={`Simulates as if the broadcaster received a raid. This functionality uses the Twitch CLI to simulate a raid. Due to the nature of the Twitch CLI, sometimes no "last streamed game" is available to be displayed in the message, as the id of the user pulled may have never streamed`}/>
     </>,
     autoShoutout:
-    // Instruct user to add their twitch account to the autoshoutout list
-    // Afterwards, type in chat
-    // Should we add a button to reset the 24 hour timer
     <>
       <Typography variant="subtitle2" sx={{ fontWeight: 'bold', textAlign: 'center'}}>To test this feature, a twitch account is required.</Typography> 
       <Typography>Navigate to Account and add your twitch account display name to the auto shoutout list. Afterwards, type anything in the chat below</Typography> 
