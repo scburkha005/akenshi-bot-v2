@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, Select, MenuItem, Typography, Paper, Divider } from "@mui/material";
 import { AuthContext } from "../../../App";
 import { useContext, useState } from "react";
-import { resetFirstMessageLogs, toggleGtotMode, triggerRaidEvent } from "../../../api/demo";
+import { resetFirstMessageLogs, toggleGtotMode, triggerRaffle, triggerRaidEvent } from "../../../api/demo";
 import DemoButton from "./DemoButton/DemoButton";
 
 function FeatureDropDown () {
@@ -27,6 +27,14 @@ function FeatureDropDown () {
   async function handleResetShoutoutTimer () {
     try {
       await resetFirstMessageLogs(token);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleStartRaffle () {
+    try {
+      await triggerRaffle(token);
     } catch (err) {
       console.log(err);
     }
@@ -72,6 +80,7 @@ function FeatureDropDown () {
     // Instruct user to use chat for this feature
     <>
       <Typography></Typography> 
+      <DemoButton buttonHandler={handleStartRaffle} buttonText={'Simulate Moderator Start Raffle'} tooltipText={`Simulates as if a mod had typed either "enter gtot mode" or "exit gtot mode" in the twitch chat causing the bot to switch which mode it's in`}/>
     </>,
   }
   function handleChange (e) {
