@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, Select, MenuItem, Typography, Paper, Divider } from "@mui/material";
 import { AuthContext } from "../../../App";
 import { useContext, useState } from "react";
-import { resetFirstMessageLogs, toggleGtotMode, triggerRaidEvent } from "../../../api/demo";
+import { resetFirstMessageLogs, toggleGtotMode, triggerRaffle, triggerRaidEvent } from "../../../api/demo";
 import DemoButton from "./DemoButton/DemoButton";
 
 function FeatureDropDown () {
@@ -31,10 +31,19 @@ function FeatureDropDown () {
       console.log(err);
     }
   }
+
+  async function handleStartRaffle () {
+    try {
+      await triggerRaffle(token);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   const infoBoxElements = {
     gtotMode:
     <>
-      <Typography>To toggle gtot mode, type "enter gtot mode" or "exit gtot mode" in your twitch chat (moderator permissions required)</Typography> 
+      <Typography>To toggle gtot mode, type "enter gtot mode" or "exit gtot mode" in your twitch chat</Typography> 
+      <Typography variant="subtitle2" sx={{fontWeight: "bold", textAlign: "center", fontStyle: "italic"}}>moderator permissions required</Typography>
       <Divider sx={{ my: '.6rem' }}></Divider>
       <Typography variant='overline'>While in gtot mode: </Typography> 
       <Typography component={'li'} sx={{
@@ -71,7 +80,11 @@ function FeatureDropDown () {
     // This feature requires a mod to start
     // Instruct user to use chat for this feature
     <>
-      <Typography></Typography> 
+      <Typography>To start a raffle, type "!startraffle" in the twitch chat </Typography> 
+      <Typography variant="subtitle2" sx={{fontWeight: "bold", textAlign: "center", fontStyle: "italic"}}>moderator permissions required</Typography>
+      <Divider sx={{ my: '.6rem' }}></Divider>
+      <Typography>Once a raffle is started, type !pickme to put your name in the box to be randomly selected</Typography> 
+      <DemoButton buttonHandler={handleStartRaffle} buttonText={'Simulate Moderator Start Raffle'} tooltipText={`Simulates a mod typing !startraffle in the chat. This starts a name raffle with a 30 second timer.`}/>
     </>,
   }
   function handleChange (e) {
