@@ -42,7 +42,8 @@ function FeatureDropDown () {
   const infoBoxElements = {
     gtotMode:
     <>
-      <Typography>To toggle gtot mode, type "enter gtot mode" or "exit gtot mode" in your twitch chat (moderator permissions required)</Typography> 
+      <Typography>To toggle gtot mode, type "enter gtot mode" or "exit gtot mode" in your twitch chat</Typography> 
+      <Typography variant="subtitle2" sx={{fontWeight: "bold", textAlign: "center", fontStyle: "italic"}}>moderator permissions required</Typography>
       <Divider sx={{ my: '.6rem' }}></Divider>
       <Typography variant='overline'>While in gtot mode: </Typography> 
       <Typography component={'li'} sx={{
@@ -79,8 +80,11 @@ function FeatureDropDown () {
     // This feature requires a mod to start
     // Instruct user to use chat for this feature
     <>
-      <Typography></Typography> 
-      <DemoButton buttonHandler={handleStartRaffle} buttonText={'Simulate Moderator Start Raffle'} tooltipText={`Simulates as if a mod had typed either "enter gtot mode" or "exit gtot mode" in the twitch chat causing the bot to switch which mode it's in`}/>
+      <Typography>To start a raffle, type "!startraffle" in the twitch chat </Typography> 
+      <Typography variant="subtitle2" sx={{fontWeight: "bold", textAlign: "center", fontStyle: "italic"}}>moderator permissions required</Typography>
+      <Divider sx={{ my: '.6rem' }}></Divider>
+      <Typography>Once a raffle is started, type !pickme to put your name in the box to be randomly selected</Typography> 
+      <DemoButton buttonHandler={handleStartRaffle} buttonText={'Simulate Moderator Start Raffle'} tooltipText={`Simulates a mod typing !startraffle in the chat. This starts a name raffle with a 30 second timer.`}/>
     </>,
   }
   function handleChange (e) {
