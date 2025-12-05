@@ -31,6 +31,21 @@ export async function triggerRaidEvent(token) {
   }
 }
 
+export async function triggerRaffle (token) {
+  try {
+    await axios({
+      method: "patch",
+      url: `${VITE_API_URL}/demo/startRaffle`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  } catch (err) {
+    console.log("error while triggering raffle");
+    throw err;
+  }
+}
+
 export async function resetFirstMessageLogs (token) {
   try {
     await axios({
