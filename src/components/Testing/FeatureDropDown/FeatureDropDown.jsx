@@ -65,20 +65,11 @@ function FeatureDropDown () {
       <DemoButton buttonHandler={handleResetShoutoutTimer} buttonText={'Reset Timer for Shoutouts'} tooltipText={`Resets all timers for auto shoutout`}/>
     </>,
     autoShoutoutRaid:
-    // Add a button to trigger a raid event to demo
     <>
       <Typography>Click the button below to simulate a raid event.</Typography> 
       <DemoButton buttonHandler={handleTriggerRaid} buttonText={'Simulate Raid Event'} tooltipText={`Simulates as if the broadcaster received a raid. This functionality uses the Twitch CLI to simulate a raid. Due to the nature of the Twitch CLI, sometimes no "last streamed game" is available to be displayed in the message, as the id of the user pulled may have never streamed`}/>
     </>,
-    randomInsult:
-    // Should we add a button to prime or trigger this event
-    // Or input field for user to directly "send" their message
-    <>
-      <Typography></Typography> 
-    </>,
     raffle:
-    // This feature requires a mod to start
-    // Instruct user to use chat for this feature
     <>
       <Typography>To start a raffle, type "!startraffle" in the twitch chat </Typography> 
       <Typography variant="subtitle2" sx={{fontWeight: "bold", textAlign: "center", fontStyle: "italic"}}>moderator permissions required</Typography>
