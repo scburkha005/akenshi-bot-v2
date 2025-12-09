@@ -69,6 +69,10 @@ function FeatureDropDown () {
       <Typography>Click the button below to simulate a raid event.</Typography> 
       <DemoButton buttonHandler={handleTriggerRaid} buttonText={'Simulate Raid Event'} tooltipText={`Simulates as if the broadcaster received a raid. This functionality uses the Twitch CLI to simulate a raid. Due to the nature of the Twitch CLI, sometimes no "last streamed game" is available to be displayed in the message, as the id of the user pulled may have never streamed`}/>
     </>,
+    randomInsult:
+    <>
+      <Typography>There's currently no testing available for this feature</Typography>
+    </>,
     raffle:
     <>
       <Typography>To start a raffle, type "!startraffle" in the twitch chat </Typography> 
