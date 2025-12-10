@@ -40,7 +40,7 @@ function Login () {
       flexDirection: 'column',
       alignItems: 'center'
     }}>
-      {error?.error && <div id='error-message'>{`${error.error}: ${error.reason}`}</div>}
+      {error?.name && <div id='error-message'>{`${error.name}: ${error.message}`}</div>}
       <Typography variant='h4'>Sign In</Typography>
       <Box component="form" onSubmit={onLogin} sx={{
         display: "flex",
