@@ -64,7 +64,8 @@ export function App () {
 
   return (
     <Container sx={{
-      maxWidth: '100vw',
+      maxWidth: { desktop: 'calc(100vw - 16rem)', mobile: '100vw'},
+      ml: { desktop: '16rem', mobile: '0rem'},
       pt: '2rem',
     }}>
       <AuthContext value={{user, token, setUser, setToken}}>
