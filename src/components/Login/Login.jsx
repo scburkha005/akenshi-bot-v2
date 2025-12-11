@@ -46,13 +46,16 @@ function Login () {
       <Snackbar
         anchorOrigin={{horizontal: 'center', vertical: 'top'}}
         open={isSnackbarOpen}
-        // autoHideDuration={2000}
         onClose={() => setIsSnackbarOpen(false)}
         sx={{
-          maxWidth: '10rem'
+          width: '100%',
         }}
       >
-        <SnackbarContent message={snackbarMsg}/>
+        <SnackbarContent message={snackbarMsg} sx={{
+          fontSize: '1.2rem',
+          maxWidth: '15rem',
+          textAlign: 'center'
+        }}/>
       </Snackbar>
       <Typography variant='h4'>Sign In</Typography>
       <Box component="form" onSubmit={onLogin} sx={{
