@@ -29,7 +29,6 @@ function Login () {
       setToken(token);
       navigate('/');
     } catch ({ response: { data }}) {
-      // setError(data);
       setSnackbarMsg(`${data.name}: ${data.message}`);
       setIsSnackbarOpen(true);
     }
