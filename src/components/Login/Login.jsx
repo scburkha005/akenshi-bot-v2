@@ -2,14 +2,15 @@ import { login } from '../../api/user.js';
 import { useState, useContext } from 'react';
 import { AuthContext } from '../../App.jsx';
 import { useNavigate } from 'react-router';
-import { Paper, Box, Typography, FormControl, FormLabel, OutlinedInput, Button, Link } from '@mui/material';
+import { Paper, Box, Typography, FormControl, FormLabel, OutlinedInput, Button, Link, Snackbar, SnackbarContent } from '@mui/material';
 
 function Login () {
   const { setToken } = useContext(AuthContext);
   const navigate = useNavigate();
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
-  const [error, setError] = useState({});
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMsg, setSnackbarMsg] = useState('');
   // Storing references to state setters in an object in order to call them modularly based on string for onChange
   const setters = {
     setUsername,
@@ -28,7 +29,8 @@ function Login () {
       setToken(token);
       navigate('/');
     } catch ({ response: { data }}) {
-      setError(data);
+      setSnackbarMsg(`${data.name}: ${data.message}`);
+      setIsSnackbarOpen(true);
     }
   }
   return (
@@ -40,7 +42,20 @@ function Login () {
       flexDirection: 'column',
       alignItems: 'center'
     }}>
-      {error?.error && <div id='error-message'>{`${error.error}: ${error.reason}`}</div>}
+      <Snackbar
+        anchorOrigin={{horizontal: 'center', vertical: 'top'}}
+        open={isSnackbarOpen}
+        onClose={() => setIsSnackbarOpen(false)}
+        sx={{
+          width: '100%',
+        }}
+      >
+        <SnackbarContent message={snackbarMsg} sx={{
+          fontSize: '1.2rem',
+          maxWidth: '15rem',
+          textAlign: 'center'
+        }}/>
+      </Snackbar>
       <Typography variant='h4'>Sign In</Typography>
       <Box component="form" onSubmit={onLogin} sx={{
         display: "flex",

@@ -88,8 +88,8 @@ userRouter.post('/login', async function (req, res, next) {
     const user = await userLogin(req.body.username, req.body.password);
     if (!user) {
       next({
-        error: "Failed to login",
-        reason: "Invalid credentials"
+        name: "Failed to login",
+        message: "Invalid credentials"
       });
       return;
     }
