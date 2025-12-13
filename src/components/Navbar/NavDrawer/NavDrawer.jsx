@@ -1,4 +1,4 @@
-import { Box, Typography, Link } from '@mui/material'
+import { Box, Typography, Link, Paper } from '@mui/material'
 import { AuthContext } from '../../../App';
 import { useContext } from 'react';
 import HomeIcon from '@mui/icons-material/Home';
@@ -13,7 +13,8 @@ function NavDrawer ({ toggleDrawer }) {
     alignItems: 'center',
     color: 'white',
     textDecoration: 'none',
-    py: '.5rem'
+    py: '.5rem',
+    pl: '1rem'
   }
   const drawerTextStyle = {
     fontSize: '1.8rem',
@@ -25,8 +26,16 @@ function NavDrawer ({ toggleDrawer }) {
       flexDirection: 'column',
       justifyContent: 'left',
       width: '16rem',
-      pl: '1rem'
     }}>
+      <Paper 
+        elevation="4"
+        square="true"
+        sx={{
+          height: '56px',
+          "--Paper-shadow": "0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12) !important",
+          "--Paper-overlay": "linear-gradient(rgba(255, 255, 255, 0.092), rgba(255, 255, 255, 0.092)) !important",
+        }}
+      ></Paper>
       <Link to="/" sx={linkDrawerStyle}>
         <HomeIcon />
         <Typography sx={drawerTextStyle}>Home</Typography>
