@@ -59,7 +59,8 @@ function Navbar () {
               sx={{
                 ":focus": {
                   outline: 'none'
-                }
+                },
+                display: { mobile: 'flex', desktop: 'none'}
               }}
             >
               <MenuIcon />
