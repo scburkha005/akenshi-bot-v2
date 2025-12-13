@@ -3,10 +3,6 @@ import { useLocation } from 'react-router';
 import { AuthContext } from "../../App";
 import { Box, Link, AppBar, Toolbar, IconButton, Drawer, Typography, Avatar, Menu, MenuItem } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import ConstructionIcon from '@mui/icons-material/Construction';
 import NavDrawer from './NavDrawer/NavDrawer';
 function Navbar () {
   const { user, token, setToken, setUser } = useContext(AuthContext);
@@ -48,8 +44,9 @@ function Navbar () {
 
   return (
     <Box>
-      <AppBar sx={{
+      <AppBar position="fixed" sx={{
         backgroundColor: "rgb(42 42 42)",
+        width: { desktop: 'calc(100vw - 16rem)'}
       }}>
         <Toolbar>
           <Box>
