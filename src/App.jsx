@@ -20,6 +20,8 @@ export function App () {
     } catch ({ response: { data }}) {
       if (data.message === 'jwt expired') {
         localStorage.removeItem('token');
+        setUser({});
+        setToken('');
       }
       console.log(data)
       throw data;
@@ -87,8 +89,9 @@ export function App () {
               <Route path='/' element={<Home />}/>
               <Route path='/login' element={<Login />}/>
               <Route path='/register' element={<Register />}/>
-              <Route path='/account' element={<AccountPage />}/>
-              <Route path='/testing' element={<TestingArea />}/>
+              {/* Logged In Routes */}
+              { token && <Route path='/account' element={<AccountPage />}/> }
+              { token && <Route path='/testing' element={<TestingArea />}/> }
               { user?.isAdmin && <Route path='/admin' element={<AdminPage/>}/>}
             </Routes>
           </Box>
