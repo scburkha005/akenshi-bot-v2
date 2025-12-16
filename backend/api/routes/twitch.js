@@ -108,9 +108,7 @@ twitchRouter.post('/accountLink', requireUser, async function (req, res, next) {
         channelInfo: {
           moderators: modsDisplayNames
         },
-        botSettings: {
-          scopes: data.scope
-        }
+        scopes: data.scope
       });
       // continue to create BASELINE necessary events
       // start with createChatSubscription
