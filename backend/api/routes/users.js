@@ -49,16 +49,24 @@ userRouter.post('/register', async function (req, res, next) {
         moderators: []
       },
       botSettings: {
-        toggle: {
-          gtotMode: false,
-          autoShoutout: false,
-          autoShoutoutRaid: true,
-          raffle: true,
-          randomInsult: false
+        gtotMode: {
+          enabled: false,
+          toggle: false
         },
-        gtotModeEnabled: false,
-        raffleOpen: false,
-        autoShoutout: [],
+        autoShoutout: {
+          enabled: false,
+          twitchDisplayNames: []
+        },
+        autoShoutoutRaid: {
+          enabled: true
+        },
+        raffle: {
+          enabled: true,
+          raffleOpen: false
+        },
+        randomInsult: {
+          enabled: false
+        },
         scopes: [],
       }
     };
