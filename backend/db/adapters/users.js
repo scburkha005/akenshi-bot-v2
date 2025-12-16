@@ -30,10 +30,10 @@ user {
       twitchDisplayNames: [str, str, str]
     }
     autoShoutoutRaid {
-      enabled: bool default false
+      enabled: bool default true
     }
     raffle {
-      enabled: bool default false
+      enabled: bool default true
       raffleOpen: bool default false
     }
     randomInsult {
