@@ -67,8 +67,8 @@ userRouter.post('/register', async function (req, res, next) {
         randomInsult: {
           enabled: false
         },
-        scopes: [],
-      }
+      },
+      scopes: [],
     };
     // store user in database
     let { username, _id } = await createUser(newUser);

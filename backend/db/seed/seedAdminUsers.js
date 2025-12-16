@@ -35,8 +35,8 @@ const adminUser = {
     randomInsult: {
       enabled: false
     },
-    scopes: [],
-  }
+  },
+  scopes: [],
 };
 
 const rl = readline.createInterface({

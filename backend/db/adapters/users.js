@@ -39,8 +39,8 @@ user {
     randomInsult {
       enabled: bool default false
     }
-    scopes array
   }
+  scopes array
 }
 bot user {
   username string
