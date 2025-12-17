@@ -7,7 +7,7 @@ import { createRaffleEntry, deleteAllRaffleEntryByBroadcasterId, getAllRaffleEnt
 const gtotModeHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
-    if (!broadcaster.botSettings.toggle.gtotMode) {
+    if (!broadcaster.botSettings.gtotMode.enabled) {
       return;
     }
     const moderatorsList = broadcaster.channelInfo.moderators;
@@ -17,7 +17,9 @@ const gtotModeHandler = async (broadcaster, notification) => {
     if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === 'enter gtot mode') {
       await updateUser(broadcaster.username, {
         botSettings: {
-          gtotModeEnabled: true
+          gtotMode: {
+            toggle: true
+          }
         }
       });
       await sendMessage(notification.event.broadcaster_user_id, `Okayge`);
@@ -25,13 +27,15 @@ const gtotModeHandler = async (broadcaster, notification) => {
     if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === 'exit gtot mode') {
       await updateUser(broadcaster.username, {
         botSettings: {
-          gtotModeEnabled: false
+          gtotMode: {
+            toggle: false
+          }
         }
       });
       await sendMessage(notification.event.broadcaster_user_id, `Deadge`);
     }
     // Chat features for when gtot mode is enabled
-    if (broadcaster.botSettings.gtotModeEnabled) {
+    if (broadcaster.botSettings.gtotMode.toggle) {
       // Handle gtot random ya mama
       let onePercentChance = (Math.floor(Math.random() * 100) + 1) === 100;
       if (onePercentChance) {
