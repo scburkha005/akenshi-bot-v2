@@ -99,9 +99,9 @@ const raffleHandler = async (broadcaster, notification) => {
     const broadcasterId = broadcaster.twitchUserId;
     const currentUser = notification.event.chatter_user_name;
     const currentMsg = notification.event.message.text.toLowerCase();
-    const raffleOpen = broadcaster.botSettings.raffleOpen;
+    const raffleOpen = broadcaster.botSettings.raffle.raffleOpen;
     // If feature is disabled, do nothing
-    if (!broadcaster.botSettings.toggle.raffle) {
+    if (!broadcaster.botSettings.raffle.enabled) {
       return;
     }
     // If moderator or broadcaster && msg is !raffle
@@ -110,7 +110,9 @@ const raffleHandler = async (broadcaster, notification) => {
       // set raffleOpen in broadcaster settings to true
       await updateUser(broadcaster.username, {
         botSettings: {
-          raffleOpen: true
+          raffle: {
+            raffleOpen: true
+          }
         }
       });
 
@@ -134,7 +136,9 @@ const raffleHandler = async (broadcaster, notification) => {
         // set raffleOpen in broadcaster settings to false
         await updateUser(broadcaster.username, {
           botSettings: {
-            raffleOpen: false
+            raffle: {
+              raffleOpen: false
+            }
           }
         });
         await deleteAllRaffleEntryByBroadcasterId(broadcasterId);
