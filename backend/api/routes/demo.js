@@ -16,10 +16,12 @@ demoRouter.patch('/toggleGtotMode', requireUser, async (req, res, next) => {
     await sendMessage(broadcasterId, `Simulating message received to enter/exit gtot mode`);
     await updateUser(broadcasterUsername, {
       botSettings: {
-        gtotModeEnabled: !req.user.botSettings.gtotModeEnabled
+        gtotMode: {
+          toggle: !req.user.botSettings.gtotMode.toggle
+        }
       }
     });
-    await sendMessage(broadcasterId, !req.user.botSettings.gtotModeEnabled ? `Gtot mode enabled: Okayge` : `Gtot mode disabled: Deadge`);
+    await sendMessage(broadcasterId, !req.user.botSettings.gtotMode.toggle ? `Gtot mode enabled: Okayge` : `Gtot mode disabled: Deadge`);
 
     res.send({
       message: "Gtot mode successfully toggled"
