@@ -51,11 +51,11 @@ const gtotModeHandler = async (broadcaster, notification) => {
 const randomInsultHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
-    if (!broadcaster.botSettings.toggle.randomInsult) {
+    if (!broadcaster.botSettings.randomInsult.enabled) {
       return;
     }
-    let onePercentChance = (Math.floor(Math.random() * 250) + 1) === 100;
-    if (onePercentChance) {
+    let oneIn250Chance = (Math.floor(Math.random() * 250) + 1) === 100;
+    if (oneIn250Chance) {
       const currentUser = notification.event.chatter_user_name;
       const currentMsg = notification.event.message.text.toLowerCase();
       const response = await createGPTMessage(currentMsg);
