@@ -4,12 +4,12 @@ import { getChannelInformation, sendShoutout } from "../modules/twitchRequest.js
 
 const raidChatShoutout = async (broadcaster, notification) => {
   try {
-    const { autoShoutoutRaid, gtotMode } = broadcaster.botSettings.toggle;
-    if (autoShoutoutRaid) {
+    const { autoShoutoutRaid, gtotMode } = broadcaster.botSettings;
+    if (autoShoutoutRaid.enabled) {
       let raider = notification.event.from_broadcaster_user_name;
       let broadcasterId = notification.event.to_broadcaster_user_id;
       let raiderId = notification.event.from_broadcaster_user_id;
-      if (gtotMode && broadcaster.botSettings.gtotModeEnabled) {
+      if (gtotMode.enabled && gtotMode.toggle) {
         await sendMessage(broadcasterId, `Yo shoutout my dawg ${raider}`);
         return;
       }

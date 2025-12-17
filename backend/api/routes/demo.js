@@ -16,10 +16,12 @@ demoRouter.patch('/toggleGtotMode', requireUser, async (req, res, next) => {
     await sendMessage(broadcasterId, `Simulating message received to enter/exit gtot mode`);
     await updateUser(broadcasterUsername, {
       botSettings: {
-        gtotModeEnabled: !req.user.botSettings.gtotModeEnabled
+        gtotMode: {
+          toggle: !req.user.botSettings.gtotMode.toggle
+        }
       }
     });
-    await sendMessage(broadcasterId, !req.user.botSettings.gtotModeEnabled ? `Gtot mode enabled: Okayge` : `Gtot mode disabled: Deadge`);
+    await sendMessage(broadcasterId, !req.user.botSettings.gtotMode.toggle ? `Gtot mode enabled: Okayge` : `Gtot mode disabled: Deadge`);
 
     res.send({
       message: "Gtot mode successfully toggled"
@@ -40,7 +42,9 @@ demoRouter.patch('/startRaffle', requireUser, async (req, res, next) => {
     // Open raffle
     await updateUser(broadcaster.username, {
       botSettings: {
-        raffleOpen: true
+        raffle: {
+          raffleOpen: true
+        }
       }
     });
     // Tell users raffle is open
@@ -62,7 +66,9 @@ demoRouter.patch('/startRaffle', requireUser, async (req, res, next) => {
       // set raffleOpen in broadcaster settings to false
       await updateUser(broadcaster.username, {
         botSettings: {
-          raffleOpen: false
+          raffle: {
+            raffleOpen: false
+          }
         }
       });
       await deleteAllRaffleEntryByBroadcasterId(broadcasterId);

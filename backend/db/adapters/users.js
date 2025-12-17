@@ -21,18 +21,26 @@ user {
     moderators array of strings 
   }
   botSettings {
-    toggle {
-      gtotMode boolean default false,
-      autoShoutout boolean default true,
-      autoShoutoutRaid boolean default true
-      raffle boolean default true
-      randomInsult boolean default false
+    gtotMode {
+      enabled: bool default false
+      toggle: bool default false
     }
-    gtotModeEnabled boolean default false,
-    raffleOpen boolean default false,
-    autoShoutout [string, string, ...string ],
-    scopes array
+    autoShoutout {
+      enabled: bool default false
+      twitchDisplayNames: [str, str, str]
+    }
+    autoShoutoutRaid {
+      enabled: bool default true
+    }
+    raffle {
+      enabled: bool default true
+      raffleOpen: bool default false
+    }
+    randomInsult {
+      enabled: bool default false
+    }
   }
+  scopes array
 }
 bot user {
   username string

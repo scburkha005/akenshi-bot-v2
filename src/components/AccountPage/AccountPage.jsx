@@ -5,44 +5,58 @@ import { updateUser } from '../../api/user.js';
 import AccountSetting from './AccountSetting/AccountSetting.jsx';
 import AutoShoutoutForm from './AutoShoutoutForm/AutoShoutoutForm.jsx';
 
-function objectComparison (sourceObj, changedObj) {
-  return Object.keys(sourceObj).reduce((isChanged, key) => {
-    if (sourceObj[key] !== changedObj[key]) {
-      isChanged = true;
+function objectDeepComparison (sourceObj, changedObj, changeFound = false) {
+  if (changeFound) return changeFound;
+  // Check each key of the sourceObj
+  // If it's value is equal to an object, recursion => sourceObj becomes the key value, changedObj should also become the key value
+  // Otherwise, compare it's value to changedObj
+  // If a change is found, we can immediately exit and return true, otherwise keep going
+  for (const key in sourceObj) {
+    let currVal = sourceObj[key];
+    let compareVal = changedObj[key]
+    if (typeof currVal === 'object' && !Array.isArray(currVal)) {
+      changeFound = objectDeepComparison(currVal, compareVal, changeFound);
+    } else {
+      if (currVal !== compareVal) {
+        changeFound = true;
+        break;
+      }
     }
-    return isChanged
-  }, false)
+  }
+  return changeFound
 }
 
 function AccountPage () {
   const { user, token, setUser } = useContext(AuthContext);
-  const [botToggleSettings, setBotToggleSettings] = useState({});
+  const [botSettings, setBotSettings] = useState({});
   const [isChanged, setIsChanged] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState('');
 
   useEffect(() => {
     // Ensures proper data assignment on refresh after loading user from context
-    setBotToggleSettings(user.botSettings?.toggle || {});
+    setBotSettings(user?.botSettings || {});
   }, [user])
 
   const handleChange = (e) => {
     let setting = e.target.name;
     let value = e.target.checked;
     let newSettings = {
-      ...botToggleSettings,
-      [setting]: value
+      ...botSettings,
+      [setting]: {
+        ...botSettings[setting],
+        enabled: value
+      }
     };
-    setBotToggleSettings(newSettings);
-    setIsChanged(objectComparison(user.botSettings.toggle, newSettings));
+    setBotSettings(newSettings);
+    setIsChanged(objectDeepComparison(user.botSettings, newSettings));
+    console.log(user.botSettings)
   }
 
   const handleSubmit = async () => {
     try {
       let updatedUser = await updateUser(token, {
-        botSettings: {
-          toggle: botToggleSettings
-        }
+        botSettings
       });
       setUser(updatedUser);
       setSnackbarMsg("Changes Saved Successfully");
@@ -85,8 +99,8 @@ function AccountPage () {
         }}>
           <Typography sx={{ textAlign: 'center' }}>Akenshi Bot Settings</Typography>
           <FormGroup>
-            {Object.keys(botToggleSettings).map(setting => {
-              return <AccountSetting key={setting} setting={setting} botToggleSettings={botToggleSettings} handleChange={handleChange} />
+            {Object.keys(botSettings).map(setting => {
+              return <AccountSetting key={setting} settingName={setting} setting={botSettings[setting]} handleChange={handleChange} />
             })}
             <Button disabled={!isChanged} onClick={handleSubmit}>Save Changes</Button>
             <Snackbar 
@@ -101,7 +115,7 @@ function AccountPage () {
           </FormGroup>
         </FormControl>
       </Paper>
-      <AutoShoutoutForm autoShoutoutEnabled={botToggleSettings.autoShoutout} setIsSnackbarOpen={setIsSnackbarOpen} setSnackbarMsg={setSnackbarMsg}/>
+      <AutoShoutoutForm autoShoutoutEnabled={botSettings.autoShoutout?.enabled} setIsSnackbarOpen={setIsSnackbarOpen} setSnackbarMsg={setSnackbarMsg}/>
     </Box>
   )
 }

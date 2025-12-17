@@ -7,7 +7,7 @@ import { createRaffleEntry, deleteAllRaffleEntryByBroadcasterId, getAllRaffleEnt
 const gtotModeHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
-    if (!broadcaster.botSettings.toggle.gtotMode) {
+    if (!broadcaster.botSettings.gtotMode.enabled) {
       return;
     }
     const moderatorsList = broadcaster.channelInfo.moderators;
@@ -17,7 +17,9 @@ const gtotModeHandler = async (broadcaster, notification) => {
     if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === 'enter gtot mode') {
       await updateUser(broadcaster.username, {
         botSettings: {
-          gtotModeEnabled: true
+          gtotMode: {
+            toggle: true
+          }
         }
       });
       await sendMessage(notification.event.broadcaster_user_id, `Okayge`);
@@ -25,13 +27,15 @@ const gtotModeHandler = async (broadcaster, notification) => {
     if ((moderatorsList.includes(currentUser) || currentUser === broadcaster.twitchDisplayName) && currentMsg === 'exit gtot mode') {
       await updateUser(broadcaster.username, {
         botSettings: {
-          gtotModeEnabled: false
+          gtotMode: {
+            toggle: false
+          }
         }
       });
       await sendMessage(notification.event.broadcaster_user_id, `Deadge`);
     }
     // Chat features for when gtot mode is enabled
-    if (broadcaster.botSettings.gtotModeEnabled) {
+    if (broadcaster.botSettings.gtotMode.toggle) {
       // Handle gtot random ya mama
       let onePercentChance = (Math.floor(Math.random() * 100) + 1) === 100;
       if (onePercentChance) {
@@ -47,11 +51,11 @@ const gtotModeHandler = async (broadcaster, notification) => {
 const randomInsultHandler = async (broadcaster, notification) => {
   try {
     // If feature is disabled, do nothing
-    if (!broadcaster.botSettings.toggle.randomInsult) {
+    if (!broadcaster.botSettings.randomInsult.enabled) {
       return;
     }
-    let onePercentChance = (Math.floor(Math.random() * 250) + 1) === 100;
-    if (onePercentChance) {
+    let oneIn250Chance = (Math.floor(Math.random() * 250) + 1) === 100;
+    if (oneIn250Chance) {
       const currentUser = notification.event.chatter_user_name;
       const currentMsg = notification.event.message.text.toLowerCase();
       const response = await createGPTMessage(currentMsg);
@@ -66,16 +70,16 @@ const randomInsultHandler = async (broadcaster, notification) => {
 const autoShoutoutHandler = async (broadcaster, notification) => {
   try {
     let broadcasterId = broadcaster.twitchUserId;
-    let autoShoutoutList = broadcaster.botSettings.autoShoutout;
+    let autoShoutoutList = broadcaster.botSettings.autoShoutout.twitchDisplayNames;
     let chatter = notification.event.chatter_user_name.toLowerCase();
     let chatterId = notification.event.chatter_user_id;
-    let gtotMode = broadcaster.botSettings.toggle.gtotMode;
+    let gtotMode = broadcaster.botSettings.gtotMode.enabled;
     let firstMessageDisplayNames = await getFirstMessageLogByBroadcasterId(broadcasterId);
     // Omit every message that 1. is not a user in the autoshoutoutlist 2. is already in the first message log
     if (!autoShoutoutList.includes(chatter) || firstMessageDisplayNames.includes(chatter)) {
       return;
     }
-    if (gtotMode && broadcaster.botSettings.gtotModeEnabled) {
+    if (gtotMode && broadcaster.botSettings.gtotMode.toggle) {
       await sendMessage(broadcasterId, `Yo shoutout my dawg ${chatter}`);
       return;
     }
@@ -95,9 +99,9 @@ const raffleHandler = async (broadcaster, notification) => {
     const broadcasterId = broadcaster.twitchUserId;
     const currentUser = notification.event.chatter_user_name;
     const currentMsg = notification.event.message.text.toLowerCase();
-    const raffleOpen = broadcaster.botSettings.raffleOpen;
+    const raffleOpen = broadcaster.botSettings.raffle.raffleOpen;
     // If feature is disabled, do nothing
-    if (!broadcaster.botSettings.toggle.raffle) {
+    if (!broadcaster.botSettings.raffle.enabled) {
       return;
     }
     // If moderator or broadcaster && msg is !raffle
@@ -106,7 +110,9 @@ const raffleHandler = async (broadcaster, notification) => {
       // set raffleOpen in broadcaster settings to true
       await updateUser(broadcaster.username, {
         botSettings: {
-          raffleOpen: true
+          raffle: {
+            raffleOpen: true
+          }
         }
       });
 
@@ -130,7 +136,9 @@ const raffleHandler = async (broadcaster, notification) => {
         // set raffleOpen in broadcaster settings to false
         await updateUser(broadcaster.username, {
           botSettings: {
-            raffleOpen: false
+            raffle: {
+              raffleOpen: false
+            }
           }
         });
         await deleteAllRaffleEntryByBroadcasterId(broadcasterId);
