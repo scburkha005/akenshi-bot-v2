@@ -5,13 +5,25 @@ import { updateUser } from '../../api/user.js';
 import AccountSetting from './AccountSetting/AccountSetting.jsx';
 import AutoShoutoutForm from './AutoShoutoutForm/AutoShoutoutForm.jsx';
 
-function objectComparison (sourceObj, changedObj) {
-  return Object.keys(sourceObj).reduce((isChanged, key) => {
-    if (sourceObj[key] !== changedObj[key]) {
-      isChanged = true;
+function objectDeepComparison (sourceObj, changedObj, changeFound = false) {
+  if (changeFound) return changeFound;
+  // Check each key of the sourceObj
+  // If it's value is equal to an object, recursion => sourceObj becomes the key value, changedObj should also become the key value
+  // Otherwise, compare it's value to changedObj
+  // If a change is found, we can immediately exit and return true, otherwise keep going
+  for (const key in sourceObj) {
+    let currVal = sourceObj[key];
+    let compareVal = changedObj[key]
+    if (typeof currVal === 'object' && !Array.isArray(currVal)) {
+      changeFound = objectDeepComparison(currVal, compareVal, changeFound);
+    } else {
+      if (currVal !== compareVal) {
+        changeFound = true;
+        break;
+      }
     }
-    return isChanged
-  }, false)
+  }
+  return changeFound
 }
 
 function AccountPage () {
@@ -24,7 +36,6 @@ function AccountPage () {
   useEffect(() => {
     // Ensures proper data assignment on refresh after loading user from context
     setBotSettings(user?.botSettings || {});
-    console.log(user);
   }, [user])
 
   const handleChange = (e) => {
@@ -33,11 +44,12 @@ function AccountPage () {
     let newSettings = {
       ...botSettings,
       [setting]: {
+        ...botSettings[setting],
         enabled: value
       }
     };
     setBotSettings(newSettings);
-    setIsChanged(objectComparison(user.botSettings, newSettings));
+    setIsChanged(objectDeepComparison(user.botSettings, newSettings));
     console.log(user.botSettings)
   }
 
