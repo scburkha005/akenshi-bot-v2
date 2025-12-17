@@ -11,7 +11,7 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
 
   useEffect(() => {
     // Assign state after user is loaded from context
-    setAutoShoutoutList(user.botSettings?.autoShoutout)
+    setAutoShoutoutList(user.botSettings?.autoShoutout.twitchDisplayNames)
   }, [user])
 
   const handleAdd = (e) => {
@@ -49,7 +49,9 @@ function AutoShoutoutForm ({ autoShoutoutEnabled, setIsSnackbarOpen, setSnackbar
     try {
       let updatedUser = await updateUser(token, {
         botSettings: {
-          autoShoutout: autoShoutoutList
+          autoShoutout: {
+            twitchDisplayNames: autoShoutoutList
+          }
         }
       });
       setUser(updatedUser);

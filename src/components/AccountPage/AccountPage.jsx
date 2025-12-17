@@ -115,7 +115,7 @@ function AccountPage () {
           </FormGroup>
         </FormControl>
       </Paper>
-      {/* <AutoShoutoutForm autoShoutoutEnabled={botToggleSettings.autoShoutout} setIsSnackbarOpen={setIsSnackbarOpen} setSnackbarMsg={setSnackbarMsg}/> */}
+      <AutoShoutoutForm autoShoutoutEnabled={botSettings.autoShoutout?.enabled} setIsSnackbarOpen={setIsSnackbarOpen} setSnackbarMsg={setSnackbarMsg}/>
     </Box>
   )
 }
