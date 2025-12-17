@@ -42,7 +42,9 @@ demoRouter.patch('/startRaffle', requireUser, async (req, res, next) => {
     // Open raffle
     await updateUser(broadcaster.username, {
       botSettings: {
-        raffleOpen: true
+        raffle: {
+          raffleOpen: true
+        }
       }
     });
     // Tell users raffle is open
@@ -64,7 +66,9 @@ demoRouter.patch('/startRaffle', requireUser, async (req, res, next) => {
       // set raffleOpen in broadcaster settings to false
       await updateUser(broadcaster.username, {
         botSettings: {
-          raffleOpen: false
+          raffle: {
+            raffleOpen: false
+          }
         }
       });
       await deleteAllRaffleEntryByBroadcasterId(broadcasterId);
