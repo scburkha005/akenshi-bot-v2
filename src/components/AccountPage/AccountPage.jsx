@@ -56,9 +56,7 @@ function AccountPage () {
   const handleSubmit = async () => {
     try {
       let updatedUser = await updateUser(token, {
-        botSettings: {
-          toggle: botToggleSettings
-        }
+        botSettings
       });
       setUser(updatedUser);
       setSnackbarMsg("Changes Saved Successfully");
