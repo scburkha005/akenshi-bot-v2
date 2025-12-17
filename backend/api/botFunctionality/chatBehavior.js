@@ -70,16 +70,16 @@ const randomInsultHandler = async (broadcaster, notification) => {
 const autoShoutoutHandler = async (broadcaster, notification) => {
   try {
     let broadcasterId = broadcaster.twitchUserId;
-    let autoShoutoutList = broadcaster.botSettings.autoShoutout;
+    let autoShoutoutList = broadcaster.botSettings.autoShoutout.twitchDisplayNames;
     let chatter = notification.event.chatter_user_name.toLowerCase();
     let chatterId = notification.event.chatter_user_id;
-    let gtotMode = broadcaster.botSettings.toggle.gtotMode;
+    let gtotMode = broadcaster.botSettings.gtotMode.enabled;
     let firstMessageDisplayNames = await getFirstMessageLogByBroadcasterId(broadcasterId);
     // Omit every message that 1. is not a user in the autoshoutoutlist 2. is already in the first message log
     if (!autoShoutoutList.includes(chatter) || firstMessageDisplayNames.includes(chatter)) {
       return;
     }
-    if (gtotMode && broadcaster.botSettings.gtotModeEnabled) {
+    if (gtotMode && broadcaster.botSettings.gtotMode.toggle) {
       await sendMessage(broadcasterId, `Yo shoutout my dawg ${chatter}`);
       return;
     }
