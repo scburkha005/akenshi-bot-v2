@@ -16,25 +16,29 @@ function objectComparison (sourceObj, changedObj) {
 
 function AccountPage () {
   const { user, token, setUser } = useContext(AuthContext);
-  const [botToggleSettings, setBotToggleSettings] = useState({});
+  const [botSettings, setBotSettings] = useState({});
   const [isChanged, setIsChanged] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState('');
 
   useEffect(() => {
     // Ensures proper data assignment on refresh after loading user from context
-    setBotToggleSettings(user.botSettings?.toggle || {});
+    setBotSettings(user?.botSettings || {});
+    console.log(user);
   }, [user])
 
   const handleChange = (e) => {
     let setting = e.target.name;
     let value = e.target.checked;
     let newSettings = {
-      ...botToggleSettings,
-      [setting]: value
+      ...botSettings,
+      [setting]: {
+        enabled: value
+      }
     };
-    setBotToggleSettings(newSettings);
-    setIsChanged(objectComparison(user.botSettings.toggle, newSettings));
+    setBotSettings(newSettings);
+    setIsChanged(objectComparison(user.botSettings, newSettings));
+    console.log(user.botSettings)
   }
 
   const handleSubmit = async () => {
@@ -85,8 +89,8 @@ function AccountPage () {
         }}>
           <Typography sx={{ textAlign: 'center' }}>Akenshi Bot Settings</Typography>
           <FormGroup>
-            {Object.keys(botToggleSettings).map(setting => {
-              return <AccountSetting key={setting} setting={setting} botToggleSettings={botToggleSettings} handleChange={handleChange} />
+            {Object.keys(botSettings).map(setting => {
+              return <AccountSetting key={setting} settingName={setting} setting={botSettings[setting]} handleChange={handleChange} />
             })}
             <Button disabled={!isChanged} onClick={handleSubmit}>Save Changes</Button>
             <Snackbar 
@@ -101,7 +105,7 @@ function AccountPage () {
           </FormGroup>
         </FormControl>
       </Paper>
-      <AutoShoutoutForm autoShoutoutEnabled={botToggleSettings.autoShoutout} setIsSnackbarOpen={setIsSnackbarOpen} setSnackbarMsg={setSnackbarMsg}/>
+      {/* <AutoShoutoutForm autoShoutoutEnabled={botToggleSettings.autoShoutout} setIsSnackbarOpen={setIsSnackbarOpen} setSnackbarMsg={setSnackbarMsg}/> */}
     </Box>
   )
 }

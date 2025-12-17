@@ -1,7 +1,7 @@
 import { Box, FormControlLabel, Switch, IconButton, Typography, Paper, Card, Divider } from "@mui/material";
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import { useState } from "react";
-function AccountSetting ({ setting, botToggleSettings, handleChange }) {
+function AccountSetting ({ settingName, setting, handleChange }) {
   const [infoOpen, setInfoOpen] = useState(false);
   const settingsInfo = {
     gtotMode: [
@@ -151,9 +151,9 @@ function AccountSetting ({ setting, botToggleSettings, handleChange }) {
       }}>
         <FormControlLabel 
           control={
-            <Switch checked={botToggleSettings[setting]} onChange={handleChange} name={setting} />
+            <Switch checked={setting.enabled} onChange={handleChange} name={settingName} />
           }
-          label={setting}
+          label={settingName}
         />
         <IconButton onClick={handleInfoClick} sx={{
           ':focus': {
@@ -170,10 +170,10 @@ function AccountSetting ({ setting, botToggleSettings, handleChange }) {
           pb: '1rem'
         }}>
           <Typography variant="overline">How to use:</Typography>
-          {settingsInfo[setting].map(data => <Typography variant={data.variant ? data.variant : 'body1'} sx={data.style}>{data.text}</Typography>)}
+          {settingsInfo[settingName].map(data => <Typography variant={data.variant ? data.variant : 'body1'} sx={data.style}>{data.text}</Typography>)}
           <Divider sx={{ my: '.6rem' }}></Divider>
           <Typography variant="overline">What changes: </Typography>
-          {settingsInfoBulletPoints[setting].map(data => <Typography component={'li'} sx={data.style}>{data.text}</Typography>)}
+          {settingsInfoBulletPoints[settingName].map(data => <Typography component={'li'} sx={data.style}>{data.text}</Typography>)}
         </Paper>
       }
     </>
