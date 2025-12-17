@@ -98,8 +98,8 @@ function FeatureDropDown () {
         onChange={handleChange}
         label="Feature"
       >
-        {user.botSettings?.toggle && Object.keys(user.botSettings.toggle).map((featureName) => {
-          return user.botSettings.toggle[featureName] ? <MenuItem value={featureName}>{featureName}</MenuItem> : <MenuItem disabled value={featureName}>{featureName}</MenuItem>
+        {user?.botSettings && Object.keys(user.botSettings).map((featureName) => {
+          return user.botSettings[featureName].enabled ? <MenuItem value={featureName}>{featureName}</MenuItem> : <MenuItem disabled value={featureName}>{featureName}</MenuItem>
         })}
       </Select>
       { selectedFeature && 
