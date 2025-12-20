@@ -1,10 +1,13 @@
+import FeaturePreview from "./FeaturePreview/FeaturePreview";
+import { Typography } from "@mui/material";
+
 function Home () {
 
   return (
-    <div>
-      <h2>Thank You For Checking Out Akenshi Bot</h2>
-      <div></div>
-    </div>
+    <>
+      <Typography variant='h4' sx={{mt: '1.2rem'}}>Thank You For Checking Out Akenshi Bot</Typography>
+      <FeaturePreview />
+    </>
   )
 }
 
