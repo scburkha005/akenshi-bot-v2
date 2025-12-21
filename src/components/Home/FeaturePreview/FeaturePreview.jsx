@@ -1,5 +1,25 @@
-import { Tab, Tabs, Box, Divider, Card } from "@mui/material";
+import { Tab, Tabs, Box } from "@mui/material";
+import SingleFeature from "./SingleFeature/SingleFeature";
 import { useState } from "react";
+
+const descriptionArr = [
+  {
+    description: "description 1",
+    video: "video link"
+  },
+  {
+    description: "description 2",
+    video: "video link"
+  },
+  {
+    description: "description 3",
+    video: "video link"
+  },
+  {
+    description: "description 4",
+    video: "video link"
+  },
+]
 function FeaturePreview () {
   const [value, setValue] = useState(0);
 
@@ -19,19 +39,9 @@ function FeaturePreview () {
           <Tab label='Feature One' />
         </Tabs>
       </Box>
-      <Card sx={{
-        display: 'flex',
-        width: '100%',
-        height: '10rem'
-      }}>
-        <Box sx={{
-          flexGrow: 1,
-        }}>Description here</Box>
-        <Divider orientation="vertical"></Divider>
-        <Box sx={{
-          flexGrow: 2.5,
-        }}>Video here</Box>
-      </Card>
+      {descriptionArr.map((info, index) => {
+        return <SingleFeature description={info.description} video={info.video} index={index} value={value} />
+      })}
     </>
   );
 }
