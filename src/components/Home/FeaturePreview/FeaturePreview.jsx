@@ -1,4 +1,4 @@
-import { Tab, Tabs, Box, Divider } from "@mui/material";
+import { Tab, Tabs, Box, Divider, Card } from "@mui/material";
 import { useState } from "react";
 function FeaturePreview () {
   const [value, setValue] = useState(0);
@@ -8,25 +8,30 @@ function FeaturePreview () {
   }
   return (
     <>
-      <Tabs value={value} onChange={handleChange}>
-        <Tab label='Feature One' />
-        <Tab label='Feature One' />
-        <Tab label='Feature One' />
-      </Tabs>
-      <Divider sx={{ width: '100%'}}></Divider>
-      <Box sx={{
+      <Box sx={{ display: 'flex', justifyContent: "left", borderBottom: 1, borderColor: 'divider', mb: '.5rem', width: "100%" }}>
+        <Tabs value={value} onChange={handleChange} variant="scrollable" scrollButtons="auto">
+          <Tab label='Feature One' />
+          <Tab label='Feature One' />
+          <Tab label='Feature One' />
+          <Tab label='Feature One' />
+          <Tab label='Feature One' />
+          <Tab label='Feature One' />
+          <Tab label='Feature One' />
+        </Tabs>
+      </Box>
+      <Card sx={{
         display: 'flex',
-        width: '100%'
+        width: '100%',
+        height: '10rem'
       }}>
         <Box sx={{
           flexGrow: 1,
-          // flexBasis: "auto"
         }}>Description here</Box>
+        <Divider orientation="vertical"></Divider>
         <Box sx={{
-          flexGrow: 2,
-          // flexBasis: "auto"
-        }}>Photo here</Box>
-      </Box>
+          flexGrow: 2.5,
+        }}>Video here</Box>
+      </Card>
     </>
   );
 }
