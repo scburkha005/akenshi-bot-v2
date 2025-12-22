@@ -1,4 +1,4 @@
-import { Card, Box, Divider } from "@mui/material";
+import { Card, Box, Divider, CardMedia, CardContent } from "@mui/material";
 function SingleFeature ({ description, video, index, value }) {
 
   return (
@@ -6,15 +6,24 @@ function SingleFeature ({ description, video, index, value }) {
       <Card sx={{
         display: index === value ? 'flex' : "none",
         width: '100%',
-        height: '10rem'
+        height: '40rem',
+        backgroundColor: "rgb(24,24,26)",
+        "--Paper-overlay": "none !important"
       }}>
-        <Box sx={{
+        <CardContent sx={{
           flexGrow: 1,
-        }}>{description}</Box>
+          width: '50%'
+        }}>{description}</CardContent>
         <Divider orientation="vertical"></Divider>
-        <Box sx={{
-          flexGrow: 2.5,
-        }}>{video}</Box>
+        <CardMedia
+          component="video"
+          image={video}
+          autoPlay
+          loop
+          sx={{
+            flexGrow: 2,
+            objectFit: "contain"
+          }} />
       </Card>
     </>
   );
