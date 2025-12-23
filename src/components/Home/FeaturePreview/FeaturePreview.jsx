@@ -5,15 +5,15 @@ import { useState } from "react";
 const descriptionArr = [
   {
     description: "description 1",
-    video: "video link"
+    video: "/static/autoShoutoutRaid.mp4"
   },
   {
     description: "description 2",
-    video: "video link"
+    video: "/static/autoShoutout.mp4"
   },
   {
     description: "description 3",
-    video: "video link"
+    video: "/static/raffle.mp4"
   },
   {
     description: "description 4",
@@ -28,7 +28,7 @@ function FeaturePreview () {
   }
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: "left", borderBottom: 1, borderColor: 'divider', mb: '.5rem', width: "100%" }}>
+      <Box sx={{ display: 'flex', justifyContent: "left", borderBottom: 1, borderColor: 'divider', mb: '.5rem', width: { "desktop-l": '1088px', mobile: "100%" }}}>
         <Tabs value={value} onChange={handleChange} variant="scrollable" scrollButtons="auto">
           <Tab label='Feature One' />
           <Tab label='Feature One' />
@@ -40,7 +40,7 @@ function FeaturePreview () {
         </Tabs>
       </Box>
       {descriptionArr.map((info, index) => {
-        return <SingleFeature description={info.description} video={info.video} index={index} value={value} />
+        return <SingleFeature key={`${index}${value}`} description={info.description} video={info.video} index={index} value={value} />
       })}
     </>
   );

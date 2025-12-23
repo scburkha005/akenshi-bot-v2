@@ -5,8 +5,8 @@ function SingleFeature ({ description, video, index, value }) {
     <>
       <Card sx={{
         display: index === value ? 'flex' : "none",
-        width: '100%',
-        height: '40rem',
+        width: { "desktop-l": '1088px', mobile: "100%" },
+        height: '30rem',
         backgroundColor: "rgb(24,24,26)",
         "--Paper-overlay": "none !important"
       }}>
