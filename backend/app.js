@@ -1,13 +1,12 @@
-import axios from 'axios';
 import express from 'express';
 const apiRouter = express.Router();
 import { userRouter, twitchRouter, demoRouter } from './api/index.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 dotenv.config();
-import { createUser, findUserByToken, findUserByTwitchId, findUserByUsername, updateUser } from './db/adapters/users.js';
+import { findUserByToken, findUserByUsername } from './db/adapters/users.js';
 import { refreshOAuthToken } from './api/modules/twitchRequest.js';
-const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET, JWT_SECRET } = process.env;
+const { JWT_SECRET } = process.env;
 
 
 apiRouter.use(async (req, res, next) => {
