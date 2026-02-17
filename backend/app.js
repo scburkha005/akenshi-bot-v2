@@ -5,7 +5,8 @@ import { userRouter, twitchRouter, demoRouter } from './api/index.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 dotenv.config();
-import { createUser, findUserByTwitchId, findUserByUsername, updateUser } from './db/adapters/users.js';
+import { createUser, findUserByToken, findUserByTwitchId, findUserByUsername, updateUser } from './db/adapters/users.js';
+import { refreshOAuthToken } from './api/modules/twitchRequest.js';
 const { TWITCH_CLIENT_ID, TWITCH_SECRET, SESSION_SECRET, STATE_STRING, HMAC_SECRET, JWT_SECRET } = process.env;
 
 
@@ -44,6 +45,36 @@ apiRouter.use('/twitch', twitchRouter);
 apiRouter.use(express.json());
 apiRouter.use('/user', userRouter);
 apiRouter.use('/demo', demoRouter);
+
+apiRouter.use(async (err, req, res, next) => {
+  const { response: { data: { error, message } } } = err;
+  if (res.statusCode < 400 || res.statusCode >= 500) {
+    res.status(500)
+  }
+  console.log('An error has occured')
+  console.log(error, message);
+  // If the OAuth token has expired, refresh it
+  if (message === "Invalid OAuth token") {
+    try {
+      const token = err.config.headers.Authorization.slice(7);
+      const user = await findUserByToken(token);
+      if (user.userAccessToken.token === token) {
+        await refreshOAuthToken(user.userAccessToken.refreshToken, user.username);
+      } else if (user.appAccessToken.token === token) {
+        await refreshOAuthToken(user.appAccessToken.refreshToken, user.username);
+      }
+      message = 'token refreshed successfully';
+      console.log(message);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  res.send({
+    name: error,
+    message
+  })
+});
 
 apiRouter.use((req, res, next) => {
   res.status(404).send({
