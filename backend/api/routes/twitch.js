@@ -146,6 +146,7 @@ twitchRouter.post('/botLink', requireAdminUser, async function (req, res, next) 
           },
           appAccessToken: {
             token: appToken.access_token,
+            refreshToken: appToken.refresh_token
           },
           scopes: data.scope
         });
@@ -160,6 +161,7 @@ twitchRouter.post('/botLink', requireAdminUser, async function (req, res, next) 
           },
           appAccessToken: {
             token: appToken.access_token,
+            refreshToken: appToken.refresh_token
           },
           scopes: data.scope
         });
