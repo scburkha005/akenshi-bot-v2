@@ -22,7 +22,8 @@ export const getAllEventSubscriptions = async () => {
     }
     return data;
   } catch (err) {
-    console.log(err);
+    console.log('error while getting all event subs');
+    throw err;
   }
 }
 
@@ -96,7 +97,8 @@ export const deleteSubscriptionById = async (subscriptionId) => {
     });
     console.log("subscription deleted successfully", data);
   } catch (err) {
-    console.log(err);
+    console.log('Error while deleting Subscription by Id');
+    throw err;
   }
 }
 
@@ -117,6 +119,7 @@ export const deleteFailedSubscriptions = async (failedSubscriptions) => {
 
     console.log('finished deleting failed subscriptions');
   } catch (err) {
-    console.log(err);
+    console.log("Error while deleting failed subscriptions");
+    throw err;
   }
 }

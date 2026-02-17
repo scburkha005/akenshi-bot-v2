@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { findUserByUsername } from '../../db/adapters/users.js';
-const { TWITCH_CLIENT_ID } = process.env;
+import { findUserByUsername, updateUser } from '../../db/adapters/users.js';
+const { TWITCH_CLIENT_ID, TWITCH_SECRET } = process.env;
 
 export async function getAdditionalUserInfo (userId, userAccessToken) {
   try {
@@ -70,4 +70,34 @@ export async function sendShoutout (sendingBroadcasterId, receivingBroadcasterId
     console.log(err)
     throw err;
    }
+}
+
+export async function refreshOAuthToken (refreshToken, username) {
+  try {
+    const { data } = await axios({
+      method: 'post',
+      url: `https://id.twitch.tv/oauth2/token`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+        client_id: TWITCH_CLIENT_ID,
+        client_secret: TWITCH_SECRET,
+        grant_type: 'refresh_token',
+        refresh_token: encodeURIComponent(refreshToken)
+      }
+    });
+
+    await updateUser(username, {
+      userAccessToken: {
+        token: data.access_token,
+        refreshToken: data.refresh_token
+      },
+      scopes: data.scope
+    });
+
+  } catch (err) {
+    console.log("error while refreshing oauth token");
+    throw err;
+  }
 }

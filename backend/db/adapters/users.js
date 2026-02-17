@@ -185,3 +185,19 @@ export async function updateUser(username, userUpdateObj) {
     throw err;
   }
 }
+
+export async function findUserByToken(token) {
+  try {
+    const user = await usersCollection.findOne({
+      $or: [
+        { "userAccessToken.token": token },
+        { "appAccessToken.token": token }
+      ]
+    });
+    delete user.password;
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+}
