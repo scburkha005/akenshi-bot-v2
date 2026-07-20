@@ -34,7 +34,8 @@ export default createTheme({
     values: {
       mobile: 0,
       tablet: 640,
-      desktop: 1024
+      desktop: 1024,
+      "desktop-l": 1441
     }
   }
 });
